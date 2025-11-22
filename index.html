@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>ET Attendance & Marks – RVCE</title>
+  <title>ET Attendance & Game – RVCE</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- Google Font -->
@@ -10,7 +10,7 @@
 
   <style>
     :root {
-      --bg-gradient: linear-gradient(135deg, #020617, #020617, #0f172a);
+      --bg-gradient: radial-gradient(circle at top, #0f172a, #020617);
       --accent: #38bdf8;
       --accent-soft: rgba(56, 189, 248, 0.15);
       --text-main: #f9fafb;
@@ -23,15 +23,11 @@
       --transition-fast: 0.18s ease-out;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont;
-      background: radial-gradient(circle at top, #0b1120, #020617);
+      background: var(--bg-gradient);
       color: var(--text-main);
       min-height: 100vh;
       display: flex;
@@ -46,7 +42,7 @@
       background:
         radial-gradient(circle at top left, rgba(56,189,248,0.22), transparent 60%),
         radial-gradient(circle at bottom right, rgba(129,140,248,0.15), transparent 60%),
-        rgba(15,23,42,0.98);
+        rgba(15,23,42,0.96);
       border-radius: 1.75rem;
       padding: 1.6rem 1.6rem 2.1rem;
       position: relative;
@@ -187,9 +183,7 @@
       transition: background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
     }
 
-    .nav-tab span.icon {
-      font-size: 0.9rem;
-    }
+    .nav-tab span.icon { font-size: 0.9rem; }
 
     .nav-tab.active {
       background: linear-gradient(135deg, #38bdf8, #2563eb);
@@ -198,9 +192,7 @@
       transform: translateY(-1px);
     }
 
-    .view {
-      margin-top: 0.4rem;
-    }
+    .view { margin-top: 0.4rem; }
 
     .main-grid {
       display: grid;
@@ -209,9 +201,7 @@
     }
 
     @media (max-width: 880px) {
-      .main-grid {
-        grid-template-columns: minmax(0, 1fr);
-      }
+      .main-grid { grid-template-columns: minmax(0, 1fr); }
     }
 
     .controls-row {
@@ -242,9 +232,7 @@
       transition: border var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast), transform var(--transition-fast);
     }
 
-    .search-input::placeholder {
-      color: #6b7280;
-    }
+    .search-input::placeholder { color: #6b7280; }
 
     .search-input:focus {
       border-color: var(--accent);
@@ -331,9 +319,7 @@
     }
 
     @media (max-width: 580px) {
-      .student-list {
-        grid-template-columns: 1fr;
-      }
+      .student-list { grid-template-columns: 1fr; }
     }
 
     .student-card {
@@ -401,17 +387,6 @@
       font-weight: 500;
     }
 
-    .pill-accent {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0.15rem 0.45rem;
-      border-radius: 999px;
-      background: var(--accent-soft);
-      font-size: 0.7rem;
-      margin-left: 0.3rem;
-    }
-
     .footer-note {
       font-size: 0.72rem;
       color: var(--text-muted);
@@ -420,17 +395,83 @@
       padding-top: 0.65rem;
     }
 
-    .footer-note span {
-      color: #fbbf24;
-    }
+    .footer-note span { color: #fbbf24; }
 
     .footer-note code {
-      font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       font-size: 0.7rem;
       background: rgba(15,23,42,0.95);
       padding: 0.08rem 0.4rem;
       border-radius: 999px;
       border: 1px solid rgba(55,65,81,0.9);
+    }
+
+    /* Dashboard table */
+    .dashboard {
+      margin-top: 0.5rem;
+      padding-top: 0.55rem;
+      border-top: 1px dashed rgba(75,85,99,0.9);
+    }
+
+    .dashboard-title {
+      font-size: 0.86rem;
+      font-weight: 500;
+      margin-bottom: 0.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .dashboard-title span {
+      font-size: 1rem;
+    }
+
+    .dashboard-sub {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      margin-bottom: 0.35rem;
+    }
+
+    .dashboard-empty {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    .dashboard-table-wrapper {
+      max-height: 220px;
+      overflow: auto;
+      margin-top: 0.25rem;
+      border-radius: 0.7rem;
+      border: 1px solid rgba(55,65,81,0.9);
+      background: rgba(15,23,42,0.95);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.76rem;
+    }
+
+    thead {
+      position: sticky;
+      top: 0;
+      background: #020617;
+    }
+
+    th, td {
+      padding: 0.35rem 0.4rem;
+      text-align: left;
+      border-bottom: 1px solid rgba(31,41,55,0.9);
+    }
+
+    th {
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    tbody tr:nth-child(even) {
+      background: rgba(15,23,42,0.9);
     }
 
     /* Modal */
@@ -445,9 +486,7 @@
       padding: 1rem;
     }
 
-    .modal-backdrop.active {
-      display: flex;
-    }
+    .modal-backdrop.active { display: flex; }
 
     .modal {
       width: 100%;
@@ -566,9 +605,7 @@
       transition: border var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast), transform var(--transition-fast);
     }
 
-    .field-group input::placeholder {
-      color: #6b7280;
-    }
+    .field-group input::placeholder { color: #6b7280; }
 
     .field-group input:focus {
       border-color: var(--accent);
@@ -608,9 +645,7 @@
       box-shadow: 0 18px 32px rgba(37,99,235,0.85);
     }
 
-    .btn-primary span.arrow {
-      font-size: 1rem;
-    }
+    .btn-primary span.arrow { font-size: 1rem; }
   </style>
 </head>
 <body>
@@ -625,17 +660,17 @@
           </div>
           <div class="brand-text">
             <h1>
-              RVCE Attendance
-              <span class="highlight">1st Sem • ET</span>
+              RVCE ET – Game Access
+              <span class="highlight">1st Sem • Telecom</span>
             </h1>
-            <p>Click your name → login → play a small game → then see marks scoreboard.</p>
+            <p>Pick your name → login with USN → full-screen game + secret prize.</p>
           </div>
         </div>
 
         <div class="top-right">
           <div class="live-pill">
             <span class="live-dot"></span>
-            <span>Class tool – not official ERP</span>
+            <span>Class fun tool – not official ERP</span>
           </div>
 
           <nav class="nav-tabs">
@@ -675,7 +710,7 @@
                   <span class="icon-badge">👥</span>
                   <span>ET – Student List</span>
                 </div>
-                <p class="card-subtitle">Click your name, enter your USN, then we send you to the game + marks page.</p>
+                <p class="card-subtitle">Click your name, enter your USN, then you get the full-screen game.</p>
               </div>
             </div>
 
@@ -689,7 +724,7 @@
               <div>
                 <div class="card-title">
                   <span class="icon-badge">ℹ️</span>
-                  <span>How this works</span>
+                  <span>How it works</span>
                 </div>
               </div>
             </div>
@@ -697,14 +732,41 @@
             <ul class="info-list">
               <li><strong>1.</strong> Find your <strong>name</strong> on the left and click it.</li>
               <li><strong>2.</strong> In the popup, type your <strong>RVCE number (USN)</strong> exactly.</li>
-              <li><strong>3.</strong> If USN is correct, you go to a <strong>mini-game</strong>.</li>
-              <li><strong>4.</strong> Win the game → answer 2 small questions → you get a message saying <strong>“you’re in WhatsApp group”</strong> and see the full <strong>scoreboard</strong>.</li>
+              <li><strong>3.</strong> If USN is correct, you go to a <strong>reaction game</strong> (Part 1).</li>
+              <li><strong>4.</strong> Then you answer <strong>4 spicy MD questions</strong> (Part 2).</li>
+              <li><strong>5.</strong> Time taken + correct answers decide your <strong>position</strong> on the dashboard.</li>
             </ul>
 
             <p class="footer-note">
-              All marks here are <span>dummy</span> for demo – generated from roll numbers.
-              Edit the JS if you want real data.
+              Dashboard runs on <span>this device</span> using <code>localStorage</code>. Best run from class laptop.
             </p>
+
+            <!-- Dashboard -->
+            <div class="dashboard">
+              <div class="dashboard-title">
+                <span>🏆</span>
+                <span>Game dashboard</span>
+              </div>
+              <p class="dashboard-sub">
+                Ranking = more correct answers, then faster time.
+              </p>
+              <div id="leaderboardEmpty" class="dashboard-empty">
+                No one has finished the game yet on this device.
+              </div>
+              <div class="dashboard-table-wrapper" style="display:none;" id="leaderboardWrapper">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Name</th>
+                      <th>Correct</th>
+                      <th>Time (s)</th>
+                    </tr>
+                  </thead>
+                  <tbody id="leaderboardBody"></tbody>
+                </table>
+              </div>
+            </div>
           </aside>
         </div>
       </section>
@@ -718,7 +780,7 @@
       <div class="modal-header">
         <div class="modal-title-block">
           <h2>Student Login</h2>
-          <p>Enter your RVCE number (USN) to continue.</p>
+          <p>Enter your RVCE number (USN) to unlock the game.</p>
         </div>
         <button id="closeModalBtn" class="close-btn" aria-label="Close">
           ✕
@@ -744,7 +806,7 @@
           </div>
           <div id="loginError" class="error-text"></div>
           <button type="submit" class="btn-primary">
-            Check my details
+            Go to game
             <span class="arrow">↗</span>
           </button>
         </form>
@@ -753,7 +815,7 @@
   </div>
 
   <script>
-    // 1. Student master data
+    // Student data
     const students = [
       { roll: 1,  name: "ABHAY BALIGA B",                 usn: "RVCE25BTE059" },
       { roll: 2,  name: "ABHINAV H KRISHNA",              usn: "RVCE25BTE051" },
@@ -820,24 +882,7 @@
       { roll: 63, name: "YASHASVI ARVIND JAIN",           usn: "RVCE25BTE040" }
     ];
 
-    // Dummy marks for ALL students, auto-generated from roll
-    const marksData = {};
-    students.forEach((s) => {
-      const r = s.roll;
-      const attendance = 70 + (r * 3) % 30;    // 70–99%
-      const cie1 = 12 + (r * 2) % 19;          // 12–30
-      const cie2 = 11 + (r * 3) % 20;          // 11–30
-      const quiz = 5 + (r * 5) % 6;            // 5–10
-      marksData[s.usn] = {
-        attendance: attendance + "%",
-        cie1,
-        cie2,
-        quiz,
-        remarks: "Dummy data – for demo"
-      };
-    });
-
-    // DOM elements
+    // DOM references
     const studentListEl = document.getElementById("studentList");
     const searchInputEl = document.getElementById("searchInput");
     const visibleCountEl = document.getElementById("visibleCount");
@@ -850,6 +895,11 @@
     const loginForm = document.getElementById("loginForm");
     const usnInput = document.getElementById("usnInput");
     const loginError = document.getElementById("loginError");
+
+    const leaderboardEmpty = document.getElementById("leaderboardEmpty");
+    const leaderboardWrapper = document.getElementById("leaderboardWrapper");
+    const leaderboardBody = document.getElementById("leaderboardBody");
+    const resultsKey = "et_game_results_v1";
 
     let currentStudent = null;
 
@@ -933,7 +983,6 @@
 
       loginError.textContent = "";
 
-      // Redirect to game page with query params
       const params = new URLSearchParams({
         usn: expected,
         roll: String(currentStudent.roll),
@@ -942,8 +991,47 @@
       window.location.href = "game.html?" + params.toString();
     });
 
-    // initial render
+    // Dashboard rendering
+    function renderLeaderboard() {
+      let entries;
+      try {
+        entries = JSON.parse(localStorage.getItem(resultsKey) || "[]");
+      } catch (e) {
+        entries = [];
+      }
+
+      if (!entries || !entries.length) {
+        leaderboardEmpty.style.display = "block";
+        leaderboardWrapper.style.display = "none";
+        leaderboardBody.innerHTML = "";
+        return;
+      }
+
+      leaderboardEmpty.style.display = "none";
+      leaderboardWrapper.style.display = "block";
+
+      entries.sort((a, b) => {
+        if (b.correct !== a.correct) return b.correct - a.correct;
+        if (a.time !== b.time) return a.time - b.time;
+        return (a.ts || 0) - (b.ts || 0);
+      });
+
+      leaderboardBody.innerHTML = "";
+      entries.forEach((entry, i) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${i + 1}</td>
+          <td>${entry.name}</td>
+          <td>${entry.correct}/4</td>
+          <td>${entry.time.toFixed ? entry.time.toFixed(2) : entry.time} s</td>
+        `;
+        leaderboardBody.appendChild(tr);
+      });
+    }
+
+    // Initial render
     renderStudents();
+    renderLeaderboard();
   </script>
 </body>
 </html>
