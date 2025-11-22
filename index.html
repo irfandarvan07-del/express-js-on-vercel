@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ET Attendance (whatsApp group )& Marks – RVCE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #1f2937, #111827);
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.15);
+      --text-main: #f9fafb;
+      --text-muted: #9ca3af;
+      --danger: #f97373;
+      --card-bg: rgba(17, 24, 39, 0.9);
+      --border-subtle: rgba(156, 163, 175, 0.2);
+      --radius-xl: 1.25rem;
+      --shadow-soft: 0 20px 40px rgba(0, 0, 0, 0.35);
+      --transition-fast: 0.18s ease-out;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont;
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .app-shell {
+      width: 100%;
+      max-width: 1120px;
+      background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.2), transparent 60%),
+                  radial-gradient(circle at bottom right, rgba(129, 140, 248, 0.15), transparent 60%);
+      border-radius: 1.75rem;
+      padding: 1.8rem 1.8rem 2.4rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+    }
+
+    .app-shell::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top center, rgba(255, 255, 255, 0.04), transparent 65%);
+      pointer-events: none;
+    }
+
+    .app-inner {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .app-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .title-block h1 {
+      font-size: 1.6rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .badge {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      color: var(--text-muted);
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(8px);
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    .right-header {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+    }
+
+    .tag-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.3rem 0.7rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(55, 65, 81, 0.9);
+    }
+
+    .tag-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 0 6px rgba(34, 197, 94, 0.35);
+    }
+
+    .legend {
+      color: var(--text-muted);
+    }
+
+    .controls-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 0.3rem;
+    }
+
+    .search-wrapper {
+      flex: 1 1 240px;
+      max-width: 340px;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 0.6rem 0.8rem 0.6rem 2.1rem;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      background: rgba(15, 23, 42, 0.92);
+      color: var(--text-main);
+      font-size: 0.85rem;
+      outline: none;
+      transition: border var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .search-input::placeholder {
+      color: #6b7280;
+    }
+
+    .search-input:focus {
+      border-color: var(--accent);
+      background: rgba(17, 24, 39, 0.98);
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.6);
+      transform: translateY(-1px);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
+
+    .stat-chip {
+      font-size: 0.78rem;
+      padding: 0.35rem 0.7rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .stat-chip strong {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 2.1fr) minmax(0, 1.1fr);
+      gap: 1.25rem;
+      margin-top: 0.6rem;
+    }
+
+    @media (max-width: 880px) {
+      .main-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .right-header {
+        align-items: flex-start;
+      }
+    }
+
+    .student-panel,
+    .info-panel {
+      background: var(--card-bg);
+      border-radius: var(--radius-xl);
+      padding: 1.1rem 1.1rem 1.2rem;
+      border: 1px solid var(--border-subtle);
+      box-shadow: 0 14px 30px rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(10px);
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.8rem;
+    }
+
+    .panel-title {
+      font-size: 0.98rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .panel-title span.icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--accent-soft);
+      font-size: 0.9rem;
+    }
+
+    .panel-subtitle {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .student-list {
+      max-height: 420px;
+      overflow: auto;
+      padding-right: 0.3rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 0.5rem;
+    }
+
+    @media (max-width: 580px) {
+      .student-list {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .student-card {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(15, 23, 42, 0.95);
+      border-radius: 0.9rem;
+      padding: 0.55rem 0.65rem;
+      border: 1px solid rgba(55, 65, 81, 0.95);
+      cursor: pointer;
+      font-size: 0.8rem;
+      text-align: left;
+      color: var(--text-main);
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast), border var(--transition-fast), background var(--transition-fast);
+    }
+
+    .student-card:hover {
+      transform: translateY(-2px);
+      background: rgba(15, 23, 42, 1);
+      border-color: var(--accent);
+      box-shadow: 0 10px 20px rgba(8, 47, 73, 0.9);
+    }
+
+    .student-card .roll-pill {
+      min-width: 26px;
+      height: 26px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      background: rgba(31, 41, 55, 0.9);
+      font-weight: 500;
+      font-size: 0.78rem;
+      color: var(--accent);
+    }
+
+    .student-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.05rem;
+      min-width: 0;
+    }
+
+    .student-name {
+      font-size: 0.82rem;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .student-usn {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .info-panel ul {
+      list-style: none;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      margin-top: 0.4rem;
+    }
+
+    .info-panel li strong {
+      color: var(--text-main);
+      font-weight: 500;
+    }
+
+    .pill-accent {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.15rem 0.45rem;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      font-size: 0.7rem;
+      margin-left: 0.3rem;
+    }
+
+    .footer-note {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-top: 0.95rem;
+      border-top: 1px dashed rgba(75, 85, 99, 0.9);
+      padding-top: 0.7rem;
+    }
+
+    .footer-note span {
+      color: #f59e0b;
+    }
+
+    .footer-note code {
+      font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.7rem;
+      background: rgba(15, 23, 42, 0.9);
+      padding: 0.1rem 0.35rem;
+      border-radius: 999px;
+      border: 1px solid rgba(55, 65, 81, 0.8);
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.93);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 30;
+      padding: 1rem;
+    }
+
+    .modal-backdrop.active {
+      display: flex;
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 420px;
+      background: radial-gradient(circle at top, rgba(56, 189, 248, 0.18), transparent 55%),
+                  rgba(15, 23, 42, 0.98);
+      border-radius: 1.4rem;
+      padding: 1.4rem 1.4rem 1.1rem;
+      border: 1px solid rgba(148, 163, 184, 0.55);
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.8);
+      position: relative;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.9rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .modal-title-block h2 {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .modal-title-block p {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+    }
+
+    .modal-chip {
+      font-size: 0.7rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(75, 85, 99, 0.85);
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .close-btn {
+      border: none;
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 999px;
+      width: 30px;
+      height: 30px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1rem;
+      color: #9ca3af;
+      transition: background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .close-btn:hover {
+      background: rgba(30, 64, 175, 0.7);
+      color: #e5e7eb;
+      transform: translateY(-1px);
+    }
+
+    .modal-body {
+      margin-top: 0.2rem;
+    }
+
+    .student-summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      padding: 0.55rem 0.7rem;
+      border-radius: 0.9rem;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(55, 65, 81, 0.95);
+      margin-bottom: 0.7rem;
+    }
+
+    .student-summary-main {
+      display: flex;
+      flex-direction: column;
+      gap: 0.08rem;
+    }
+
+    .student-summary-main .name {
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .student-summary-main .usn {
+      font-size: 0.77rem;
+      color: var(--text-muted);
+    }
+
+    .summary-roll {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-align: right;
+    }
+
+    .summary-roll span {
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .login-form {
+      margin-top: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .field-group label {
+      font-size: 0.76rem;
+      color: #d1d5db;
+      margin-bottom: 0.15rem;
+      display: inline-block;
+    }
+
+    .field-group input {
+      width: 100%;
+      padding: 0.55rem 0.7rem;
+      border-radius: 0.8rem;
+      border: 1px solid rgba(55, 65, 81, 0.95);
+      background: rgba(15, 23, 42, 0.95);
+      color: var(--text-main);
+      font-size: 0.8rem;
+      outline: none;
+      transition: border var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .field-group input::placeholder {
+      color: #6b7280;
+    }
+
+    .field-group input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.7);
+      background: rgba(15, 23, 42, 1);
+      transform: translateY(-1px);
+    }
+
+    .error-text {
+      font-size: 0.74rem;
+      color: var(--danger);
+      min-height: 1.1em;
+    }
+
+    .btn-primary {
+      width: 100%;
+      margin-top: 0.35rem;
+      padding: 0.55rem 0.7rem;
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(135deg, #38bdf8, #2563eb);
+      color: white;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.3rem;
+      box-shadow: 0 14px 25px rgba(37, 99, 235, 0.6);
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast), filter var(--transition-fast);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.03);
+      box-shadow: 0 18px 32px rgba(37, 99, 235, 0.85);
+    }
+
+    .btn-primary span.arrow {
+      font-size: 1rem;
+    }
+
+    .result-block {
+      margin-top: 0.7rem;
+      border-radius: 0.9rem;
+      background: rgba(15, 23, 42, 0.96);
+      border: 1px solid rgba(55, 65, 81, 0.95);
+      padding: 0.6rem 0.7rem;
+      font-size: 0.8rem;
+    }
+
+    .result-block h3 {
+      font-size: 0.85rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+      gap: 0.4rem;
+    }
+
+    .result-item {
+      background: rgba(17, 24, 39, 0.9);
+      border-radius: 0.7rem;
+      padding: 0.35rem 0.45rem;
+      border: 1px solid rgba(55, 65, 81, 0.95);
+      display: flex;
+      flex-direction: column;
+      gap: 0.08rem;
+    }
+
+    .result-item span.label {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .result-item span.value {
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .no-data {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .no-data strong {
+      color: #fbbf24;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <div class="app-inner">
+      <header class="app-header">
+        <div class="title-block">
+          <h1>
+            ET Attendance & Marks
+            <span class="badge">RVCE • 1st Sem • ET</span>
+          </h1>
+          <p class="subtitle">
+            Click your name → enter your RVCE number → view attendance & marks (when updated).
+          </p>
+        </div>
+
+        <div class="right-header">
+          <div class="tag-pill">
+            <span class="tag-dot"></span>
+            <span>63 students • ET only</span>
+          </div>
+          <span class="legend">Internal class tool – not an official RVCE portal.</span>
+        </div>
+      </header>
+
+      <div class="controls-row">
+        <div class="search-wrapper">
+          <span class="search-icon">🔍</span>
+          <input
+            id="searchInput"
+            class="search-input"
+            type="text"
+            placeholder="Search by name or USN…"
+          />
+        </div>
+
+        <div class="stat-chip">
+          <span>Showing</span>
+          <strong id="visibleCount">63</strong>
+          <span>/ 63 students</span>
+        </div>
+      </div>
+
+      <main class="main-grid">
+        <section class="student-panel">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title">
+                <span class="icon">👥</span>
+                <span>ET – Student List</span>
+              </div>
+              <p class="panel-subtitle">Click a name to open the login popup.</p>
+            </div>
+          </div>
+
+          <div id="studentList" class="student-list">
+            <!-- Filled by JS -->
+          </div>
+        </section>
+
+        <aside class="info-panel">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title">
+                <span class="icon">ℹ️</span>
+                <span>How this works</span>
+              </div>
+            </div>
+          </div>
+
+          <ul>
+            <li><strong>1.</strong> Find your <strong>name</strong> in the left list and click it.</li>
+            <li><strong>2.</strong> In the popup, type your <strong>RVCE number (USN)</strong> exactly.</li>
+            <li><strong>3.</strong> If the USN matches, your
+              <strong>attendance & marks</strong> will be shown.
+            </li>
+            <li>
+              <strong>Note:</strong> Data is stored in the site code (front-end only)
+              <span class="pill-accent">class use</span>
+            </li>
+          </ul>
+
+          <p class="footer-note">
+            To update marks, edit the <code>marksData</code> object inside this file.
+            <br />
+            <span>Warning:</span> This is not a secure ERP. Anyone can see data via “View Source”.
+          </p>
+        </aside>
+      </main>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div id="loginModal" class="modal-backdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title-block">
+          <h2>Student Login</h2>
+          <p>Enter your RVCE number (USN) to view your details.</p>
+        </div>
+        <button id="closeModalBtn" class="close-btn" aria-label="Close">
+          ✕
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="student-summary">
+          <div class="student-summary-main">
+            <div id="modalStudentName" class="name">Student Name</div>
+            <div id="modalStudentUsn" class="usn">USN • ET</div>
+          </div>
+          <div class="summary-roll">
+            Roll<br />
+            <span id="modalStudentRoll">–</span>
+          </div>
+        </div>
+
+        <form id="loginForm" class="login-form">
+          <div class="field-group">
+            <label for="usnInput">RVCE Number (USN)</label>
+            <input id="usnInput" type="text" placeholder="Example: RVCE25BTE059" autocomplete="off" />
+          </div>
+          <div id="loginError" class="error-text"></div>
+          <button type="submit" class="btn-primary">
+            Check my details
+            <span class="arrow">↗</span>
+          </button>
+        </form>
+
+        <div id="resultArea" class="result-block" style="display:none;"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ==========================
+    // 1. ET STUDENT MASTER DATA
+    // ==========================
+
+    const students = [
+      { roll: 1,  name: "ABHAY BALIGA B",                 usn: "RVCE25BTE059" },
+      { roll: 2,  name: "ABHINAV H KRISHNA",              usn: "RVCE25BTE051" },
+      { roll: 3,  name: "ANANYA H S",                     usn: "RVCE25BTE058" },
+      { roll: 4,  name: "ANANYA KARTHIK",                 usn: "RVCE25BTE006" },
+      { roll: 5,  name: "ANAY DURG",                      usn: "RVCE25BTE001" },
+      { roll: 6,  name: "ANIRUDH S J",                    usn: "RVCE25BTE045" },
+      { roll: 7,  name: "ARAVIND R",                      usn: "RVCE25BTE055" },
+      { roll: 8,  name: "ARNAV GANGOOR",                  usn: "RVCE25BTE015" },
+      { roll: 9,  name: "ARNAV GAUTAM",                   usn: "RVCE25BTE016" },
+      { roll: 10, name: "ARYA RITESH KHODAKE",            usn: "RVCE25BTE043" },
+      { roll: 11, name: "ATHARVA TYAGI",                  usn: "RVCE25BTE061" },
+      { roll: 12, name: "ATHARVA VARSHNEY",               usn: "RVCE25BTE041" },
+      { roll: 13, name: "BHARGAV BEKKAM",                 usn: "RVCE25BTE028" },
+      { roll: 14, name: "BHARGAVI S B",                   usn: "RVCE25BTE011" },
+      { roll: 15, name: "CHANDRAKANTHA",                  usn: "RVCE25BTE029" },
+      { roll: 16, name: "CHIRAG CHANDRA",                 usn: "RVCE25BTE044" },
+      { roll: 17, name: "D R SHREESUJA",                  usn: "RVCE25BTE019" },
+      { roll: 18, name: "DAIVIK MANKAME",                 usn: "RVCE25BTE032" },
+      { roll: 19, name: "DAKSH JAIN",                     usn: "RVCE25BTE038" },
+      { roll: 20, name: "DEBDEEP GHOSH",                  usn: "RVCE25BTE020" },
+      { roll: 21, name: "DHRUV TANDEKAR",                 usn: "RVCE25BTE014" },
+      { roll: 22, name: "DIVYA YANAMASHETTI",             usn: "RVCE25BTE018" },
+      { roll: 23, name: "DONDAPATI SINDHUJA",             usn: "RVCE25BTE025" },
+      { roll: 24, name: "GARGI TOMAR",                    usn: "RVCE25BTE005" },
+      { roll: 25, name: "GAUTHAM REDDY CHIRAPU REDDY",    usn: "RVCE25BTE034" },
+      { roll: 26, name: "HARDIK VATS",                    usn: "RVCE25BTE035" },
+      { roll: 27, name: "HRITHIK",                        usn: "RVCE25BTE030" },
+      { roll: 28, name: "ISHITA SINGH",                   usn: "RVCE25BTE009" },
+      { roll: 29, name: "JAHNAVI A H",                    usn: "RVCE25BTE057" },
+      { roll: 30, name: "JASVANTH V A",                   usn: "RVCE25BTE053" },
+      { roll: 31, name: "KARTHIK R",                      usn: "RVCE25BTE031" },
+      { roll: 32, name: "KSHITI CHAUDHARY",               usn: "RVCE25BTE021" },
+      { roll: 33, name: "MANIK KANYAL",                   usn: "RVCE25BTE033" },
+      { roll: 34, name: "MANYA S",                        usn: "RVCE25BTE048" },
+      { roll: 35, name: "MD IRFAN DARVAN",                usn: "RVCE25BTE013" },
+      { roll: 36, name: "MEGHNA ROY",                     usn: "RVCE25BTE060" },
+      { roll: 37, name: "MIA MICHAEL",                    usn: "RVCE25BTE004" },
+      { roll: 38, name: "MOHIT RAJ JALGAR",               usn: "RVCE25BTE026" },
+      { roll: 39, name: "NIKHIL JAGADEESH KORI",          usn: "RVCE25BTE008" },
+      { roll: 40, name: "NIMIT JAIN",                     usn: "RVCE25BTE037" },
+      { roll: 41, name: "PALLAVI K",                      usn: "RVCE25BTE012" },
+      { roll: 42, name: "PRANYA",                         usn: "RVCE25BTE022" },
+      { roll: 43, name: "RISHAB KASHYAP A",               usn: "RVCE25BTE047" },
+      { roll: 44, name: "SAI PRAKASH J",                  usn: "RVCE25BTE023" },
+      { roll: 45, name: "SAMANVAY SHOBHIT",               usn: "RVCE25BTE063" },
+      { roll: 46, name: "SANATH KUMAR N",                 usn: "RVCE25BTE017" },
+      { roll: 47, name: "SANDYA PRITHIKA BALAJI",         usn: "RVCE25BTE049" },
+      { roll: 48, name: "SATYADEEP SREENIVAS",            usn: "RVCE25BTE024" },
+      { roll: 49, name: "SKANDHA VISAKHA",                usn: "RVCE25BTE003" },
+      { roll: 50, name: "SOHAN A GADAVI",                 usn: "RVCE25BTE010" },
+      { roll: 51, name: "SRIJAN SANJEEV INGALAGI",        usn: "RVCE25BTE050" },
+      { roll: 52, name: "STUTHI SANTOSH MATHAPATI",       usn: "RVCE25BTE052" },
+      { roll: 53, name: "SUHAS CHAWAN",                   usn: "RVCE25BTE056" },
+      { roll: 54, name: "SUHAS V J",                      usn: "RVCE25BTE039" },
+      { roll: 55, name: "SUJAN KUMAR S K",                usn: "RVCE25BTE046" },
+      { roll: 56, name: "SWAPNIL SAHU",                   usn: "RVCE25BTE042" },
+      { roll: 57, name: "THARICKA MURARI",                usn: "RVCE25BTE027" },
+      { roll: 58, name: "THARUN S",                       usn: "RVCE25BTE002" },
+      { roll: 59, name: "VAISHNAVI KARPUR",               usn: "RVCE25BTE062" },
+      { roll: 60, name: "VANI GUSAIN",                    usn: "RVCE25BTE036" },
+      { roll: 61, name: "VEDAANT RAJ",                    usn: "RVCE25BTE007" },
+      { roll: 62, name: "VINAYAK S HALLI",                usn: "RVCE25BTE054" },
+      { roll: 63, name: "YASHASVI ARVIND JAIN",           usn: "RVCE25BTE040" }
+    ];
+
+    // =======================================
+    // 2. MARKS + ATTENDANCE DATA (EDIT THIS)
+    // =======================================
+    //
+    // When you get your marks/attendance PDF,
+    // fill this object for each USN.
+    //
+    // Example format:
+    // "RVCE25BTE059": {
+    //   attendance: "88%",
+    //   cie1: 24,
+    //   cie2: 21,
+    //   quiz: 9,
+    //   remarks: "Good"
+    // }
+
+    const marksData = {
+      // === EXAMPLES – REPLACE WITH REAL VALUES ===
+      "RVCE25BTE059": {
+        attendance: "88%",
+        cie1: 24,
+        cie2: 21,
+        quiz: 9,
+        remarks: "Good – keep it up"
+      },
+      "RVCE25BTE051": {
+        attendance: "76%",
+        cie1: 18,
+        cie2: 19,
+        quiz: 7,
+        remarks: "Needs more consistency"
+      },
+      "RVCE25BTE058": {
+        attendance: "92%",
+        cie1: 25,
+        cie2: 23,
+        quiz: 9,
+        remarks: "Excellent"
+      }
+      // Add the rest of the USNs here…
+    };
+
+    // ==========================
+    // 3. DOM / INTERACTION LOGIC
+    // ==========================
+
+    const studentListEl = document.getElementById("studentList");
+    const searchInputEl = document.getElementById("searchInput");
+    const visibleCountEl = document.getElementById("visibleCount");
+
+    const modalBackdrop = document.getElementById("loginModal");
+    const closeModalBtn = document.getElementById("closeModalBtn");
+    const modalStudentName = document.getElementById("modalStudentName");
+    const modalStudentUsn = document.getElementById("modalStudentUsn");
+    const modalStudentRoll = document.getElementById("modalStudentRoll");
+    const loginForm = document.getElementById("loginForm");
+    const usnInput = document.getElementById("usnInput");
+    const loginError = document.getElementById("loginError");
+    const resultArea = document.getElementById("resultArea");
+
+    let currentStudent = null;
+
+    function renderStudents(filterText = "") {
+      const normalized = filterText.trim().toLowerCase();
+      studentListEl.innerHTML = "";
+
+      let visibleCount = 0;
+
+      students.forEach((student) => {
+        const match =
+          !normalized ||
+          student.name.toLowerCase().includes(normalized) ||
+          student.usn.toLowerCase().includes(normalized) ||
+          String(student.roll).includes(normalized);
+
+        if (!match) return;
+
+        visibleCount++;
+
+        const btn = document.createElement("button");
+        btn.className = "student-card";
+        btn.type = "button";
+
+        btn.innerHTML = `
+          <span class="roll-pill">${student.roll}</span>
+          <div class="student-meta">
+            <span class="student-name">${student.name}</span>
+            <span class="student-usn">${student.usn}</span>
+          </div>
+        `;
+
+        btn.addEventListener("click", () => openModal(student));
+        studentListEl.appendChild(btn);
+      });
+
+      visibleCountEl.textContent = visibleCount;
+    }
+
+    function openModal(student) {
+      currentStudent = student;
+      modalStudentName.textContent = student.name;
+      modalStudentUsn.textContent = student.usn + " • ET";
+      modalStudentRoll.textContent = student.roll;
+      loginError.textContent = "";
+      resultArea.style.display = "none";
+      resultArea.innerHTML = "";
+      usnInput.value = "";
+
+      modalBackdrop.classList.add("active");
+      usnInput.focus();
+    }
+
+    function closeModal() {
+      modalBackdrop.classList.remove("active");
+      currentStudent = null;
+    }
+
+    searchInputEl.addEventListener("input", (e) => {
+      renderStudents(e.target.value);
+    });
+
+    closeModalBtn.addEventListener("click", closeModal);
+
+    modalBackdrop.addEventListener("click", (e) => {
+      if (e.target === modalBackdrop) closeModal();
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && modalBackdrop.classList.contains("active")) {
+        closeModal();
+      }
+    });
+
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (!currentStudent) return;
+
+      const entered = usnInput.value.trim().toUpperCase();
+      const expected = currentStudent.usn.toUpperCase();
+
+      if (!entered) {
+        loginError.textContent = "Enter your RVCE number (USN).";
+        resultArea.style.display = "none";
+        resultArea.innerHTML = "";
+        return;
+      }
+
+      if (entered !== expected) {
+        loginError.textContent = "Wrong RVCE number for this name.";
+        resultArea.style.display = "none";
+        resultArea.innerHTML = "";
+        return;
+      }
+
+      loginError.textContent = "";
+      const record = marksData[expected];
+
+      if (!record) {
+        resultArea.style.display = "block";
+        resultArea.innerHTML = `
+          <p class="no-data">
+            <strong>Marks & attendance not updated yet for this USN.</strong><br/>
+            Ask the coordinator to fill <code>marksData</code> in the site code.
+          </p>
+        `;
+        return;
+      }
+
+      const { attendance, cie1, cie2, quiz, remarks } = record;
+
+      resultArea.style.display = "block";
+      resultArea.innerHTML = `
+        <h3>Attendance & Marks</h3>
+        <div class="result-grid">
+          <div class="result-item">
+            <span class="label">Attendance</span>
+            <span class="value">${attendance ?? "—"}</span>
+          </div>
+          <div class="result-item">
+            <span class="label">CIE-1</span>
+            <span class="value">${cie1 ?? "—"}</span>
+          </div>
+          <div class="result-item">
+            <span class="label">CIE-2</span>
+            <span class="value">${cie2 ?? "—"}</span>
+          </div>
+          <div class="result-item">
+            <span class="label">Quiz / Other</span>
+            <span class="value">${quiz ?? "—"}</span>
+          </div>
+        </div>
+        <p style="margin-top:0.45rem;font-size:0.78rem;color:#9ca3af;">
+          <strong>Remarks:</strong> ${remarks ?? "—"}
+        </p>
+      `;
+    });
+
+    // initial render
+    renderStudents();
+  </script>
+</body>
+</html>
