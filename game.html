@@ -2,41 +2,45 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>ET Game & Scoreboard – RVCE</title>
+  <title>ET Reaction Game – RVCE</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --accent: #38bdf8;
-      --accent-soft: rgba(56,189,248,0.15);
-      --bg: #020617;
-      --card: #0b1120;
-      --text-main: #f9fafb;
-      --text-muted: #9ca3af;
-      --enemy-bg: rgba(248, 113, 113, 0.16);
-      --enemy-border: rgba(248, 113, 113, 0.85);
+      --bg: #f3f4f6;
+      --card: #ffffff;
+      --accent: #2563eb;
+      --accent-soft: rgba(37, 99, 235, 0.09);
+      --text-main: #111827;
+      --text-muted: #6b7280;
+      --danger: #dc2626;
+      --success: #16a34a;
+      --border: #e5e7eb;
     }
+
     * { box-sizing:border-box; margin:0; padding:0; }
+
     body {
       font-family: "Poppins", system-ui, -apple-system;
-      background: radial-gradient(circle at top, #0b1120, #020617);
+      background: radial-gradient(circle at top, #e5f0ff, #f3f4f6);
       color: var(--text-main);
       min-height:100vh;
-      padding:1.4rem;
       display:flex;
+      align-items:center;
       justify-content:center;
+      padding:1.2rem;
     }
+
     .shell {
       width:100%;
-      max-width:1200px;
-      background:
-        radial-gradient(circle at top left, rgba(56,189,248,0.2), transparent 60%),
-        rgba(15,23,42,0.98);
-      border-radius:1.75rem;
-      padding:1.4rem 1.6rem 2rem;
-      border:1px solid rgba(148,163,184,0.5);
-      box-shadow:0 22px 45px rgba(0,0,0,0.6);
+      max-width:1100px;
+      background:var(--card);
+      border-radius:1.5rem;
+      padding:1.5rem 1.6rem 1.7rem;
+      border:1px solid var(--border);
+      box-shadow:0 16px 40px rgba(15,23,42,0.15);
     }
+
     header {
       display:flex;
       justify-content:space-between;
@@ -44,53 +48,61 @@
       flex-wrap:wrap;
       margin-bottom:1.1rem;
     }
+
     .title h1 {
       font-size:1.35rem;
       font-weight:600;
     }
+
     .title p {
-      font-size:0.85rem;
+      font-size:0.86rem;
       color:var(--text-muted);
       margin-top:0.2rem;
     }
+
     .tag {
       font-size:0.75rem;
       padding:0.25rem 0.6rem;
       border-radius:999px;
-      border:1px solid rgba(148,163,184,0.7);
-      background:rgba(15,23,42,0.9);
+      border:1px solid #d1d5db;
+      background:#f9fafb;
       color:var(--text-muted);
       display:inline-flex;
       align-items:center;
       gap:0.3rem;
     }
+
     .tag-dot {
       width:7px;height:7px;border-radius:999px;
       background:#22c55e;
-      box-shadow:0 0 0 6px rgba(34,197,94,0.3);
+      box-shadow:0 0 0 5px rgba(34,197,94,0.25);
     }
-    .grid {
+
+    .layout {
       display:grid;
-      grid-template-columns: minmax(0,1.3fr) minmax(0,1.7fr);
+      grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);
       gap:1.1rem;
     }
+
     @media (max-width:900px) {
-      .grid { grid-template-columns: minmax(0,1fr); }
+      .layout { grid-template-columns:minmax(0,1fr); }
     }
+
     .card {
-      background:var(--card);
-      border-radius:1.2rem;
-      padding:1rem 1.1rem 1.2rem;
-      border:1px solid rgba(55,65,81,0.9);
-      box-shadow:0 16px 32px rgba(15,23,42,0.9);
+      background:#ffffff;
+      border-radius:1.1rem;
+      padding:1rem 1.05rem 1.2rem;
+      border:1px solid #e5e7eb;
     }
+
     .card h2 {
       font-size:0.98rem;
-      margin-bottom:0.5rem;
+      margin-bottom:0.55rem;
       display:flex;
       align-items:center;
       gap:0.4rem;
     }
+
     .card h2 span.icon {
       width:24px;height:24px;border-radius:999px;
       background:var(--accent-soft);
@@ -98,45 +110,50 @@
       align-items:center;
       justify-content:center;
       font-size:0.9rem;
+      color:var(--accent);
     }
+
     .student-banner {
       display:flex;
       justify-content:space-between;
       gap:0.6rem;
-      padding:0.5rem 0.75rem;
+      padding:0.6rem 0.8rem;
       border-radius:0.9rem;
-      background:rgba(15,23,42,0.95);
-      border:1px solid rgba(75,85,99,0.9);
+      background:#f3f4ff;
+      border:1px solid #d4d8ff;
       margin-bottom:0.7rem;
     }
+
     .student-main {
       font-size:0.85rem;
     }
-    .student-main .name {
-      font-weight:500;
-    }
+
+    .student-main .name { font-weight:500; }
+
     .student-main .usn {
       font-size:0.78rem;
       color:var(--text-muted);
     }
+
     .student-roll {
       font-size:0.78rem;
       color:var(--text-muted);
       text-align:right;
     }
+
     .student-roll span {
       font-weight:600;
       color:var(--accent);
     }
 
-    /* Enemy banner (for Ishita only) */
+    /* Ishita enemy banner */
     .enemy-banner {
       display:none;
       margin-bottom:0.7rem;
       padding:0.5rem 0.75rem;
       border-radius:0.9rem;
-      background:var(--enemy-bg);
-      border:1px solid var(--enemy-border);
+      background:#fee2e2;
+      border:1px solid #fca5a5;
       font-size:0.83rem;
       position:relative;
       overflow:hidden;
@@ -147,28 +164,26 @@
       letter-spacing:0.04em;
       text-transform:uppercase;
       margin-bottom:0.15rem;
-      color:#fecaca;
+      color:#b91c1c;
       display:flex;
       align-items:center;
       gap:0.3rem;
     }
-    .enemy-banner-title span.icon {
-      font-size:1rem;
-    }
+    .enemy-banner-title span.icon { font-size:1rem; }
     .enemy-banner-text {
       font-size:0.85rem;
-      color:#fee2e2;
+      color:#7f1d1d;
     }
     .enemy-glitch {
       position:absolute;
       inset:0;
       pointer-events:none;
       opacity:0;
-      mix-blend-mode:screen;
+      mix-blend-mode:multiply;
       background:repeating-linear-gradient(
         0deg,
-        rgba(248,250,252,0.12) 0px,
-        rgba(248,250,252,0.12) 1px,
+        rgba(248,113,113,0.18) 0px,
+        rgba(248,113,113,0.18) 1px,
         transparent 1px,
         transparent 3px
       );
@@ -186,19 +201,20 @@
     }
     @keyframes enemyGlitch {
       0% { opacity:0; transform:translateY(0); }
-      20% { opacity:0.45; transform:translateY(-1px); }
-      40% { opacity:0.2; transform:translateY(1px); }
-      60% { opacity:0.55; transform:translateY(-0.5px); }
-      80% { opacity:0.3; transform:translateY(0.5px); }
+      20% { opacity:0.6; transform:translateY(-1px); }
+      40% { opacity:0.3; transform:translateY(1px); }
+      60% { opacity:0.7; transform:translateY(-0.5px); }
+      80% { opacity:0.4; transform:translateY(0.5px); }
       100% { opacity:0; transform:translateY(0); }
     }
 
     /* Game */
     .game-info {
-      font-size:0.82rem;
+      font-size:0.83rem;
       color:var(--text-muted);
       margin-bottom:0.6rem;
     }
+
     .game-status {
       display:flex;
       justify-content:space-between;
@@ -206,79 +222,121 @@
       margin-bottom:0.7rem;
       font-size:0.84rem;
     }
+
     .badge {
       display:inline-flex;
       align-items:center;
       justify-content:center;
       border-radius:999px;
-      padding:0.15rem 0.55rem;
+      padding:0.2rem 0.65rem;
       background:var(--accent-soft);
-      font-size:0.76rem;
-    }
-    .timer {
-      font-size:0.9rem;
-    }
-    .timer span {
-      font-weight:600;
+      font-size:0.78rem;
       color:var(--accent);
+      font-weight:500;
     }
-    .tap-btn {
-      border:none;
+
+    .timer {
+      font-size:0.85rem;
+      color:var(--text-muted);
+    }
+    .timer span { color:var(--accent); font-weight:600; }
+
+    .arena {
+      position:relative;
+      width:100%;
+      max-width:420px;
+      height:320px;
+      border-radius:1rem;
+      background:#f9fafb;
+      border:1px dashed #d1d5db;
+      margin:0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+    }
+
+    .arena-hint {
+      font-size:0.8rem;
+      color:var(--text-muted);
+      text-align:center;
+      padding:0 0.75rem;
+    }
+
+    .target {
+      position:absolute;
+      width:60px;
+      height:60px;
       border-radius:999px;
-      padding:0.7rem 1.6rem;
+      background:radial-gradient(circle at 30% 20%, #ffffff, #60a5fa);
+      border:3px solid #1d4ed8;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#ffffff;
+      font-weight:600;
+      box-shadow:0 10px 20px rgba(37,99,235,0.65);
+      cursor:pointer;
+      user-select:none;
+    }
+
+    .start-btn {
+      margin-top:0.7rem;
+      display:inline-flex;
+      align-items:center;
+      gap:0.35rem;
+      padding:0.6rem 1.4rem;
+      border-radius:999px;
+      border:none;
+      background:linear-gradient(135deg,#2563eb,#3b82f6);
+      color:#ffffff;
       font-size:0.9rem;
       font-weight:500;
       cursor:pointer;
-      background:linear-gradient(135deg,#38bdf8,#2563eb);
-      color:#fff;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:0.3rem;
-      box-shadow:0 14px 28px rgba(37,99,235,0.8);
+      box-shadow:0 14px 30px rgba(37,99,235,0.65);
       transition:transform 0.15s ease-out, box-shadow 0.15s ease-out;
     }
-    .tap-btn.small {
-      padding:0.55rem 1.3rem;
-      font-size:0.85rem;
-      box-shadow:0 10px 18px rgba(37,99,235,0.7);
-    }
-    .tap-btn:hover {
+    .start-btn:hover {
       transform:translateY(-1px);
-      box-shadow:0 18px 34px rgba(37,99,235,1);
+      box-shadow:0 18px 36px rgba(37,99,235,0.9);
     }
-    .tap-btn:disabled {
-      opacity:0.4;
+    .start-btn:disabled {
+      opacity:0.5;
       cursor:not-allowed;
       box-shadow:none;
-    }
-    .game-result {
-      margin-top:0.6rem;
-      font-size:0.84rem;
-    }
-    .game-result.win {
-      color:#4ade80;
-      font-weight:500;
-    }
-    .game-result.lose {
-      color:#f97373;
-      font-weight:500;
-    }
-    .game-sub {
-      font-size:0.78rem;
-      color:var(--text-muted);
-      margin-top:0.25rem;
+      transform:none;
     }
 
-    /* Quiz */
+    .game-result {
+      margin-top:0.6rem;
+      font-size:0.85rem;
+    }
+    .game-result.win { color:var(--success); font-weight:500; }
+    .game-result.lose { color:var(--danger); font-weight:500; }
+
+    .back-link {
+      margin-top:0.7rem;
+      font-size:0.8rem;
+    }
+    .back-link a {
+      color:#2563eb;
+      text-decoration:none;
+    }
+    .back-link a:hover { text-decoration:underline; }
+
+    /* Quiz section */
     .quiz-area {
-      margin-top:0.8rem;
-      padding-top:0.6rem;
-      border-top:1px dashed rgba(75,85,99,0.9);
+      margin-top:0.75rem;
+      padding-top:0.7rem;
+      border-top:1px dashed #e5e7eb;
+    }
+    .quiz-area h3 {
+      font-size:0.92rem;
+      margin-bottom:0.4rem;
     }
     .quiz-q {
-      margin-bottom:0.55rem;
-      font-size:0.82rem;
+      margin-bottom:0.6rem;
+      font-size:0.83rem;
     }
     .quiz-q strong {
       display:block;
@@ -287,69 +345,109 @@
     .quiz-options {
       display:flex;
       flex-direction:column;
-      gap:0.2rem;
+      gap:0.18rem;
       font-size:0.8rem;
     }
     .quiz-options label {
       cursor:pointer;
+      display:flex;
+      align-items:flex-start;
+      gap:0.35rem;
+    }
+    .quiz-options input {
+      margin-top:0.08rem;
     }
 
-    /* Scoreboard */
-    .scoreboard-wrapper {
-      max-height:430px;
-      overflow:auto;
-      margin-top:0.5rem;
-    }
-    table {
-      width:100%;
-      border-collapse:collapse;
-      font-size:0.78rem;
-    }
-    thead {
-      position:sticky;
-      top:0;
-      background:#020617;
-      z-index:1;
-    }
-    th, td {
-      padding:0.35rem 0.4rem;
-      text-align:left;
-      border-bottom:1px solid rgba(31,41,55,0.9);
-    }
-    th {
+    .submit-btn {
+      margin-top:0.4rem;
+      display:inline-flex;
+      align-items:center;
+      gap:0.35rem;
+      padding:0.55rem 1.3rem;
+      border-radius:999px;
+      border:none;
+      background:#16a34a;
+      color:#ffffff;
+      font-size:0.86rem;
       font-weight:500;
+      cursor:pointer;
+      box-shadow:0 10px 22px rgba(22,163,74,0.55);
+      transition:transform 0.15s ease-out, box-shadow 0.15s ease-out;
+    }
+    .submit-btn:hover {
+      transform:translateY(-1px);
+      box-shadow:0 14px 28px rgba(22,163,74,0.8);
+    }
+
+    .quiz-result {
+      margin-top:0.5rem;
+      font-size:0.85rem;
+    }
+    .quiz-result.win { color:var(--success); font-weight:500; }
+    .quiz-result.lose { color:var(--danger); font-weight:500; }
+
+    /* Side card */
+    .side-note {
+      font-size:0.82rem;
       color:var(--text-muted);
-      font-size:0.76rem;
+      margin-bottom:0.7rem;
     }
-    tbody tr:nth-child(even) {
-      background:rgba(15,23,42,0.7);
-    }
-    .score-name {
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      max-width:180px;
-    }
-    .highlight-row {
-      background:rgba(56,189,248,0.12) !important;
-    }
-    .highlight-row td {
-      border-bottom-color:rgba(56,189,248,0.5);
-    }
-    .back-link {
-      margin-top:0.7rem;
+    .side-bullets {
       font-size:0.8rem;
+      list-style:none;
+      padding-left:0;
+      display:flex;
+      flex-direction:column;
+      gap:0.3rem;
+      color:var(--text-muted);
     }
-    .back-link a {
-      color:var(--accent);
+    .side-bullets li span {
+      color:#111827;
+      font-weight:500;
+    }
+
+    .trophy-box {
+      margin-top:0.6rem;
+      padding:0.8rem 0.8rem;
+      border-radius:0.9rem;
+      background:#fef9c3;
+      border:1px solid #facc15;
+      display:none;
+    }
+    .trophy-main {
+      font-size:0.9rem;
+      font-weight:600;
+      margin-bottom:0.25rem;
+    }
+    .trophy-sub {
+      font-size:0.8rem;
+      color:#78350f;
+      margin-bottom:0.45rem;
+    }
+
+    .prize-btn {
+      display:inline-flex;
+      align-items:center;
+      gap:0.35rem;
+      padding:0.55rem 1.3rem;
+      border-radius:999px;
+      border:none;
+      background:#ea580c;
+      color:#ffffff;
+      font-size:0.86rem;
+      font-weight:500;
       text-decoration:none;
+      box-shadow:0 10px 22px rgba(234,88,12,0.65);
+      transition:transform 0.15s ease-out, box-shadow 0.15s ease-out;
     }
-    .back-link a:hover {
-      text-decoration:underline;
+    .prize-btn:hover {
+      transform:translateY(-1px);
+      box-shadow:0 13px 28px rgba(234,88,12,0.9);
     }
+
     .note {
-      margin-top:0.45rem;
-      font-size:0.76rem;
+      margin-top:0.5rem;
+      font-size:0.78rem;
       color:var(--text-muted);
     }
   </style>
@@ -358,21 +456,21 @@
   <div class="shell">
     <header>
       <div class="title">
-        <h1>Mini Game + Marks Scoreboard</h1>
-        <p>Win the tap game, answer 2 questions correctly → then you’re “in the WhatsApp group”.</p>
+        <h1>ET Reaction Game + MD Quiz</h1>
+        <p>Finish the target game fast, then survive 4 questions about MD. Time + correct answers decide your rank.</p>
       </div>
       <div>
         <div class="tag">
           <span class="tag-dot"></span>
-          <span>ET • 1st Sem • Fun only</span>
+          <span>Telecom • 1st Sem • Fun only</span>
         </div>
       </div>
     </header>
 
-    <div class="grid">
-      <!-- Game panel -->
+    <div class="layout">
+      <!-- Game + quiz -->
       <section class="card">
-        <h2><span class="icon">🎮</span>Tap Rush + Final Questions</h2>
+        <h2><span class="icon">🎮</span>Part 1 – Reaction game</h2>
 
         <!-- Ishita-only enemy banner -->
         <div id="enemyBanner" class="enemy-banner">
@@ -395,56 +493,86 @@
             Roll<br><span id="stuRoll"></span>
           </div>
         </div>
-        <p id="noStudentMsg" style="font-size:0.84rem;color:#f97373;display:none;">
+        <p id="noStudentMsg" style="font-size:0.84rem;color:#b91c1c;display:none;">
           No student info found. Please go back to the main page and login again.
         </p>
 
-        <div id="gameArea" style="display:none;">
+        <div id="gameBlock" style="display:none;">
           <p class="game-info">
-            Step 1: You have <strong>10 seconds</strong>. Tap the button
-            <strong>5 times</strong> before time runs out.
-            Step 2: Answer 2 small questions.
+            Click the blue target <strong>10 times</strong> as fast as possible. The target will jump to random positions.
           </p>
           <div class="game-status">
             <div class="badge">
-              Taps: <span id="tapCount">0</span> / 5
+              Hits: <span id="hitCount">0</span> / 10
             </div>
             <div class="timer">
-              Time left: <span id="timeLeft">10</span>s
+              Time: <span id="timeElapsed">0.00</span>s
             </div>
           </div>
-          <button id="tapBtn" class="tap-btn">
-            Tap me fast ⚡
+
+          <div class="arena" id="arena">
+            <div class="arena-hint" id="arenaHint">
+              Press <strong>Start Game</strong> and then chase the target with your mouse / finger.
+            </div>
+            <div class="target" id="target" style="display:none;">
+              Tap
+            </div>
+          </div>
+
+          <button id="startBtn" class="start-btn">
+            ▶ Start game
           </button>
+
           <div id="gameResult" class="game-result"></div>
-          <div id="gameSub" class="game-sub"></div>
 
-          <!-- Quiz area (shown after tap game win) -->
+          <!-- Quiz area -->
           <div id="quizArea" class="quiz-area" style="display:none;">
-            <p class="game-info"><strong>Final step:</strong> answer these 2 questions correctly.</p>
+            <h3>Part 2 – MD’s truth quiz</h3>
 
             <div class="quiz-q">
-              <strong>Q1. What phone does NNN  sir use?</strong>
+              <strong>Q1. Why does MD act like he understands every subject?</strong>
               <div class="quiz-options">
-                <label><input type="radio" name="q1" value="iphone"> iPhone</label>
-                <label><input type="radio" name="q1" value="samsung"> Samsung</label>
-                <label><input type="radio" name="q1" value="pixel"> Google Pixel</label>
+                <label><input type="radio" name="q1" value="a"> a) Because he actually does</label>
+                <label><input type="radio" name="q1" value="b"> b) Because confidence &gt; knowledge</label>
+                <label><input type="radio" name="q1" value="c"> c) Because the professor makes eye contact</label>
+                <label><input type="radio" name="q1" value="d"> d) Because he refuses to accept reality</label>
               </div>
             </div>
 
             <div class="quiz-q">
-              <strong>Q2. How does your CR Irfan address everyone in the group?</strong>
+              <strong>Q2. What is MD’s REAL motivation to study telecom?</strong>
               <div class="quiz-options">
-                <label><input type="radio" name="q2" value="brothers"> Brothers and sisters</label>
-                <label><input type="radio" name="q2" value="guys"> Guys and sisters</label>
-                <label><input type="radio" name="q2" value="dearall"> gay and lesbians</label>
+                <label><input type="radio" name="q2" value="a"> a) Passion for electronics</label>
+                <label><input type="radio" name="q2" value="b"> b) To invent something great for the world</label>
+                <label><input type="radio" name="q2" value="c"> c) Because destiny chose him</label>
+                <label><input type="radio" name="q2" value="d"> d) Because he didn’t get CS 💀</label>
               </div>
             </div>
 
-            <button id="submitQuizBtn" class="tap-btn small">
+            <div class="quiz-q">
+              <strong>Q3. Why is MD always active on WhatsApp?</strong>
+              <div class="quiz-options">
+                <label><input type="radio" name="q3" value="a"> a) To expand knowledge</label>
+                <label><input type="radio" name="q3" value="b"> b) To chat with his huzz</label>
+                <label><input type="radio" name="q3" value="c"> c) To cheat, survive &amp; vibe</label>
+                <label><input type="radio" name="q3" value="d"> d) To make maths mam shout</label>
+              </div>
+            </div>
+
+            <div class="quiz-q">
+              <strong>Q4. What does MD actually want from college life?</strong>
+              <div class="quiz-options">
+                <label><input type="radio" name="q4" value="a"> a) Degree</label>
+                <label><input type="radio" name="q4" value="b"> b) Placement</label>
+                <label><input type="radio" name="q4" value="c"> c) Knowledge</label>
+                <label><input type="radio" name="q4" value="d"> d) ✨Someone who replies instantly on WhatsApp✨</label>
+              </div>
+            </div>
+
+            <button id="submitQuizBtn" class="submit-btn">
               Submit answers ✅
             </button>
-            <div id="quizResult" class="game-result"></div>
+            <div id="quizResult" class="quiz-result"></div>
           </div>
         </div>
 
@@ -453,36 +581,40 @@
         </div>
       </section>
 
-      <!-- Scoreboard -->
+      <!-- Side card: summary + trophy/prize -->
       <section class="card">
-        <h2><span class="icon">📊</span>Marks Scoreboard – all students</h2>
-        <p class="note">
-          Scores are dummy values generated from roll numbers (CIE1 + CIE2 + Quiz).
-          Your row is highlighted.
+        <h2><span class="icon">🏆</span>Result & prize</h2>
+        <p class="side-note">
+          Finish Part 1, then Part 2. If you get all 4 correct, you unlock a small “prize”.
         </p>
-        <div class="scoreboard-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Roll</th>
-                <th>Name</th>
-                <th>Att</th>
-                <th>CIE1</th>
-                <th>CIE2</th>
-                <th>Quiz</th>
-                <th>Total</th>
-              </tr>
-            </thead>
-            <tbody id="scoreBody"></tbody>
-          </table>
+        <ul class="side-bullets">
+          <li><span>Part 1:</span> 10 target hits as fast as you can.</li>
+          <li><span>Part 2:</span> 4 questions about MD’s life and decisions.</li>
+          <li><span>Ranking:</span> more correct answers first, then faster time.</li>
+        </ul>
+
+        <div id="trophyBox" class="trophy-box">
+          <div class="trophy-main">🏆 Perfect run!</div>
+          <div class="trophy-sub" id="trophyText"></div>
+          <a
+            id="prizeLink"
+            class="prize-btn"
+            href="https://youtu.be/HiJ2ym9auqI?si=BwDL0wZDsaW3Rcot"
+            target="_blank"
+            rel="noopener"
+          >
+            Here is your prize
+          </a>
         </div>
+
+        <p class="note">
+          Your best score is saved on this device only and appears on the dashboard back on the main page.
+        </p>
       </section>
     </div>
   </div>
 
   <script>
-    // same student data as index.html
     const students = [
       { roll: 1,  name: "ABHAY BALIGA B",                 usn: "RVCE25BTE059" },
       { roll: 2,  name: "ABHINAV H KRISHNA",              usn: "RVCE25BTE051" },
@@ -549,24 +681,6 @@
       { roll: 63, name: "YASHASVI ARVIND JAIN",           usn: "RVCE25BTE040" }
     ];
 
-    // dummy marks (same formula as index.html)
-    const marksData = {};
-    students.forEach((s) => {
-      const r = s.roll;
-      const attendance = 70 + (r * 3) % 30;
-      const cie1 = 12 + (r * 2) % 19;
-      const cie2 = 11 + (r * 3) % 20;
-      const quiz = 5 + (r * 5) % 6;
-      marksData[s.usn] = {
-        attendance: attendance + "%",
-        cie1,
-        cie2,
-        quiz,
-        remarks: "Dummy data – for demo"
-      };
-    });
-
-    // parse query params
     const params = new URLSearchParams(window.location.search);
     const usn = (params.get("usn") || "").toUpperCase();
     const roll = params.get("roll");
@@ -578,155 +692,208 @@
     const stuName = document.getElementById("stuName");
     const stuUsn = document.getElementById("stuUsn");
     const stuRoll = document.getElementById("stuRoll");
-    const gameArea = document.getElementById("gameArea");
-    const tapBtn = document.getElementById("tapBtn");
-    const tapCountEl = document.getElementById("tapCount");
-    const timeLeftEl = document.getElementById("timeLeft");
+    const gameBlock = document.getElementById("gameBlock");
+
+    const arena = document.getElementById("arena");
+    const arenaHint = document.getElementById("arenaHint");
+    const target = document.getElementById("target");
+    const startBtn = document.getElementById("startBtn");
+    const hitCountEl = document.getElementById("hitCount");
+    const timeElapsedEl = document.getElementById("timeElapsed");
     const gameResult = document.getElementById("gameResult");
-    const gameSub = document.getElementById("gameSub");
 
     const quizArea = document.getElementById("quizArea");
     const submitQuizBtn = document.getElementById("submitQuizBtn");
     const quizResult = document.getElementById("quizResult");
 
-    const scoreBody = document.getElementById("scoreBody");
+    const trophyBox = document.getElementById("trophyBox");
+    const trophyText = document.getElementById("trophyText");
+
+    const resultsKey = "et_game_results_v1";
 
     let currentStudent = null;
 
     if (usn && roll && name) {
       const found = students.find(s => s.usn === usn);
-      if (found) {
-        currentStudent = found;
-      }
+      if (found) currentStudent = found;
     }
 
     if (!currentStudent) {
       noStudentMsg.style.display = "block";
     } else {
       studentBanner.style.display = "flex";
-      gameArea.style.display = "block";
+      gameBlock.style.display = "block";
       stuName.textContent = currentStudent.name;
       stuUsn.textContent = currentStudent.usn + " • ET";
       stuRoll.textContent = currentStudent.roll;
 
-      // Ishita special: animated enemy banner
       if (currentStudent.usn === "RVCE25BTE009") {
         enemyBanner.style.display = "block";
         enemyBanner.classList.add("flash");
-        // remove flashing after 5 seconds (keep banner visible)
-        setTimeout(() => {
-          enemyBanner.classList.remove("flash");
-        }, 5000);
+        setTimeout(() => enemyBanner.classList.remove("flash"), 5000);
       }
     }
 
     // Game logic
-    let tapCount = 0;
-    let timeLeft = 10;
-    let timerId = null;
-    let finished = false;
-    let gameWon = false;
+    let totalTargets = 10;
+    let hits = 0;
+    let gameStarted = false;
+    let gameFinished = false;
+    let startTime = 0;
+    let timerInterval = null;
+    let finalTime = null;
 
-    function endGame(win) {
-      finished = true;
-      tapBtn.disabled = true;
-      clearInterval(timerId);
-      if (win) {
-        gameWon = true;
-        gameResult.textContent = "Step 1 cleared ✅ Now answer the 2 questions below.";
-        gameResult.className = "game-result";
-        gameSub.textContent = "";
-        quizArea.style.display = "block";
+    function moveTarget() {
+      const rect = arena.getBoundingClientRect();
+      const size = 60;
+      const padding = 10;
+
+      const maxX = rect.width - size - padding;
+      const maxY = rect.height - size - padding;
+
+      const x = padding + Math.random() * maxX;
+      const y = padding + Math.random() * maxY;
+
+      target.style.left = x + "px";
+      target.style.top = y + "px";
+    }
+
+    function resetGame() {
+      hits = 0;
+      hitCountEl.textContent = hits;
+      timeElapsedEl.textContent = "0.00";
+      gameResult.textContent = "";
+      gameResult.className = "game-result";
+      quizArea.style.display = "none";
+      quizResult.textContent = "";
+      quizResult.className = "quiz-result";
+      trophyBox.style.display = "none";
+      finalTime = null;
+    }
+
+    function startGame() {
+      if (!currentStudent) return;
+      resetGame();
+      gameStarted = true;
+      gameFinished = false;
+      startBtn.disabled = true;
+      arenaHint.style.display = "none";
+      target.style.display = "flex";
+      moveTarget();
+      startTime = performance.now();
+      timerInterval = setInterval(() => {
+        if (!gameStarted) return;
+        const now = performance.now();
+        const elapsed = (now - startTime) / 1000;
+        timeElapsedEl.textContent = elapsed.toFixed(2);
+      }, 80);
+    }
+
+    function finishGame() {
+      gameStarted = false;
+      gameFinished = true;
+      startBtn.disabled = false;
+      clearInterval(timerInterval);
+      timerInterval = null;
+
+      const now = performance.now();
+      finalTime = (now - startTime) / 1000;
+      timeElapsedEl.textContent = finalTime.toFixed(2);
+
+      target.style.display = "none";
+
+      gameResult.textContent = `Nice, you hit all ${totalTargets} targets in ${finalTime.toFixed(2)}s. Now answer MD's questions below.`;
+      gameResult.className = "game-result win";
+      quizArea.style.display = "block";
+    }
+
+    startBtn.addEventListener("click", () => {
+      if (gameStarted) return;
+      startGame();
+    });
+
+    target.addEventListener("click", () => {
+      if (!gameStarted || gameFinished) return;
+      hits++;
+      hitCountEl.textContent = hits;
+      if (hits >= totalTargets) {
+        finishGame();
       } else {
-        gameResult.textContent = "You LOST the tap challenge ❌";
-        gameResult.className = "game-result lose";
-        gameSub.textContent = "Refresh the page to try again. Scoreboard is still visible.";
-      }
-    }
-
-    function startTimer() {
-      timerId = setInterval(() => {
-        timeLeft--;
-        if (timeLeft < 0) timeLeft = 0;
-        timeLeftEl.textContent = timeLeft;
-        if (timeLeft <= 0 && !finished) {
-          endGame(false);
-        }
-      }, 1000);
-    }
-
-    tapBtn.addEventListener("click", () => {
-      if (!currentStudent || finished) return;
-      if (!timerId) startTimer();
-      tapCount++;
-      tapCountEl.textContent = tapCount;
-      if (tapCount >= 5 && !finished) {
-        endGame(true);
+        moveTarget();
       }
     });
 
     // Quiz logic
-    submitQuizBtn.addEventListener("click", () => {
-      if (!gameWon) {
-        quizResult.textContent = "First finish the tap challenge.";
-        quizResult.className = "game-result";
-        return;
+    function getAnswer(name) {
+      const el = document.querySelector(`input[name="${name}"]:checked`);
+      return el ? el.value : null;
+    }
+
+    function saveResult(correctCount) {
+      if (!currentStudent || finalTime == null) return;
+      let arr;
+      try {
+        arr = JSON.parse(localStorage.getItem(resultsKey) || "[]");
+      } catch (e) {
+        arr = [];
       }
-      const q1 = document.querySelector('input[name="q1"]:checked');
-      const q2 = document.querySelector('input[name="q2"]:checked');
-
-      if (!q1 || !q2) {
-        quizResult.textContent = "Answer both questions.";
-        quizResult.className = "game-result";
-        return;
-      }
-
-      const correctQ1 = q1.value === "pixel";  // Google Pixel
-      const correctQ2 = q2.value === "guys";   // Guys and sisters
-
-      if (correctQ1 && correctQ2) {
-        quizResult.textContent = "You WON the full challenge ✅ You are in the WhatsApp group.";
-        quizResult.className = "game-result win";
-      } else {
-        quizResult.textContent = "One or more answers are wrong ❌ Not in the WhatsApp group yet.";
-        quizResult.className = "game-result lose";
-      }
-    });
-
-    // Scoreboard
-    const rows = students.map((s) => {
-      const m = marksData[s.usn];
-      const total = (m.cie1 || 0) + (m.cie2 || 0) + (m.quiz || 0);
-      return {
-        usn: s.usn,
-        roll: s.roll,
-        name: s.name,
-        attendance: m.attendance,
-        cie1: m.cie1,
-        cie2: m.cie2,
-        quiz: m.quiz,
-        total
+      const newEntry = {
+        usn: currentStudent.usn,
+        name: currentStudent.name,
+        roll: currentStudent.roll,
+        correct: correctCount,
+        time: Number(finalTime.toFixed(2)),
+        ts: Date.now()
       };
-    });
-
-    rows.sort((a,b) => b.total - a.total);
-
-    rows.forEach((r, idx) => {
-      const tr = document.createElement("tr");
-      if (currentStudent && r.usn === currentStudent.usn) {
-        tr.classList.add("highlight-row");
+      const idx = arr.findIndex(e => e.usn === newEntry.usn);
+      if (idx >= 0) {
+        const old = arr[idx];
+        const better =
+          newEntry.correct > old.correct ||
+          (newEntry.correct === old.correct && newEntry.time < old.time);
+        if (better) arr[idx] = newEntry;
+      } else {
+        arr.push(newEntry);
       }
-      tr.innerHTML = `
-        <td>${idx + 1}</td>
-        <td>${r.roll}</td>
-        <td class="score-name">${r.name}</td>
-        <td>${r.attendance}</td>
-        <td>${r.cie1}</td>
-        <td>${r.cie2}</td>
-        <td>${r.quiz}</td>
-        <td>${r.total}</td>
-      `;
-      scoreBody.appendChild(tr);
+      localStorage.setItem(resultsKey, JSON.stringify(arr));
+    }
+
+    submitQuizBtn.addEventListener("click", () => {
+      if (!gameFinished || finalTime == null) {
+        quizResult.textContent = "Finish the reaction game first.";
+        quizResult.className = "quiz-result";
+        return;
+      }
+
+      const a1 = getAnswer("q1");
+      const a2 = getAnswer("q2");
+      const a3 = getAnswer("q3");
+      const a4 = getAnswer("q4");
+
+      if (!a1 || !a2 || !a3 || !a4) {
+        quizResult.textContent = "Answer all four questions.";
+        quizResult.className = "quiz-result";
+        return;
+      }
+
+      let correct = 0;
+      if (a1 === "d") correct++;
+      if (a2 === "d") correct++;
+      if (a3 === "d") correct++;
+      if (a4 === "d") correct++;
+
+      saveResult(correct);
+
+      if (correct === 4) {
+        quizResult.textContent = `Perfect: 4/4 correct in ${finalTime.toFixed(2)}s.`;
+        quizResult.className = "quiz-result win";
+        trophyBox.style.display = "block";
+        trophyText.textContent = `You cleared MD's full challenge with 4/4 correct and a time of ${finalTime.toFixed(2)} seconds.`;
+      } else {
+        quizResult.textContent = `You got ${correct}/4 correct in ${finalTime.toFixed(2)}s. No trophy yet – go back and try to beat yourself.`;
+        quizResult.className = "quiz-result lose";
+        trophyBox.style.display = "none";
+      }
     });
   </script>
 </body>
