@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>ET Knife Throw & MD Quiz – RVCE</title>
+  <title>ET Memory Game – RVCE</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <style>
@@ -14,7 +14,6 @@
       --text-main: #111827;
       --text-muted: #6b7280;
       --danger: #dc2626;
-      --success: #16a34a;
       --border: #e5e7eb;
     }
 
@@ -39,8 +38,6 @@
       padding:1.5rem 1.6rem 1.7rem;
       border:1px solid var(--border);
       box-shadow:0 16px 40px rgba(15,23,42,0.15);
-      position:relative;
-      z-index:1;
     }
 
     header {
@@ -126,91 +123,23 @@
       margin-bottom:0.7rem;
     }
 
-    .student-main {
-      font-size:0.85rem;
-    }
-
+    .student-main { font-size:0.85rem; }
     .student-main .name { font-weight:500; }
-
-    .student-main .usn {
-      font-size:0.78rem;
-      color:var(--text-muted);
-    }
+    .student-main .usn { font-size:0.78rem; color:var(--text-muted); }
 
     .student-roll {
       font-size:0.78rem;
       color:var(--text-muted);
       text-align:right;
     }
+    .student-roll span { font-weight:600; color:var(--accent); }
 
-    .student-roll span {
-      font-weight:600;
-      color:var(--accent);
-    }
-
-    /* Ishita enemy banner */
-    .enemy-banner {
-      display:none;
-      margin-bottom:0.7rem;
-      padding:0.5rem 0.75rem;
-      border-radius:0.9rem;
-      background:#fee2e2;
-      border:1px solid #fca5a5;
-      font-size:0.83rem;
-      position:relative;
-      overflow:hidden;
-    }
-    .enemy-banner-title {
-      font-size:0.8rem;
-      font-weight:600;
-      letter-spacing:0.04em;
-      text-transform:uppercase;
-      margin-bottom:0.15rem;
+    #noStudentMsg {
+      font-size:0.84rem;
       color:#b91c1c;
-      display:flex;
-      align-items:center;
-      gap:0.3rem;
-    }
-    .enemy-banner-title span.icon { font-size:1rem; }
-    .enemy-banner-text {
-      font-size:0.85rem;
-      color:#7f1d1d;
-    }
-    .enemy-glitch {
-      position:absolute;
-      inset:0;
-      pointer-events:none;
-      opacity:0;
-      mix-blend-mode:multiply;
-      background:repeating-linear-gradient(
-        0deg,
-        rgba(248,113,113,0.18) 0px,
-        rgba(248,113,113,0.18) 1px,
-        transparent 1px,
-        transparent 3px
-      );
-      animation: enemyGlitch 1.2s infinite;
-    }
-    .enemy-banner.flash {
-      animation: enemyFlash 0.35s linear 0s 10;
-    }
-    @keyframes enemyFlash {
-      0%, 100% { transform:translateX(0); box-shadow:0 0 0 rgba(248,113,113,0.4); }
-      20% { transform:translateX(-1px); box-shadow:0 0 16px rgba(248,113,113,0.7); }
-      40% { transform:translateX(1px); }
-      60% { transform:translateX(-1px); }
-      80% { transform:translateX(1px); }
-    }
-    @keyframes enemyGlitch {
-      0% { opacity:0; transform:translateY(0); }
-      20% { opacity:0.6; transform:translateY(-1px); }
-      40% { opacity:0.3; transform:translateY(1px); }
-      60% { opacity:0.7; transform:translateY(-0.5px); }
-      80% { opacity:0.4; transform:translateY(0.5px); }
-      100% { opacity:0; transform:translateY(0); }
+      margin-bottom:0.6rem;
     }
 
-    /* Knife game */
     .game-info {
       font-size:0.83rem;
       color:var(--text-muted);
@@ -244,81 +173,69 @@
     .timer span { color:var(--accent); font-weight:600; }
 
     .arena {
-      position:relative;
       width:100%;
       max-width:420px;
-      height:320px;
-      border-radius:1rem;
-      background:#f9fafb;
-      border:1px dashed #d1d5db;
       margin:0 auto;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      overflow:hidden;
+      background:#f9fafb;
+      border-radius:1rem;
+      border:1px dashed #d1d5db;
+      padding:0.8rem;
     }
 
-    .arena-hint {
-      font-size:0.8rem;
-      color:var(--text-muted);
-      text-align:center;
-      padding:0 0.75rem;
+    .grid {
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0,1fr));
+      gap:0.5rem;
     }
 
-    .wheel {
+    .card-tile {
       position:relative;
-      width:180px;
-      height:180px;
-      border-radius:999px;
-      background:radial-gradient(circle at 30% 20%, #ffffff, #bfdbfe);
-      border:4px solid #1d4ed8;
-      box-shadow:0 10px 25px rgba(37,99,235,0.45);
-      animation: spin 5s linear infinite;
+      aspect-ratio:3/4;
+      border-radius:0.75rem;
+      cursor:pointer;
+      perspective:800px;
     }
 
-    @keyframes spin {
-      from { transform:rotate(0deg); }
-      to { transform:rotate(360deg); }
-    }
-
-    .wheel-center {
+    .card-inner {
       position:absolute;
-      top:50%;
-      left:50%;
-      transform:translate(-50%, -50%);
-      width:40px;
-      height:40px;
-      border-radius:999px;
-      background:#1d4ed8;
+      inset:0;
+      border-radius:inherit;
+      transform-style:preserve-3d;
+      transition:transform 0.28s ease-out;
+    }
+
+    .card-tile.flipped .card-inner {
+      transform:rotateY(180deg);
+    }
+
+    .card-face {
+      position:absolute;
+      inset:0;
+      backface-visibility:hidden;
+      border-radius:inherit;
       display:flex;
       align-items:center;
       justify-content:center;
-      color:#eff6ff;
-      font-size:0.8rem;
+      font-size:1.6rem;
       font-weight:600;
     }
 
-    .knife-stuck {
-      position:absolute;
-      left:50%;
-      top:50%;
-      width:6px;
-      height:70px;
-      background:#111827;
-      transform-origin:50% 100%;
-      border-radius:999px;
+    .card-front {
+      background:linear-gradient(135deg,#2563eb,#3b82f6);
+      color:#ffffff;
     }
 
-    .knife-tip {
-      position:absolute;
-      top:0;
-      left:50%;
-      transform:translateX(-50%);
-      width:0;
-      height:0;
-      border-left:8px solid transparent;
-      border-right:8px solid transparent;
-      border-bottom:14px solid #111827;
+    .card-back {
+      background:#ffffff;
+      border:1px solid #d1d5db;
+      transform:rotateY(180deg);
+      font-size:1.8rem;
+    }
+
+    .card-tile.matched .card-inner {
+      transform:rotateY(180deg);
+      cursor:default;
+      opacity:0.9;
     }
 
     .start-btn {
@@ -352,82 +269,36 @@
       margin-top:0.6rem;
       font-size:0.85rem;
     }
-    .game-result.win { color:var(--success); font-weight:500; }
-    .game-result.lose { color:var(--danger); font-weight:500; }
+    .game-result span.label { font-weight:600; }
+
+    .next-btn {
+      margin-top:0.55rem;
+      display:none;
+      align-items:center;
+      gap:0.35rem;
+      padding:0.58rem 1.35rem;
+      border-radius:999px;
+      border:none;
+      background:#16a34a;
+      color:#ffffff;
+      font-size:0.88rem;
+      font-weight:500;
+      cursor:pointer;
+      box-shadow:0 10px 24px rgba(22,163,74,0.6);
+      transition:transform 0.15s ease-out, box-shadow 0.15s ease-out;
+    }
+    .next-btn:hover {
+      transform:translateY(-1px);
+      box-shadow:0 14px 30px rgba(22,163,74,0.9);
+    }
 
     .back-link {
       margin-top:0.7rem;
       font-size:0.8rem;
     }
-    .back-link a {
-      color:#2563eb;
-      text-decoration:none;
-    }
+    .back-link a { color:#2563eb; text-decoration:none; }
     .back-link a:hover { text-decoration:underline; }
 
-    /* Quiz section */
-    .quiz-area {
-      margin-top:0.75rem;
-      padding-top:0.7rem;
-      border-top:1px dashed #e5e7eb;
-    }
-    .quiz-area h3 {
-      font-size:0.92rem;
-      margin-bottom:0.4rem;
-    }
-    .quiz-q {
-      margin-bottom:0.6rem;
-      font-size:0.83rem;
-    }
-    .quiz-q strong {
-      display:block;
-      margin-bottom:0.25rem;
-    }
-    .quiz-options {
-      display:flex;
-      flex-direction:column;
-      gap:0.18rem;
-      font-size:0.8rem;
-    }
-    .quiz-options label {
-      cursor:pointer;
-      display:flex;
-      align-items:flex-start;
-      gap:0.35rem;
-    }
-    .quiz-options input {
-      margin-top:0.08rem;
-    }
-
-    .submit-btn {
-      margin-top:0.4rem;
-      display:inline-flex;
-      align-items:center;
-      gap:0.35rem;
-      padding:0.55rem 1.3rem;
-      border-radius:999px;
-      border:none;
-      background:#16a34a;
-      color:#ffffff;
-      font-size:0.86rem;
-      font-weight:500;
-      cursor:pointer;
-      box-shadow:0 10px 22px rgba(22,163,74,0.55);
-      transition:transform 0.15s ease-out, box-shadow 0.15s ease-out;
-    }
-    .submit-btn:hover {
-      transform:translateY(-1px);
-      box-shadow:0 14px 28px rgba(22,163,74,0.8);
-    }
-
-    .quiz-result {
-      margin-top:0.5rem;
-      font-size:0.85rem;
-    }
-    .quiz-result.win { color:var(--success); font-weight:500; }
-    .quiz-result.lose { color:var(--danger); font-weight:500; }
-
-    /* Side card */
     .side-note {
       font-size:0.82rem;
       color:var(--text-muted);
@@ -442,10 +313,7 @@
       gap:0.3rem;
       color:var(--text-muted);
     }
-    .side-bullets li span {
-      color:#111827;
-      font-weight:500;
-    }
+    .side-bullets li span { color:#111827; font-weight:500; }
 
     .note {
       margin-top:0.5rem;
@@ -453,96 +321,14 @@
       color:var(--text-muted);
     }
 
-    /* Full-screen result overlay */
-    .result-overlay {
-      position:fixed;
-      inset:0;
-      background:#f9fafb;
-      display:none;
-      align-items:center;
-      justify-content:center;
-      z-index:50;
-      padding:1.2rem;
-    }
-
-    .result-card {
-      max-width:520px;
-      width:100%;
-      background:#ffffff;
-      border-radius:1.4rem;
-      padding:1.6rem 1.7rem 1.4rem;
-      border:1px solid #e5e7eb;
-      box-shadow:0 18px 40px rgba(15,23,42,0.2);
-      text-align:center;
-    }
-
-    .result-icon {
-      font-size:2.3rem;
-      margin-bottom:0.4rem;
-    }
-
-    .result-title {
-      font-size:1.2rem;
-      font-weight:600;
-      margin-bottom:0.25rem;
-    }
-
-    .result-sub {
-      font-size:0.86rem;
-      color:var(--text-muted);
-      margin-bottom:0.6rem;
-    }
-
-    .result-correct {
-      font-size:0.84rem;
-      margin-bottom:0.35rem;
-    }
-
-    .result-answers {
-      font-size:0.8rem;
-      color:var(--text-muted);
-      margin-bottom:0.8rem;
-    }
-
-    .prize-btn {
-      display:inline-flex;
-      align-items:center;
-      gap:0.35rem;
-      padding:0.6rem 1.4rem;
-      border-radius:999px;
-      border:none;
-      background:#ea580c;
-      color:#ffffff;
-      font-size:0.9rem;
-      font-weight:500;
-      text-decoration:none;
-      box-shadow:0 12px 26px rgba(234,88,12,0.75);
-      transition:transform 0.15s ease-out, box-shadow 0.15s ease-out;
-    }
-    .prize-btn:hover {
-      transform:translateY(-1px);
-      box-shadow:0 16px 30px rgba(234,88,12,0.95);
-    }
-
-    .result-back {
-      margin-top:0.5rem;
-      font-size:0.8rem;
-      color:var(--text-muted);
-    }
-    .result-back a {
-      color:#2563eb;
-      text-decoration:none;
-    }
-    .result-back a:hover { text-decoration:underline; }
-
   </style>
 </head>
 <body>
   <div class="shell">
     <header>
       <div class="title">
-        <h1>ET Knife Throw + MD Quiz</h1>
-        <p>Land 5 knives on the spinning target, then answer 5 MD questions. Prize is the same… only your ego changes.</p>
+        <h1>ET Memory Game (Part 1)</h1>
+        <p>Match all the cards as fast as you can. Then you’ll be redirected to the MD quiz page (Part 2).</p>
       </div>
       <div>
         <div class="tag">
@@ -553,21 +339,8 @@
     </header>
 
     <div class="layout">
-      <!-- Game + quiz -->
       <section class="card">
-        <h2><span class="icon">🔪</span>Part 1 – Knife Throw</h2>
-
-        <!-- Ishita-only enemy banner -->
-        <div id="enemyBanner" class="enemy-banner">
-          <div class="enemy-glitch"></div>
-          <div class="enemy-banner-title">
-            <span class="icon">⚠️</span>
-            <span>Message from Irfan</span>
-          </div>
-          <div class="enemy-banner-text">
-            Irfan says… you’re now my enemy 😈
-          </div>
-        </div>
+        <h2><span class="icon">🧠</span>Memory Match</h2>
 
         <div id="studentBanner" class="student-banner" style="display:none;">
           <div class="student-main">
@@ -578,99 +351,40 @@
             Roll<br><span id="stuRoll"></span>
           </div>
         </div>
-        <p id="noStudentMsg" style="font-size:0.84rem;color:#b91c1c;display:none;">
-          No student info found. Please go back to the main page and login again.
+
+        <p id="noStudentMsg" style="display:none;">
+          Login data missing. Go back and select your name again.
         </p>
 
         <div id="gameBlock" style="display:none;">
           <p class="game-info">
-            The wheel spins. You have <strong>5 knives</strong>. Tap <strong>Throw knife</strong> to stick them.
-            If a new knife hits too close to an old one, it’s a collision – but you still go to the MD quiz.
+            There are <strong>6 pairs</strong> of icons. Flip two cards at a time. Match all pairs with
+            minimum moves and time.
           </p>
+
           <div class="game-status">
             <div class="badge">
-              Knives: <span id="knifeCount">0</span> / 5
+              Moves: <span id="moveCount">0</span>
             </div>
             <div class="timer">
               Time: <span id="timeElapsed">0.00</span>s
             </div>
           </div>
 
-          <div class="arena" id="arena">
-            <div class="arena-hint" id="arenaHint">
-              Press <strong>Start</strong> and then throw knives one by one. They can’t overlap.
-            </div>
-            <div class="wheel" id="wheel">
-              <div class="wheel-center">ET</div>
-              <!-- knives get added here -->
+          <div class="arena">
+            <div class="grid" id="grid">
+              <!-- cards via JS -->
             </div>
           </div>
 
-          <button id="startBtn" class="start-btn">
-            ▶ Start &amp; throw knife
+          <button id="restartBtn" class="start-btn">
+            🔁 Restart game
           </button>
 
           <div id="gameResult" class="game-result"></div>
-
-          <!-- Quiz area -->
-          <div id="quizArea" class="quiz-area" style="display:none;">
-            <h3>Part 2 – MD’s truth quiz (5 Qs)</h3>
-
-            <div class="quiz-q">
-              <strong>Q1. Why does MD act like he understands every subject?</strong>
-              <div class="quiz-options">
-                <label><input type="radio" name="q1" value="a"> a) Because he actually does</label>
-                <label><input type="radio" name="q1" value="b"> b) Because confidence &gt; knowledge</label>
-                <label><input type="radio" name="q1" value="c"> c) Because the professor makes eye contact</label>
-                <label><input type="radio" name="q1" value="d"> d) Because he refuses to accept reality</label>
-              </div>
-            </div>
-
-            <div class="quiz-q">
-              <strong>Q2. What is MD’s REAL motivation to study telecom?</strong>
-              <div class="quiz-options">
-                <label><input type="radio" name="q2" value="a"> a) Passion for electronics</label>
-                <label><input type="radio" name="q2" value="b"> b) To invent something great for the world</label>
-                <label><input type="radio" name="q2" value="c"> c) Because destiny chose him</label>
-                <label><input type="radio" name="q2" value="d"> d) Because he didn’t get CS 💀</label>
-              </div>
-            </div>
-
-            <div class="quiz-q">
-              <strong>Q3. Why is MD always active on WhatsApp?</strong>
-              <div class="quiz-options">
-                <label><input type="radio" name="q3" value="a"> a) To expand knowledge</label>
-                <label><input type="radio" name="q3" value="b"> b) To chat with his huzz</label>
-                <label><input type="radio" name="q3" value="c"> c) To cheat, survive &amp; vibe</label>
-                <label><input type="radio" name="q3" value="d"> d) To make maths mam shout</label>
-              </div>
-            </div>
-
-            <div class="quiz-q">
-              <strong>Q4. What does MD actually want from college life?</strong>
-              <div class="quiz-options">
-                <label><input type="radio" name="q4" value="a"> a) Degree</label>
-                <label><input type="radio" name="q4" value="b"> b) Placement</label>
-                <label><input type="radio" name="q4" value="c"> c) Knowledge</label>
-                <label><input type="radio" name="q4" value="d"> d) ✨Someone who replies instantly on WhatsApp✨</label>
-              </div>
-            </div>
-
-            <div class="quiz-q">
-              <strong>Q5. Do you think Irfan has a girlfriend?</strong>
-              <div class="quiz-options">
-                <label><input type="radio" name="q5" value="a"> A) Yes, in his dreams only</label>
-                <label><input type="radio" name="q5" value="b"> B) No, he is a childish boy</label>
-                <label><input type="radio" name="q5" value="c"> C) Maybe, but only if VPN counts as a relationship</label>
-                <label><input type="radio" name="q5" value="d"> D) He is still waiting for “typing…” since 2021</label>
-              </div>
-            </div>
-
-            <button id="submitQuizBtn" class="submit-btn">
-              Submit answers ✅
-            </button>
-            <div id="quizResult" class="quiz-result"></div>
-          </div>
+          <button id="nextBtn" class="next-btn">
+            ➜ Go to MD Quiz
+          </button>
         </div>
 
         <div class="back-link">
@@ -678,53 +392,25 @@
         </div>
       </section>
 
-      <!-- Side card: explanation -->
       <section class="card">
-        <h2><span class="icon">📊</span>How your score is used</h2>
+        <h2><span class="icon">ℹ️</span>How this is used</h2>
         <p class="side-note">
-          Knife time + number of correct answers decide your rank on the dashboard (back on the main page).
+          Only your total time from this game is passed to the MD quiz page. Final scoreboard = quiz score + this time.
         </p>
         <ul class="side-bullets">
-          <li><span>5 knives:</span> each safe hit = new level.</li>
-          <li><span>Collision:</span> knife hits another knife → game ends, but you still go to the quiz.</li>
-          <li><span>Quiz:</span> 5 questions about MD and Irfan. We store only score + time.</li>
+          <li><span>Game 1:</span> Memory match with 6 pairs.</li>
+          <li><span>Game 2:</span> MD roast quiz on the next page.</li>
+          <li><span>Scoreboard:</span> stored on this device and visible on the quiz page & main dashboard.</li>
         </ul>
-
         <p class="note">
-          Nothing here is official. Just vibes, roasting and a YouTube prize.
+          Don’t overthink the strategy. Just flip fast and pray the icons match.
         </p>
       </section>
     </div>
   </div>
 
-  <!-- Result overlay -->
-  <div id="resultOverlay" class="result-overlay">
-    <div class="result-card">
-      <div id="overlayIcon" class="result-icon">🏆</div>
-      <div id="overlayTitle" class="result-title">Well done!</div>
-      <div id="overlaySub" class="result-sub">
-        Thanks for playing. Respect for at least trying.
-      </div>
-      <div id="overlayCorrect" class="result-correct"></div>
-      <div id="overlayAnswers" class="result-answers">
-        Correct answers: Q1 – D, Q2 – D, Q3 – D, Q4 – D, Q5 – D.
-      </div>
-      <a
-        class="prize-btn"
-        href="https://youtu.be/HiJ2ym9auqI?si=BwDL0wZDsaW3Rcot"
-        target="_blank"
-        rel="noopener"
-      >
-        Here is your prize
-      </a>
-      <div class="result-back">
-        or <a href="index.html">go back to the dashboard</a>
-      </div>
-    </div>
-  </div>
-
   <script>
-    // --- student data (same as index.html) ---
+    // ---- student setup (same list as index) ----
     const students = [
       { roll: 1,  name: "ABHAY BALIGA B",                 usn: "RVCE25BTE059" },
       { roll: 2,  name: "ABHINAV H KRISHNA",              usn: "RVCE25BTE051" },
@@ -796,37 +482,14 @@
     const roll = params.get("roll");
     const name = params.get("name") || "";
 
-    const enemyBanner = document.getElementById("enemyBanner");
     const studentBanner = document.getElementById("studentBanner");
     const noStudentMsg = document.getElementById("noStudentMsg");
+    const gameBlock = document.getElementById("gameBlock");
     const stuName = document.getElementById("stuName");
     const stuUsn = document.getElementById("stuUsn");
     const stuRoll = document.getElementById("stuRoll");
-    const gameBlock = document.getElementById("gameBlock");
-
-    const arena = document.getElementById("arena");
-    const arenaHint = document.getElementById("arenaHint");
-    const wheel = document.getElementById("wheel");
-    const startBtn = document.getElementById("startBtn");
-    const knifeCountEl = document.getElementById("knifeCount");
-    const timeElapsedEl = document.getElementById("timeElapsed");
-    const gameResult = document.getElementById("gameResult");
-
-    const quizArea = document.getElementById("quizArea");
-    const submitQuizBtn = document.getElementById("submitQuizBtn");
-    const quizResult = document.getElementById("quizResult");
-
-    const resultOverlay = document.getElementById("resultOverlay");
-    const overlayIcon = document.getElementById("overlayIcon");
-    const overlayTitle = document.getElementById("overlayTitle");
-    const overlaySub = document.getElementById("overlaySub");
-    const overlayCorrect = document.getElementById("overlayCorrect");
-    const overlayAnswers = document.getElementById("overlayAnswers");
-
-    const resultsKey = "et_game_results_v1";
 
     let currentStudent = null;
-
     if (usn && roll && name) {
       const found = students.find(s => s.usn === usn);
       if (found) currentStudent = found;
@@ -840,245 +503,157 @@
       stuName.textContent = currentStudent.name;
       stuUsn.textContent = currentStudent.usn + " • ET";
       stuRoll.textContent = currentStudent.roll;
-
-      // Ishita enemy banner
-      if (currentStudent.usn === "RVCE25BTE009") {
-        enemyBanner.style.display = "block";
-        enemyBanner.classList.add("flash");
-        setTimeout(() => enemyBanner.classList.remove("flash"), 5000);
-      }
     }
 
-    // --- Knife throw game logic ---
-    const TOTAL_KNIVES = 5;
-    const MIN_ANGLE_GAP = 28; // degrees around wheel
+    const icons = ["📡","📶","📱","💻","🛰️","⚡"]; // 6 pairs
+    const gridEl = document.getElementById("grid");
+    const moveCountEl = document.getElementById("moveCount");
+    const timeElapsedEl = document.getElementById("timeElapsed");
+    const gameResultEl = document.getElementById("gameResult");
+    const restartBtn = document.getElementById("restartBtn");
+    const nextBtn = document.getElementById("nextBtn");
 
-    let knivesPlaced = 0;
-    let angles = [];
-    let gameStarted = false;
-    let gameFinished = false;
-    let startTime = 0;
+    let cards = [];
+    let firstCard = null;
+    let secondCard = null;
+    let lockBoard = false;
+    let moves = 0;
+    let matchedPairs = 0;
+    let startTime = null;
     let timerInterval = null;
-    let finalTime = null;
+    let finalTime = 0;
 
-    function resetGameState() {
-      knivesPlaced = 0;
-      angles = [];
-      knifeCountEl.textContent = "0";
-      timeElapsedEl.textContent = "0.00";
-      gameResult.textContent = "";
-      gameResult.className = "game-result";
-      quizArea.style.display = "none";
-      quizResult.textContent = "";
-      quizResult.className = "quiz-result";
-      finalTime = null;
-      // remove old knives
-      const oldKnives = wheel.querySelectorAll(".knife-stuck");
-      oldKnives.forEach(k => k.remove());
+    function shuffleArray(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
     }
 
-    function startGame() {
-      if (!currentStudent) return;
-      if (gameStarted) return;
-      resetGameState();
-      gameStarted = true;
-      gameFinished = false;
-      startBtn.disabled = false; // still used to throw
-      startBtn.textContent = "Throw knife";
-      arenaHint.style.display = "none";
+    function setupBoard() {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      startTime = null;
+      finalTime = 0;
+      moves = 0;
+      matchedPairs = 0;
+      moveCountEl.textContent = "0";
+      timeElapsedEl.textContent = "0.00";
+      gameResultEl.textContent = "";
+      nextBtn.style.display = "none";
 
+      gridEl.innerHTML = "";
+      firstCard = null;
+      secondCard = null;
+      lockBoard = false;
+
+      const pairIcons = [...icons, ...icons];
+      shuffleArray(pairIcons);
+
+      cards = pairIcons.map((icon, index) => {
+        const card = document.createElement("div");
+        card.className = "card-tile";
+        card.dataset.icon = icon;
+        card.dataset.index = index;
+
+        card.innerHTML = `
+          <div class="card-inner">
+            <div class="card-face card-front"></div>
+            <div class="card-face card-back">${icon}</div>
+          </div>
+        `;
+
+        card.addEventListener("click", () => onCardClick(card));
+        gridEl.appendChild(card);
+        return card;
+      });
+    }
+
+    function startTimerIfNeeded() {
+      if (startTime !== null) return;
       startTime = performance.now();
       timerInterval = setInterval(() => {
-        if (!gameStarted) return;
         const now = performance.now();
         const elapsed = (now - startTime) / 1000;
         timeElapsedEl.textContent = elapsed.toFixed(2);
-      }, 80);
+      }, 100);
     }
 
-    function stopTimer() {
-      if (timerInterval) {
-        clearInterval(timerInterval);
-        timerInterval = null;
-      }
-    }
+    function onCardClick(card) {
+      if (lockBoard) return;
+      if (card.classList.contains("matched")) return;
 
-    function finishGame(message, win) {
-      gameStarted = false;
-      gameFinished = true;
-      stopTimer();
-      const now = performance.now();
-      finalTime = (now - startTime) / 1000;
-      timeElapsedEl.textContent = finalTime.toFixed(2);
+      startTimerIfNeeded();
 
-      gameResult.textContent = message;
-      gameResult.className = "game-result " + (win ? "win" : "lose");
-      quizArea.style.display = "block";
-      startBtn.disabled = true;
-    }
+      if (card === firstCard) return;
 
-    function placeKnife() {
-      if (!gameStarted || gameFinished) return;
+      card.classList.add("flipped");
 
-      if (knivesPlaced === 0 && !startTime) {
-        startTime = performance.now();
+      if (!firstCard) {
+        firstCard = card;
+        return;
       }
 
-      // choose random angle
-      const angle = Math.random() * 360;
+      secondCard = card;
+      moves++;
+      moveCountEl.textContent = String(moves);
+      checkMatch();
+    }
 
-      // collision check
-      let collision = false;
-      for (const a of angles) {
-        const diff = Math.abs(a - angle);
-        const wrapped = Math.min(diff, 360 - diff);
-        if (wrapped < MIN_ANGLE_GAP) {
-          collision = true;
-          break;
+    function checkMatch() {
+      const isMatch = firstCard.dataset.icon === secondCard.dataset.icon;
+
+      if (isMatch) {
+        firstCard.classList.add("matched");
+        secondCard.classList.add("matched");
+        matchedPairs++;
+        resetTurn();
+
+        if (matchedPairs === icons.length) {
+          finishGame();
         }
-      }
-
-      if (collision) {
-        // add a dramatic knife anyway
-        addKnife(angle);
-        knivesPlaced++;
-        knifeCountEl.textContent = knivesPlaced;
-        finishGame("Knife collision 😵 – but you still go to MD’s quiz.", false);
-        return;
-      }
-
-      angles.push(angle);
-      knivesPlaced++;
-      knifeCountEl.textContent = knivesPlaced;
-      addKnife(angle);
-
-      if (knivesPlaced >= TOTAL_KNIVES) {
-        finishGame("Clean hit! All 5 knives landed 🎯 – now face MD’s quiz.", true);
+      } else {
+        lockBoard = true;
+        setTimeout(() => {
+          firstCard.classList.remove("flipped");
+          secondCard.classList.remove("flipped");
+          resetTurn();
+        }, 700);
       }
     }
 
-    function addKnife(angle) {
-      const knife = document.createElement("div");
-      knife.className = "knife-stuck";
-      knife.style.transform = `translate(-50%, -50%) rotate(${angle}deg) translateY(-80px)`;
-      const tip = document.createElement("div");
-      tip.className = "knife-tip";
-      knife.appendChild(tip);
-      wheel.appendChild(knife);
+    function resetTurn() {
+      [firstCard, secondCard] = [null, null];
+      lockBoard = false;
     }
 
-    startBtn.addEventListener("click", () => {
+    function finishGame() {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      const now = performance.now();
+      finalTime = startTime ? (now - startTime) / 1000 : 0;
+      timeElapsedEl.textContent = finalTime.toFixed(2);
+      gameResultEl.innerHTML =
+        `<span class="label">Nice!</span> You finished in <strong>${moves}</strong> moves and <strong>${finalTime.toFixed(2)}s</strong>.`;
+      nextBtn.style.display = "inline-flex";
+    }
+
+    restartBtn.addEventListener("click", setupBoard);
+
+    nextBtn.addEventListener("click", () => {
       if (!currentStudent) return;
-      if (!gameStarted && !gameFinished && knivesPlaced === 0) {
-        startGame();
-        placeKnife();
-      } else if (gameStarted && !gameFinished) {
-        placeKnife();
-      } else if (gameFinished) {
-        // allow restart if needed
-        startGame();
-        placeKnife();
-      }
-    });
-
-    // --- Quiz + result logic ---
-
-    function getAnswer(name) {
-      const el = document.querySelector(`input[name="${name}"]:checked`);
-      return el ? el.value : null;
-    }
-
-    function saveResult(correctCount) {
-      if (!currentStudent || finalTime == null) return;
-      let arr;
-      try {
-        arr = JSON.parse(localStorage.getItem(resultsKey) || "[]");
-      } catch (e) {
-        arr = [];
-      }
-      const newEntry = {
+      const params = new URLSearchParams({
         usn: currentStudent.usn,
+        roll: String(currentStudent.roll),
         name: currentStudent.name,
-        roll: currentStudent.roll,
-        correct: correctCount,
-        time: Number(finalTime.toFixed(2)),
-        ts: Date.now()
-      };
-      const idx = arr.findIndex(e => e.usn === newEntry.usn);
-      if (idx >= 0) {
-        const old = arr[idx];
-        const better =
-          newEntry.correct > old.correct ||
-          (newEntry.correct === old.correct && newEntry.time < old.time);
-        if (better) arr[idx] = newEntry;
-      } else {
-        arr.push(newEntry);
-      }
-      localStorage.setItem(resultsKey, JSON.stringify(arr));
-    }
-
-    submitQuizBtn.addEventListener("click", () => {
-      if (!currentStudent) return;
-
-      if (!gameFinished || finalTime == null) {
-        quizResult.textContent = "Finish the knife game first – then submit.";
-        quizResult.className = "quiz-result";
-        return;
-      }
-
-      const a1 = getAnswer("q1");
-      const a2 = getAnswer("q2");
-      const a3 = getAnswer("q3");
-      const a4 = getAnswer("q4");
-      const a5 = getAnswer("q5");
-
-      if (!a1 || !a2 || !a3 || !a4 || !a5) {
-        quizResult.textContent = "Answer all five questions.";
-        quizResult.className = "quiz-result";
-        return;
-      }
-
-      let correct = 0;
-      if (a1 === "d") correct++;
-      if (a2 === "d") correct++;
-      if (a3 === "d") correct++;
-      if (a4 === "d") correct++;
-      if (a5 === "d") correct++;
-
-      // We still display something under the quiz (just in case)
-      if (correct === 5) {
-        quizResult.textContent = `5/5 correct in ${finalTime.toFixed(2)}s – MD approved.`;
-        quizResult.className = "quiz-result win";
-      } else {
-        quizResult.textContent = `${correct}/5 correct in ${finalTime.toFixed(2)}s. Respect for attempting.`;
-        quizResult.className = "quiz-result lose";
-      }
-
-      // Save for dashboard
-      saveResult(correct);
-
-      // Show overlay "new page" with correct answers + prize
-      const champion = correct === 5;
-
-      overlayCorrect.textContent = champion
-        ? `You nailed ALL 5 answers in ${finalTime.toFixed(2)} seconds.`
-        : `You got ${correct}/5 answers correct in ${finalTime.toFixed(2)} seconds.`;
-
-      overlayAnswers.textContent =
-        "Correct answers: Q1 – D, Q2 – D, Q3 – D, Q4 – D, Q5 – D.";
-
-      if (champion) {
-        overlayIcon.textContent = "👑";
-        overlayTitle.textContent = "Champion of ET!";
-        overlaySub.textContent = "Perfect score. You’re officially overqualified for this quiz.";
-      } else {
-        overlayIcon.textContent = "🏆";
-        overlayTitle.textContent = "Well done for participation!";
-        overlaySub.textContent = "You survived the knives and the MD roast. That’s already something.";
-      }
-
-      resultOverlay.style.display = "flex";
+        gameTime: finalTime.toFixed(2)
+      });
+      window.location.href = "quiz.html?" + params.toString();
     });
+
+    // Initial draw
+    if (currentStudent) setupBoard();
   </script>
 </body>
 </html>
