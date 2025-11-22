@@ -172,6 +172,11 @@
       box-shadow:0 14px 28px rgba(37,99,235,0.8);
       transition:transform 0.15s ease-out, box-shadow 0.15s ease-out;
     }
+    .tap-btn.small {
+      padding:0.55rem 1.3rem;
+      font-size:0.85rem;
+      box-shadow:0 10px 18px rgba(37,99,235,0.7);
+    }
     .tap-btn:hover {
       transform:translateY(-1px);
       box-shadow:0 18px 34px rgba(37,99,235,1);
@@ -197,6 +202,30 @@
       font-size:0.78rem;
       color:var(--text-muted);
       margin-top:0.25rem;
+    }
+
+    /* Quiz */
+    .quiz-area {
+      margin-top:0.8rem;
+      padding-top:0.6rem;
+      border-top:1px dashed rgba(75,85,99,0.9);
+    }
+    .quiz-q {
+      margin-bottom:0.55rem;
+      font-size:0.82rem;
+    }
+    .quiz-q strong {
+      display:block;
+      margin-bottom:0.25rem;
+    }
+    .quiz-options {
+      display:flex;
+      flex-direction:column;
+      gap:0.2rem;
+      font-size:0.8rem;
+    }
+    .quiz-options label {
+      cursor:pointer;
     }
 
     /* Scoreboard */
@@ -264,7 +293,7 @@
     <header>
       <div class="title">
         <h1>Mini Game + Marks Scoreboard</h1>
-        <p>If you win the game, you’ll see a “You’re in WhatsApp group” message below.</p>
+        <p>Win the tap game, answer 2 questions correctly → then you’re “in the WhatsApp group”.</p>
       </div>
       <div>
         <div class="tag">
@@ -277,7 +306,7 @@
     <div class="grid">
       <!-- Game panel -->
       <section class="card">
-        <h2><span class="icon">🎮</span>Tap Rush – win to unlock message</h2>
+        <h2><span class="icon">🎮</span>Tap Rush + Final Questions</h2>
         <div id="studentBanner" class="student-banner" style="display:none;">
           <div class="student-main">
             <div class="name" id="stuName"></div>
@@ -293,8 +322,9 @@
 
         <div id="gameArea" style="display:none;">
           <p class="game-info">
-            Rules: You have <strong>10 seconds</strong>. Tap the button
+            Step 1: You have <strong>10 seconds</strong>. Tap the button
             <strong>5 times</strong> before time runs out.
+            Step 2: Answer 2 small questions.
           </p>
           <div class="game-status">
             <div class="badge">
@@ -309,6 +339,34 @@
           </button>
           <div id="gameResult" class="game-result"></div>
           <div id="gameSub" class="game-sub"></div>
+
+          <!-- Quiz area (shown after tap game win) -->
+          <div id="quizArea" class="quiz-area" style="display:none;">
+            <p class="game-info"><strong>Final step:</strong> answer these 2 questions correctly.</p>
+
+            <div class="quiz-q">
+              <strong>Q1. What phone does NNN use?</strong>
+              <div class="quiz-options">
+                <label><input type="radio" name="q1" value="iphone"> iPhone</label>
+                <label><input type="radio" name="q1" value="samsung"> Samsung</label>
+                <label><input type="radio" name="q1" value="pixel"> Google Pixel</label>
+              </div>
+            </div>
+
+            <div class="quiz-q">
+              <strong>Q2. How does your CR Irfan address everyone in the group?</strong>
+              <div class="quiz-options">
+                <label><input type="radio" name="q2" value="brothers"> Brothers and sisters</label>
+                <label><input type="radio" name="q2" value="guys"> Guys and sisters</label>
+                <label><input type="radio" name="q2" value="dearall"> gay and lesbian </label>
+              </div>
+            </div>
+
+            <button id="submitQuizBtn" class="tap-btn small">
+              Submit answers ✅
+            </button>
+            <div id="quizResult" class="game-result"></div>
+          </div>
         </div>
 
         <div class="back-link">
@@ -412,7 +470,7 @@
       { roll: 63, name: "YASHASVI ARVIND JAIN",           usn: "RVCE25BTE040" }
     ];
 
-    // same dummy marks logic
+    // dummy marks (same formula as index.html)
     const marksData = {};
     students.forEach((s) => {
       const r = s.roll;
@@ -446,6 +504,11 @@
     const timeLeftEl = document.getElementById("timeLeft");
     const gameResult = document.getElementById("gameResult");
     const gameSub = document.getElementById("gameSub");
+
+    const quizArea = document.getElementById("quizArea");
+    const submitQuizBtn = document.getElementById("submitQuizBtn");
+    const quizResult = document.getElementById("quizResult");
+
     const scoreBody = document.getElementById("scoreBody");
 
     let currentStudent = null;
@@ -472,19 +535,22 @@
     let timeLeft = 10;
     let timerId = null;
     let finished = false;
+    let gameWon = false;
 
     function endGame(win) {
       finished = true;
       tapBtn.disabled = true;
       clearInterval(timerId);
       if (win) {
-        gameResult.textContent = "You WON the game! ✅ You are in the WhatsApp group.";
-        gameResult.className = "game-result win";
-        gameSub.textContent = "Now scroll to see your marks row in the scoreboard.";
+        gameWon = true;
+        gameResult.textContent = "Step 1 cleared ✅ Now answer the 2 questions below.";
+        gameResult.className = "game-result";
+        gameSub.textContent = "";
+        quizArea.style.display = "block";
       } else {
-        gameResult.textContent = "You LOST this round ❌";
+        gameResult.textContent = "You LOST the tap challenge ❌";
         gameResult.className = "game-result lose";
-        gameSub.textContent = "Refresh the page to try again. (Your marks scoreboard is still visible below.)";
+        gameSub.textContent = "Refresh the page to try again. Scoreboard is still visible.";
       }
     }
 
@@ -506,6 +572,34 @@
       tapCountEl.textContent = tapCount;
       if (tapCount >= 5 && !finished) {
         endGame(true);
+      }
+    });
+
+    // Quiz logic
+    submitQuizBtn.addEventListener("click", () => {
+      if (!gameWon) {
+        quizResult.textContent = "First finish the tap challenge.";
+        quizResult.className = "game-result";
+        return;
+      }
+      const q1 = document.querySelector('input[name="q1"]:checked');
+      const q2 = document.querySelector('input[name="q2"]:checked');
+
+      if (!q1 || !q2) {
+        quizResult.textContent = "Answer both questions.";
+        quizResult.className = "game-result";
+        return;
+      }
+
+      const correctQ1 = q1.value === "pixel";  // Google Pixel
+      const correctQ2 = q2.value === "guys";   // Guys and sisters
+
+      if (correctQ1 && correctQ2) {
+        quizResult.textContent = "You WON the full challenge ✅ You are in the WhatsApp group.";
+        quizResult.className = "game-result win";
+      } else {
+        quizResult.textContent = "One or more answers are wrong ❌ Not in the WhatsApp group yet.";
+        quizResult.className = "game-result lose";
       }
     });
 
