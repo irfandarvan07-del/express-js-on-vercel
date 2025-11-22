@@ -13,6 +13,8 @@
       --card: #0b1120;
       --text-main: #f9fafb;
       --text-muted: #9ca3af;
+      --enemy-bg: rgba(248, 113, 113, 0.16);
+      --enemy-border: rgba(248, 113, 113, 0.85);
     }
     * { box-sizing:border-box; margin:0; padding:0; }
     body {
@@ -125,6 +127,70 @@
     .student-roll span {
       font-weight:600;
       color:var(--accent);
+    }
+
+    /* Enemy banner (for Ishita only) */
+    .enemy-banner {
+      display:none;
+      margin-bottom:0.7rem;
+      padding:0.5rem 0.75rem;
+      border-radius:0.9rem;
+      background:var(--enemy-bg);
+      border:1px solid var(--enemy-border);
+      font-size:0.83rem;
+      position:relative;
+      overflow:hidden;
+    }
+    .enemy-banner-title {
+      font-size:0.8rem;
+      font-weight:600;
+      letter-spacing:0.04em;
+      text-transform:uppercase;
+      margin-bottom:0.15rem;
+      color:#fecaca;
+      display:flex;
+      align-items:center;
+      gap:0.3rem;
+    }
+    .enemy-banner-title span.icon {
+      font-size:1rem;
+    }
+    .enemy-banner-text {
+      font-size:0.85rem;
+      color:#fee2e2;
+    }
+    .enemy-glitch {
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      opacity:0;
+      mix-blend-mode:screen;
+      background:repeating-linear-gradient(
+        0deg,
+        rgba(248,250,252,0.12) 0px,
+        rgba(248,250,252,0.12) 1px,
+        transparent 1px,
+        transparent 3px
+      );
+      animation: enemyGlitch 1.2s infinite;
+    }
+    .enemy-banner.flash {
+      animation: enemyFlash 0.35s linear 0s 10;
+    }
+    @keyframes enemyFlash {
+      0%, 100% { transform:translateX(0); box-shadow:0 0 0 rgba(248,113,113,0.4); }
+      20% { transform:translateX(-1px); box-shadow:0 0 16px rgba(248,113,113,0.7); }
+      40% { transform:translateX(1px); }
+      60% { transform:translateX(-1px); }
+      80% { transform:translateX(1px); }
+    }
+    @keyframes enemyGlitch {
+      0% { opacity:0; transform:translateY(0); }
+      20% { opacity:0.45; transform:translateY(-1px); }
+      40% { opacity:0.2; transform:translateY(1px); }
+      60% { opacity:0.55; transform:translateY(-0.5px); }
+      80% { opacity:0.3; transform:translateY(0.5px); }
+      100% { opacity:0; transform:translateY(0); }
     }
 
     /* Game */
@@ -307,6 +373,19 @@
       <!-- Game panel -->
       <section class="card">
         <h2><span class="icon">🎮</span>Tap Rush + Final Questions</h2>
+
+        <!-- Ishita-only enemy banner -->
+        <div id="enemyBanner" class="enemy-banner">
+          <div class="enemy-glitch"></div>
+          <div class="enemy-banner-title">
+            <span class="icon">⚠️</span>
+            <span>Message from Irfan</span>
+          </div>
+          <div class="enemy-banner-text">
+            Irfan says… you’re now my enemy 😈
+          </div>
+        </div>
+
         <div id="studentBanner" class="student-banner" style="display:none;">
           <div class="student-main">
             <div class="name" id="stuName"></div>
@@ -358,7 +437,7 @@
               <div class="quiz-options">
                 <label><input type="radio" name="q2" value="brothers"> Brothers and sisters</label>
                 <label><input type="radio" name="q2" value="guys"> Guys and sisters</label>
-                <label><input type="radio" name="q2" value="dearall"> gay and lesbian </label>
+                <label><input type="radio" name="q2" value="dearall"> Dear all</label>
               </div>
             </div>
 
@@ -432,7 +511,7 @@
       { roll: 25, name: "GAUTHAM REDDY CHIRAPU REDDY",    usn: "RVCE25BTE034" },
       { roll: 26, name: "HARDIK VATS",                    usn: "RVCE25BTE035" },
       { roll: 27, name: "HRITHIK",                        usn: "RVCE25BTE030" },
-      { roll: 28, name: "ISHITA SINGH(IDK WHO IS THIS)",                   usn: "RVCE25BTE009" },
+      { roll: 28, name: "ISHITA SINGH",                   usn: "RVCE25BTE009" },
       { roll: 29, name: "JAHNAVI A H",                    usn: "RVCE25BTE057" },
       { roll: 30, name: "JASVANTH V A",                   usn: "RVCE25BTE053" },
       { roll: 31, name: "KARTHIK R",                      usn: "RVCE25BTE031" },
@@ -493,6 +572,7 @@
     const roll = params.get("roll");
     const name = params.get("name") || "";
 
+    const enemyBanner = document.getElementById("enemyBanner");
     const studentBanner = document.getElementById("studentBanner");
     const noStudentMsg = document.getElementById("noStudentMsg");
     const stuName = document.getElementById("stuName");
@@ -528,6 +608,16 @@
       stuName.textContent = currentStudent.name;
       stuUsn.textContent = currentStudent.usn + " • ET";
       stuRoll.textContent = currentStudent.roll;
+
+      // Ishita special: animated enemy banner
+      if (currentStudent.usn === "RVCE25BTE009") {
+        enemyBanner.style.display = "block";
+        enemyBanner.classList.add("flash");
+        // remove flashing after 5 seconds (keep banner visible)
+        setTimeout(() => {
+          enemyBanner.classList.remove("flash");
+        }, 5000);
+      }
     }
 
     // Game logic
