@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>ET Reaction Game – RVCE</title>
+  <title>ET Knife Throw & MD Quiz – RVCE</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <style>
@@ -39,6 +39,8 @@
       padding:1.5rem 1.6rem 1.7rem;
       border:1px solid var(--border);
       box-shadow:0 16px 40px rgba(15,23,42,0.15);
+      position:relative;
+      z-index:1;
     }
 
     header {
@@ -208,7 +210,7 @@
       100% { opacity:0; transform:translateY(0); }
     }
 
-    /* Game */
+    /* Knife game */
     .game-info {
       font-size:0.83rem;
       color:var(--text-muted);
@@ -263,25 +265,64 @@
       padding:0 0.75rem;
     }
 
-    .target {
-      position:absolute;
-      width:60px;
-      height:60px;
+    .wheel {
+      position:relative;
+      width:180px;
+      height:180px;
       border-radius:999px;
-      background:radial-gradient(circle at 30% 20%, #ffffff, #60a5fa);
-      border:3px solid #1d4ed8;
+      background:radial-gradient(circle at 30% 20%, #ffffff, #bfdbfe);
+      border:4px solid #1d4ed8;
+      box-shadow:0 10px 25px rgba(37,99,235,0.45);
+      animation: spin 5s linear infinite;
+    }
+
+    @keyframes spin {
+      from { transform:rotate(0deg); }
+      to { transform:rotate(360deg); }
+    }
+
+    .wheel-center {
+      position:absolute;
+      top:50%;
+      left:50%;
+      transform:translate(-50%, -50%);
+      width:40px;
+      height:40px;
+      border-radius:999px;
+      background:#1d4ed8;
       display:flex;
       align-items:center;
       justify-content:center;
-      color:#ffffff;
+      color:#eff6ff;
+      font-size:0.8rem;
       font-weight:600;
-      box-shadow:0 10px 20px rgba(37,99,235,0.65);
-      cursor:pointer;
-      user-select:none;
+    }
+
+    .knife-stuck {
+      position:absolute;
+      left:50%;
+      top:50%;
+      width:6px;
+      height:70px;
+      background:#111827;
+      transform-origin:50% 100%;
+      border-radius:999px;
+    }
+
+    .knife-tip {
+      position:absolute;
+      top:0;
+      left:50%;
+      transform:translateX(-50%);
+      width:0;
+      height:0;
+      border-left:8px solid transparent;
+      border-right:8px solid transparent;
+      border-bottom:14px solid #111827;
     }
 
     .start-btn {
-      margin-top:0.7rem;
+      margin-top:0.8rem;
       display:inline-flex;
       align-items:center;
       gap:0.35rem;
@@ -406,58 +447,102 @@
       font-weight:500;
     }
 
-    .trophy-box {
-      margin-top:0.6rem;
-      padding:0.8rem 0.8rem;
-      border-radius:0.9rem;
-      background:#fef9c3;
-      border:1px solid #facc15;
-      display:none;
+    .note {
+      margin-top:0.5rem;
+      font-size:0.78rem;
+      color:var(--text-muted);
     }
-    .trophy-main {
-      font-size:0.9rem;
+
+    /* Full-screen result overlay */
+    .result-overlay {
+      position:fixed;
+      inset:0;
+      background:#f9fafb;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:50;
+      padding:1.2rem;
+    }
+
+    .result-card {
+      max-width:520px;
+      width:100%;
+      background:#ffffff;
+      border-radius:1.4rem;
+      padding:1.6rem 1.7rem 1.4rem;
+      border:1px solid #e5e7eb;
+      box-shadow:0 18px 40px rgba(15,23,42,0.2);
+      text-align:center;
+    }
+
+    .result-icon {
+      font-size:2.3rem;
+      margin-bottom:0.4rem;
+    }
+
+    .result-title {
+      font-size:1.2rem;
       font-weight:600;
       margin-bottom:0.25rem;
     }
-    .trophy-sub {
+
+    .result-sub {
+      font-size:0.86rem;
+      color:var(--text-muted);
+      margin-bottom:0.6rem;
+    }
+
+    .result-correct {
+      font-size:0.84rem;
+      margin-bottom:0.35rem;
+    }
+
+    .result-answers {
       font-size:0.8rem;
-      color:#78350f;
-      margin-bottom:0.45rem;
+      color:var(--text-muted);
+      margin-bottom:0.8rem;
     }
 
     .prize-btn {
       display:inline-flex;
       align-items:center;
       gap:0.35rem;
-      padding:0.55rem 1.3rem;
+      padding:0.6rem 1.4rem;
       border-radius:999px;
       border:none;
       background:#ea580c;
       color:#ffffff;
-      font-size:0.86rem;
+      font-size:0.9rem;
       font-weight:500;
       text-decoration:none;
-      box-shadow:0 10px 22px rgba(234,88,12,0.65);
+      box-shadow:0 12px 26px rgba(234,88,12,0.75);
       transition:transform 0.15s ease-out, box-shadow 0.15s ease-out;
     }
     .prize-btn:hover {
       transform:translateY(-1px);
-      box-shadow:0 13px 28px rgba(234,88,12,0.9);
+      box-shadow:0 16px 30px rgba(234,88,12,0.95);
     }
 
-    .note {
+    .result-back {
       margin-top:0.5rem;
-      font-size:0.78rem;
+      font-size:0.8rem;
       color:var(--text-muted);
     }
+    .result-back a {
+      color:#2563eb;
+      text-decoration:none;
+    }
+    .result-back a:hover { text-decoration:underline; }
+
   </style>
 </head>
 <body>
   <div class="shell">
     <header>
       <div class="title">
-        <h1>ET Reaction Game + MD Quiz</h1>
-        <p>Finish the target game fast, then survive 4 questions about MD. Time + correct answers decide your rank.</p>
+        <h1>ET Knife Throw + MD Quiz</h1>
+        <p>Land 5 knives on the spinning target, then answer 5 MD questions. Prize is the same… only your ego changes.</p>
       </div>
       <div>
         <div class="tag">
@@ -470,7 +555,7 @@
     <div class="layout">
       <!-- Game + quiz -->
       <section class="card">
-        <h2><span class="icon">🎮</span>Part 1 – Reaction game</h2>
+        <h2><span class="icon">🔪</span>Part 1 – Knife Throw</h2>
 
         <!-- Ishita-only enemy banner -->
         <div id="enemyBanner" class="enemy-banner">
@@ -499,11 +584,12 @@
 
         <div id="gameBlock" style="display:none;">
           <p class="game-info">
-            Click the blue target <strong>10 times</strong> as fast as possible. The target will jump to random positions.
+            The wheel spins. You have <strong>5 knives</strong>. Tap <strong>Throw knife</strong> to stick them.
+            If a new knife hits too close to an old one, it’s a collision – but you still go to the MD quiz.
           </p>
           <div class="game-status">
             <div class="badge">
-              Hits: <span id="hitCount">0</span> / 10
+              Knives: <span id="knifeCount">0</span> / 5
             </div>
             <div class="timer">
               Time: <span id="timeElapsed">0.00</span>s
@@ -512,22 +598,23 @@
 
           <div class="arena" id="arena">
             <div class="arena-hint" id="arenaHint">
-              Press <strong>Start Game</strong> and then chase the target with your mouse / finger.
+              Press <strong>Start</strong> and then throw knives one by one. They can’t overlap.
             </div>
-            <div class="target" id="target" style="display:none;">
-              Tap
+            <div class="wheel" id="wheel">
+              <div class="wheel-center">ET</div>
+              <!-- knives get added here -->
             </div>
           </div>
 
           <button id="startBtn" class="start-btn">
-            ▶ Start game
+            ▶ Start &amp; throw knife
           </button>
 
           <div id="gameResult" class="game-result"></div>
 
           <!-- Quiz area -->
           <div id="quizArea" class="quiz-area" style="display:none;">
-            <h3>Part 2 – MD’s truth quiz</h3>
+            <h3>Part 2 – MD’s truth quiz (5 Qs)</h3>
 
             <div class="quiz-q">
               <strong>Q1. Why does MD act like he understands every subject?</strong>
@@ -569,6 +656,16 @@
               </div>
             </div>
 
+            <div class="quiz-q">
+              <strong>Q5. Do you think Irfan has a girlfriend?</strong>
+              <div class="quiz-options">
+                <label><input type="radio" name="q5" value="a"> A) Yes, in his dreams only</label>
+                <label><input type="radio" name="q5" value="b"> B) No, he is a childish boy</label>
+                <label><input type="radio" name="q5" value="c"> C) Maybe, but only if VPN counts as a relationship</label>
+                <label><input type="radio" name="q5" value="d"> D) He is still waiting for “typing…” since 2021</label>
+              </div>
+            </div>
+
             <button id="submitQuizBtn" class="submit-btn">
               Submit answers ✅
             </button>
@@ -581,40 +678,53 @@
         </div>
       </section>
 
-      <!-- Side card: summary + trophy/prize -->
+      <!-- Side card: explanation -->
       <section class="card">
-        <h2><span class="icon">🏆</span>Result & prize</h2>
+        <h2><span class="icon">📊</span>How your score is used</h2>
         <p class="side-note">
-          Finish Part 1, then Part 2. If you get all 4 correct, you unlock a small “prize”.
+          Knife time + number of correct answers decide your rank on the dashboard (back on the main page).
         </p>
         <ul class="side-bullets">
-          <li><span>Part 1:</span> 10 target hits as fast as you can.</li>
-          <li><span>Part 2:</span> 4 questions about MD’s life and decisions.</li>
-          <li><span>Ranking:</span> more correct answers first, then faster time.</li>
+          <li><span>5 knives:</span> each safe hit = new level.</li>
+          <li><span>Collision:</span> knife hits another knife → game ends, but you still go to the quiz.</li>
+          <li><span>Quiz:</span> 5 questions about MD and Irfan. We store only score + time.</li>
         </ul>
 
-        <div id="trophyBox" class="trophy-box">
-          <div class="trophy-main">🏆 Perfect run!</div>
-          <div class="trophy-sub" id="trophyText"></div>
-          <a
-            id="prizeLink"
-            class="prize-btn"
-            href="https://youtu.be/HiJ2ym9auqI?si=BwDL0wZDsaW3Rcot"
-            target="_blank"
-            rel="noopener"
-          >
-            Here is your prize
-          </a>
-        </div>
-
         <p class="note">
-          Your best score is saved on this device only and appears on the dashboard back on the main page.
+          Nothing here is official. Just vibes, roasting and a YouTube prize.
         </p>
       </section>
     </div>
   </div>
 
+  <!-- Result overlay -->
+  <div id="resultOverlay" class="result-overlay">
+    <div class="result-card">
+      <div id="overlayIcon" class="result-icon">🏆</div>
+      <div id="overlayTitle" class="result-title">Well done!</div>
+      <div id="overlaySub" class="result-sub">
+        Thanks for playing. Respect for at least trying.
+      </div>
+      <div id="overlayCorrect" class="result-correct"></div>
+      <div id="overlayAnswers" class="result-answers">
+        Correct answers: Q1 – D, Q2 – D, Q3 – D, Q4 – D, Q5 – D.
+      </div>
+      <a
+        class="prize-btn"
+        href="https://youtu.be/HiJ2ym9auqI?si=BwDL0wZDsaW3Rcot"
+        target="_blank"
+        rel="noopener"
+      >
+        Here is your prize
+      </a>
+      <div class="result-back">
+        or <a href="index.html">go back to the dashboard</a>
+      </div>
+    </div>
+  </div>
+
   <script>
+    // --- student data (same as index.html) ---
     const students = [
       { roll: 1,  name: "ABHAY BALIGA B",                 usn: "RVCE25BTE059" },
       { roll: 2,  name: "ABHINAV H KRISHNA",              usn: "RVCE25BTE051" },
@@ -696,9 +806,9 @@
 
     const arena = document.getElementById("arena");
     const arenaHint = document.getElementById("arenaHint");
-    const target = document.getElementById("target");
+    const wheel = document.getElementById("wheel");
     const startBtn = document.getElementById("startBtn");
-    const hitCountEl = document.getElementById("hitCount");
+    const knifeCountEl = document.getElementById("knifeCount");
     const timeElapsedEl = document.getElementById("timeElapsed");
     const gameResult = document.getElementById("gameResult");
 
@@ -706,8 +816,12 @@
     const submitQuizBtn = document.getElementById("submitQuizBtn");
     const quizResult = document.getElementById("quizResult");
 
-    const trophyBox = document.getElementById("trophyBox");
-    const trophyText = document.getElementById("trophyText");
+    const resultOverlay = document.getElementById("resultOverlay");
+    const overlayIcon = document.getElementById("overlayIcon");
+    const overlayTitle = document.getElementById("overlayTitle");
+    const overlaySub = document.getElementById("overlaySub");
+    const overlayCorrect = document.getElementById("overlayCorrect");
+    const overlayAnswers = document.getElementById("overlayAnswers");
 
     const resultsKey = "et_game_results_v1";
 
@@ -727,6 +841,7 @@
       stuUsn.textContent = currentStudent.usn + " • ET";
       stuRoll.textContent = currentStudent.roll;
 
+      // Ishita enemy banner
       if (currentStudent.usn === "RVCE25BTE009") {
         enemyBanner.style.display = "block";
         enemyBanner.classList.add("flash");
@@ -734,52 +849,44 @@
       }
     }
 
-    // Game logic
-    let totalTargets = 10;
-    let hits = 0;
+    // --- Knife throw game logic ---
+    const TOTAL_KNIVES = 5;
+    const MIN_ANGLE_GAP = 28; // degrees around wheel
+
+    let knivesPlaced = 0;
+    let angles = [];
     let gameStarted = false;
     let gameFinished = false;
     let startTime = 0;
     let timerInterval = null;
     let finalTime = null;
 
-    function moveTarget() {
-      const rect = arena.getBoundingClientRect();
-      const size = 60;
-      const padding = 10;
-
-      const maxX = rect.width - size - padding;
-      const maxY = rect.height - size - padding;
-
-      const x = padding + Math.random() * maxX;
-      const y = padding + Math.random() * maxY;
-
-      target.style.left = x + "px";
-      target.style.top = y + "px";
-    }
-
-    function resetGame() {
-      hits = 0;
-      hitCountEl.textContent = hits;
+    function resetGameState() {
+      knivesPlaced = 0;
+      angles = [];
+      knifeCountEl.textContent = "0";
       timeElapsedEl.textContent = "0.00";
       gameResult.textContent = "";
       gameResult.className = "game-result";
       quizArea.style.display = "none";
       quizResult.textContent = "";
       quizResult.className = "quiz-result";
-      trophyBox.style.display = "none";
       finalTime = null;
+      // remove old knives
+      const oldKnives = wheel.querySelectorAll(".knife-stuck");
+      oldKnives.forEach(k => k.remove());
     }
 
     function startGame() {
       if (!currentStudent) return;
-      resetGame();
+      if (gameStarted) return;
+      resetGameState();
       gameStarted = true;
       gameFinished = false;
-      startBtn.disabled = true;
+      startBtn.disabled = false; // still used to throw
+      startBtn.textContent = "Throw knife";
       arenaHint.style.display = "none";
-      target.style.display = "flex";
-      moveTarget();
+
       startTime = performance.now();
       timerInterval = setInterval(() => {
         if (!gameStarted) return;
@@ -789,41 +896,93 @@
       }, 80);
     }
 
-    function finishGame() {
+    function stopTimer() {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+    }
+
+    function finishGame(message, win) {
       gameStarted = false;
       gameFinished = true;
-      startBtn.disabled = false;
-      clearInterval(timerInterval);
-      timerInterval = null;
-
+      stopTimer();
       const now = performance.now();
       finalTime = (now - startTime) / 1000;
       timeElapsedEl.textContent = finalTime.toFixed(2);
 
-      target.style.display = "none";
-
-      gameResult.textContent = `Nice, you hit all ${totalTargets} targets in ${finalTime.toFixed(2)}s. Now answer MD's questions below.`;
-      gameResult.className = "game-result win";
+      gameResult.textContent = message;
+      gameResult.className = "game-result " + (win ? "win" : "lose");
       quizArea.style.display = "block";
+      startBtn.disabled = true;
+    }
+
+    function placeKnife() {
+      if (!gameStarted || gameFinished) return;
+
+      if (knivesPlaced === 0 && !startTime) {
+        startTime = performance.now();
+      }
+
+      // choose random angle
+      const angle = Math.random() * 360;
+
+      // collision check
+      let collision = false;
+      for (const a of angles) {
+        const diff = Math.abs(a - angle);
+        const wrapped = Math.min(diff, 360 - diff);
+        if (wrapped < MIN_ANGLE_GAP) {
+          collision = true;
+          break;
+        }
+      }
+
+      if (collision) {
+        // add a dramatic knife anyway
+        addKnife(angle);
+        knivesPlaced++;
+        knifeCountEl.textContent = knivesPlaced;
+        finishGame("Knife collision 😵 – but you still go to MD’s quiz.", false);
+        return;
+      }
+
+      angles.push(angle);
+      knivesPlaced++;
+      knifeCountEl.textContent = knivesPlaced;
+      addKnife(angle);
+
+      if (knivesPlaced >= TOTAL_KNIVES) {
+        finishGame("Clean hit! All 5 knives landed 🎯 – now face MD’s quiz.", true);
+      }
+    }
+
+    function addKnife(angle) {
+      const knife = document.createElement("div");
+      knife.className = "knife-stuck";
+      knife.style.transform = `translate(-50%, -50%) rotate(${angle}deg) translateY(-80px)`;
+      const tip = document.createElement("div");
+      tip.className = "knife-tip";
+      knife.appendChild(tip);
+      wheel.appendChild(knife);
     }
 
     startBtn.addEventListener("click", () => {
-      if (gameStarted) return;
-      startGame();
-    });
-
-    target.addEventListener("click", () => {
-      if (!gameStarted || gameFinished) return;
-      hits++;
-      hitCountEl.textContent = hits;
-      if (hits >= totalTargets) {
-        finishGame();
-      } else {
-        moveTarget();
+      if (!currentStudent) return;
+      if (!gameStarted && !gameFinished && knivesPlaced === 0) {
+        startGame();
+        placeKnife();
+      } else if (gameStarted && !gameFinished) {
+        placeKnife();
+      } else if (gameFinished) {
+        // allow restart if needed
+        startGame();
+        placeKnife();
       }
     });
 
-    // Quiz logic
+    // --- Quiz + result logic ---
+
     function getAnswer(name) {
       const el = document.querySelector(`input[name="${name}"]:checked`);
       return el ? el.value : null;
@@ -859,8 +1018,10 @@
     }
 
     submitQuizBtn.addEventListener("click", () => {
+      if (!currentStudent) return;
+
       if (!gameFinished || finalTime == null) {
-        quizResult.textContent = "Finish the reaction game first.";
+        quizResult.textContent = "Finish the knife game first – then submit.";
         quizResult.className = "quiz-result";
         return;
       }
@@ -869,9 +1030,10 @@
       const a2 = getAnswer("q2");
       const a3 = getAnswer("q3");
       const a4 = getAnswer("q4");
+      const a5 = getAnswer("q5");
 
-      if (!a1 || !a2 || !a3 || !a4) {
-        quizResult.textContent = "Answer all four questions.";
+      if (!a1 || !a2 || !a3 || !a4 || !a5) {
+        quizResult.textContent = "Answer all five questions.";
         quizResult.className = "quiz-result";
         return;
       }
@@ -881,19 +1043,41 @@
       if (a2 === "d") correct++;
       if (a3 === "d") correct++;
       if (a4 === "d") correct++;
+      if (a5 === "d") correct++;
 
+      // We still display something under the quiz (just in case)
+      if (correct === 5) {
+        quizResult.textContent = `5/5 correct in ${finalTime.toFixed(2)}s – MD approved.`;
+        quizResult.className = "quiz-result win";
+      } else {
+        quizResult.textContent = `${correct}/5 correct in ${finalTime.toFixed(2)}s. Respect for attempting.`;
+        quizResult.className = "quiz-result lose";
+      }
+
+      // Save for dashboard
       saveResult(correct);
 
-      if (correct === 4) {
-        quizResult.textContent = `Perfect: 4/4 correct in ${finalTime.toFixed(2)}s.`;
-        quizResult.className = "quiz-result win";
-        trophyBox.style.display = "block";
-        trophyText.textContent = `You cleared MD's full challenge with 4/4 correct and a time of ${finalTime.toFixed(2)} seconds.`;
+      // Show overlay "new page" with correct answers + prize
+      const champion = correct === 5;
+
+      overlayCorrect.textContent = champion
+        ? `You nailed ALL 5 answers in ${finalTime.toFixed(2)} seconds.`
+        : `You got ${correct}/5 answers correct in ${finalTime.toFixed(2)} seconds.`;
+
+      overlayAnswers.textContent =
+        "Correct answers: Q1 – D, Q2 – D, Q3 – D, Q4 – D, Q5 – D.";
+
+      if (champion) {
+        overlayIcon.textContent = "👑";
+        overlayTitle.textContent = "Champion of ET!";
+        overlaySub.textContent = "Perfect score. You’re officially overqualified for this quiz.";
       } else {
-        quizResult.textContent = `You got ${correct}/4 correct in ${finalTime.toFixed(2)}s. No trophy yet – go back and try to beat yourself.`;
-        quizResult.className = "quiz-result lose";
-        trophyBox.style.display = "none";
+        overlayIcon.textContent = "🏆";
+        overlayTitle.textContent = "Well done for participation!";
+        overlaySub.textContent = "You survived the knives and the MD roast. That’s already something.";
       }
+
+      resultOverlay.style.display = "flex";
     });
   </script>
 </body>
