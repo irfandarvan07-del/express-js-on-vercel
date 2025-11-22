@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ET Game & Scoreboard – RVCE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --accent: #38bdf8;
+      --accent-soft: rgba(56,189,248,0.15);
+      --bg: #020617;
+      --card: #0b1120;
+      --text-main: #f9fafb;
+      --text-muted: #9ca3af;
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body {
+      font-family: "Poppins", system-ui, -apple-system;
+      background: radial-gradient(circle at top, #0b1120, #020617);
+      color: var(--text-main);
+      min-height:100vh;
+      padding:1.4rem;
+      display:flex;
+      justify-content:center;
+    }
+    .shell {
+      width:100%;
+      max-width:1200px;
+      background:
+        radial-gradient(circle at top left, rgba(56,189,248,0.2), transparent 60%),
+        rgba(15,23,42,0.98);
+      border-radius:1.75rem;
+      padding:1.4rem 1.6rem 2rem;
+      border:1px solid rgba(148,163,184,0.5);
+      box-shadow:0 22px 45px rgba(0,0,0,0.6);
+    }
+    header {
+      display:flex;
+      justify-content:space-between;
+      gap:1rem;
+      flex-wrap:wrap;
+      margin-bottom:1.1rem;
+    }
+    .title h1 {
+      font-size:1.35rem;
+      font-weight:600;
+    }
+    .title p {
+      font-size:0.85rem;
+      color:var(--text-muted);
+      margin-top:0.2rem;
+    }
+    .tag {
+      font-size:0.75rem;
+      padding:0.25rem 0.6rem;
+      border-radius:999px;
+      border:1px solid rgba(148,163,184,0.7);
+      background:rgba(15,23,42,0.9);
+      color:var(--text-muted);
+      display:inline-flex;
+      align-items:center;
+      gap:0.3rem;
+    }
+    .tag-dot {
+      width:7px;height:7px;border-radius:999px;
+      background:#22c55e;
+      box-shadow:0 0 0 6px rgba(34,197,94,0.3);
+    }
+    .grid {
+      display:grid;
+      grid-template-columns: minmax(0,1.3fr) minmax(0,1.7fr);
+      gap:1.1rem;
+    }
+    @media (max-width:900px) {
+      .grid { grid-template-columns: minmax(0,1fr); }
+    }
+    .card {
+      background:var(--card);
+      border-radius:1.2rem;
+      padding:1rem 1.1rem 1.2rem;
+      border:1px solid rgba(55,65,81,0.9);
+      box-shadow:0 16px 32px rgba(15,23,42,0.9);
+    }
+    .card h2 {
+      font-size:0.98rem;
+      margin-bottom:0.5rem;
+      display:flex;
+      align-items:center;
+      gap:0.4rem;
+    }
+    .card h2 span.icon {
+      width:24px;height:24px;border-radius:999px;
+      background:var(--accent-soft);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      font-size:0.9rem;
+    }
+    .student-banner {
+      display:flex;
+      justify-content:space-between;
+      gap:0.6rem;
+      padding:0.5rem 0.75rem;
+      border-radius:0.9rem;
+      background:rgba(15,23,42,0.95);
+      border:1px solid rgba(75,85,99,0.9);
+      margin-bottom:0.7rem;
+    }
+    .student-main {
+      font-size:0.85rem;
+    }
+    .student-main .name {
+      font-weight:500;
+    }
+    .student-main .usn {
+      font-size:0.78rem;
+      color:var(--text-muted);
+    }
+    .student-roll {
+      font-size:0.78rem;
+      color:var(--text-muted);
+      text-align:right;
+    }
+    .student-roll span {
+      font-weight:600;
+      color:var(--accent);
+    }
+
+    /* Game */
+    .game-info {
+      font-size:0.82rem;
+      color:var(--text-muted);
+      margin-bottom:0.6rem;
+    }
+    .game-status {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:0.7rem;
+      font-size:0.84rem;
+    }
+    .badge {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:999px;
+      padding:0.15rem 0.55rem;
+      background:var(--accent-soft);
+      font-size:0.76rem;
+    }
+    .timer {
+      font-size:0.9rem;
+    }
+    .timer span {
+      font-weight:600;
+      color:var(--accent);
+    }
+    .tap-btn {
+      border:none;
+      border-radius:999px;
+      padding:0.7rem 1.6rem;
+      font-size:0.9rem;
+      font-weight:500;
+      cursor:pointer;
+      background:linear-gradient(135deg,#38bdf8,#2563eb);
+      color:#fff;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:0.3rem;
+      box-shadow:0 14px 28px rgba(37,99,235,0.8);
+      transition:transform 0.15s ease-out, box-shadow 0.15s ease-out;
+    }
+    .tap-btn:hover {
+      transform:translateY(-1px);
+      box-shadow:0 18px 34px rgba(37,99,235,1);
+    }
+    .tap-btn:disabled {
+      opacity:0.4;
+      cursor:not-allowed;
+      box-shadow:none;
+    }
+    .game-result {
+      margin-top:0.6rem;
+      font-size:0.84rem;
+    }
+    .game-result.win {
+      color:#4ade80;
+      font-weight:500;
+    }
+    .game-result.lose {
+      color:#f97373;
+      font-weight:500;
+    }
+    .game-sub {
+      font-size:0.78rem;
+      color:var(--text-muted);
+      margin-top:0.25rem;
+    }
+
+    /* Scoreboard */
+    .scoreboard-wrapper {
+      max-height:430px;
+      overflow:auto;
+      margin-top:0.5rem;
+    }
+    table {
+      width:100%;
+      border-collapse:collapse;
+      font-size:0.78rem;
+    }
+    thead {
+      position:sticky;
+      top:0;
+      background:#020617;
+      z-index:1;
+    }
+    th, td {
+      padding:0.35rem 0.4rem;
+      text-align:left;
+      border-bottom:1px solid rgba(31,41,55,0.9);
+    }
+    th {
+      font-weight:500;
+      color:var(--text-muted);
+      font-size:0.76rem;
+    }
+    tbody tr:nth-child(even) {
+      background:rgba(15,23,42,0.7);
+    }
+    .score-name {
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width:180px;
+    }
+    .highlight-row {
+      background:rgba(56,189,248,0.12) !important;
+    }
+    .highlight-row td {
+      border-bottom-color:rgba(56,189,248,0.5);
+    }
+    .back-link {
+      margin-top:0.7rem;
+      font-size:0.8rem;
+    }
+    .back-link a {
+      color:var(--accent);
+      text-decoration:none;
+    }
+    .back-link a:hover {
+      text-decoration:underline;
+    }
+    .note {
+      margin-top:0.45rem;
+      font-size:0.76rem;
+      color:var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <div class="title">
+        <h1>Mini Game + Marks Scoreboard</h1>
+        <p>If you win the game, you’ll see a “You’re in WhatsApp group” message below.</p>
+      </div>
+      <div>
+        <div class="tag">
+          <span class="tag-dot"></span>
+          <span>ET • 1st Sem • Fun only</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- Game panel -->
+      <section class="card">
+        <h2><span class="icon">🎮</span>Tap Rush – win to unlock message</h2>
+        <div id="studentBanner" class="student-banner" style="display:none;">
+          <div class="student-main">
+            <div class="name" id="stuName"></div>
+            <div class="usn" id="stuUsn"></div>
+          </div>
+          <div class="student-roll">
+            Roll<br><span id="stuRoll"></span>
+          </div>
+        </div>
+        <p id="noStudentMsg" style="font-size:0.84rem;color:#f97373;display:none;">
+          No student info found. Please go back to the main page and login again.
+        </p>
+
+        <div id="gameArea" style="display:none;">
+          <p class="game-info">
+            Rules: You have <strong>10 seconds</strong>. Tap the button
+            <strong>5 times</strong> before time runs out.
+          </p>
+          <div class="game-status">
+            <div class="badge">
+              Taps: <span id="tapCount">0</span> / 5
+            </div>
+            <div class="timer">
+              Time left: <span id="timeLeft">10</span>s
+            </div>
+          </div>
+          <button id="tapBtn" class="tap-btn">
+            Tap me fast ⚡
+          </button>
+          <div id="gameResult" class="game-result"></div>
+          <div id="gameSub" class="game-sub"></div>
+        </div>
+
+        <div class="back-link">
+          ← <a href="index.html">Back to student list</a>
+        </div>
+      </section>
+
+      <!-- Scoreboard -->
+      <section class="card">
+        <h2><span class="icon">📊</span>Marks Scoreboard – all students</h2>
+        <p class="note">
+          Scores are dummy values generated from roll numbers (CIE1 + CIE2 + Quiz).
+          Your row is highlighted.
+        </p>
+        <div class="scoreboard-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Roll</th>
+                <th>Name</th>
+                <th>Att</th>
+                <th>CIE1</th>
+                <th>CIE2</th>
+                <th>Quiz</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody id="scoreBody"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    // same student data as index.html
+    const students = [
+      { roll: 1,  name: "ABHAY BALIGA B",                 usn: "RVCE25BTE059" },
+      { roll: 2,  name: "ABHINAV H KRISHNA",              usn: "RVCE25BTE051" },
+      { roll: 3,  name: "ANANYA H S",                     usn: "RVCE25BTE058" },
+      { roll: 4,  name: "ANANYA KARTHIK",                 usn: "RVCE25BTE006" },
+      { roll: 5,  name: "ANAY DURG",                      usn: "RVCE25BTE001" },
+      { roll: 6,  name: "ANIRUDH S J",                    usn: "RVCE25BTE045" },
+      { roll: 7,  name: "ARAVIND R",                      usn: "RVCE25BTE055" },
+      { roll: 8,  name: "ARNAV GANGOOR",                  usn: "RVCE25BTE015" },
+      { roll: 9,  name: "ARNAV GAUTAM",                   usn: "RVCE25BTE016" },
+      { roll: 10, name: "ARYA RITESH KHODAKE",            usn: "RVCE25BTE043" },
+      { roll: 11, name: "ATHARVA TYAGI",                  usn: "RVCE25BTE061" },
+      { roll: 12, name: "ATHARVA VARSHNEY",               usn: "RVCE25BTE041" },
+      { roll: 13, name: "BHARGAV BEKKAM",                 usn: "RVCE25BTE028" },
+      { roll: 14, name: "BHARGAVI S B",                   usn: "RVCE25BTE011" },
+      { roll: 15, name: "CHANDRAKANTHA",                  usn: "RVCE25BTE029" },
+      { roll: 16, name: "CHIRAG CHANDRA",                 usn: "RVCE25BTE044" },
+      { roll: 17, name: "D R SHREESUJA",                  usn: "RVCE25BTE019" },
+      { roll: 18, name: "DAIVIK MANKAME",                 usn: "RVCE25BTE032" },
+      { roll: 19, name: "DAKSH JAIN",                     usn: "RVCE25BTE038" },
+      { roll: 20, name: "DEBDEEP GHOSH",                  usn: "RVCE25BTE020" },
+      { roll: 21, name: "DHRUV TANDEKAR",                 usn: "RVCE25BTE014" },
+      { roll: 22, name: "DIVYA YANAMASHETTI",             usn: "RVCE25BTE018" },
+      { roll: 23, name: "DONDAPATI SINDHUJA",             usn: "RVCE25BTE025" },
+      { roll: 24, name: "GARGI TOMAR",                    usn: "RVCE25BTE005" },
+      { roll: 25, name: "GAUTHAM REDDY CHIRAPU REDDY",    usn: "RVCE25BTE034" },
+      { roll: 26, name: "HARDIK VATS",                    usn: "RVCE25BTE035" },
+      { roll: 27, name: "HRITHIK",                        usn: "RVCE25BTE030" },
+      { roll: 28, name: "ISHITA SINGH",                   usn: "RVCE25BTE009" },
+      { roll: 29, name: "JAHNAVI A H",                    usn: "RVCE25BTE057" },
+      { roll: 30, name: "JASVANTH V A",                   usn: "RVCE25BTE053" },
+      { roll: 31, name: "KARTHIK R",                      usn: "RVCE25BTE031" },
+      { roll: 32, name: "KSHITI CHAUDHARY",               usn: "RVCE25BTE021" },
+      { roll: 33, name: "MANIK KANYAL",                   usn: "RVCE25BTE033" },
+      { roll: 34, name: "MANYA S",                        usn: "RVCE25BTE048" },
+      { roll: 35, name: "MD IRFAN DARVAN",                usn: "RVCE25BTE013" },
+      { roll: 36, name: "MEGHNA ROY",                     usn: "RVCE25BTE060" },
+      { roll: 37, name: "MIA MICHAEL",                    usn: "RVCE25BTE004" },
+      { roll: 38, name: "MOHIT RAJ JALGAR",               usn: "RVCE25BTE026" },
+      { roll: 39, name: "NIKHIL JAGADEESH KORI",          usn: "RVCE25BTE008" },
+      { roll: 40, name: "NIMIT JAIN",                     usn: "RVCE25BTE037" },
+      { roll: 41, name: "PALLAVI K",                      usn: "RVCE25BTE012" },
+      { roll: 42, name: "PRANYA",                         usn: "RVCE25BTE022" },
+      { roll: 43, name: "RISHAB KASHYAP A",               usn: "RVCE25BTE047" },
+      { roll: 44, name: "SAI PRAKASH J",                  usn: "RVCE25BTE023" },
+      { roll: 45, name: "SAMANVAY SHOBHIT",               usn: "RVCE25BTE063" },
+      { roll: 46, name: "SANATH KUMAR N",                 usn: "RVCE25BTE017" },
+      { roll: 47, name: "SANDYA PRITHIKA BALAJI",         usn: "RVCE25BTE049" },
+      { roll: 48, name: "SATYADEEP SREENIVAS",            usn: "RVCE25BTE024" },
+      { roll: 49, name: "SKANDHA VISAKHA",                usn: "RVCE25BTE003" },
+      { roll: 50, name: "SOHAN A GADAVI",                 usn: "RVCE25BTE010" },
+      { roll: 51, name: "SRIJAN SANJEEV INGALAGI",        usn: "RVCE25BTE050" },
+      { roll: 52, name: "STUTHI SANTOSH MATHAPATI",       usn: "RVCE25BTE052" },
+      { roll: 53, name: "SUHAS CHAWAN",                   usn: "RVCE25BTE056" },
+      { roll: 54, name: "SUHAS V J",                      usn: "RVCE25BTE039" },
+      { roll: 55, name: "SUJAN KUMAR S K",                usn: "RVCE25BTE046" },
+      { roll: 56, name: "SWAPNIL SAHU",                   usn: "RVCE25BTE042" },
+      { roll: 57, name: "THARICKA MURARI",                usn: "RVCE25BTE027" },
+      { roll: 58, name: "THARUN S",                       usn: "RVCE25BTE002" },
+      { roll: 59, name: "VAISHNAVI KARPUR",               usn: "RVCE25BTE062" },
+      { roll: 60, name: "VANI GUSAIN",                    usn: "RVCE25BTE036" },
+      { roll: 61, name: "VEDAANT RAJ",                    usn: "RVCE25BTE007" },
+      { roll: 62, name: "VINAYAK S HALLI",                usn: "RVCE25BTE054" },
+      { roll: 63, name: "YASHASVI ARVIND JAIN",           usn: "RVCE25BTE040" }
+    ];
+
+    // same dummy marks logic
+    const marksData = {};
+    students.forEach((s) => {
+      const r = s.roll;
+      const attendance = 70 + (r * 3) % 30;
+      const cie1 = 12 + (r * 2) % 19;
+      const cie2 = 11 + (r * 3) % 20;
+      const quiz = 5 + (r * 5) % 6;
+      marksData[s.usn] = {
+        attendance: attendance + "%",
+        cie1,
+        cie2,
+        quiz,
+        remarks: "Dummy data – for demo"
+      };
+    });
+
+    // parse query params
+    const params = new URLSearchParams(window.location.search);
+    const usn = (params.get("usn") || "").toUpperCase();
+    const roll = params.get("roll");
+    const name = params.get("name") || "";
+
+    const studentBanner = document.getElementById("studentBanner");
+    const noStudentMsg = document.getElementById("noStudentMsg");
+    const stuName = document.getElementById("stuName");
+    const stuUsn = document.getElementById("stuUsn");
+    const stuRoll = document.getElementById("stuRoll");
+    const gameArea = document.getElementById("gameArea");
+    const tapBtn = document.getElementById("tapBtn");
+    const tapCountEl = document.getElementById("tapCount");
+    const timeLeftEl = document.getElementById("timeLeft");
+    const gameResult = document.getElementById("gameResult");
+    const gameSub = document.getElementById("gameSub");
+    const scoreBody = document.getElementById("scoreBody");
+
+    let currentStudent = null;
+
+    if (usn && roll && name) {
+      const found = students.find(s => s.usn === usn);
+      if (found) {
+        currentStudent = found;
+      }
+    }
+
+    if (!currentStudent) {
+      noStudentMsg.style.display = "block";
+    } else {
+      studentBanner.style.display = "flex";
+      gameArea.style.display = "block";
+      stuName.textContent = currentStudent.name;
+      stuUsn.textContent = currentStudent.usn + " • ET";
+      stuRoll.textContent = currentStudent.roll;
+    }
+
+    // Game logic
+    let tapCount = 0;
+    let timeLeft = 10;
+    let timerId = null;
+    let finished = false;
+
+    function endGame(win) {
+      finished = true;
+      tapBtn.disabled = true;
+      clearInterval(timerId);
+      if (win) {
+        gameResult.textContent = "You WON the game! ✅ You are in the WhatsApp group.";
+        gameResult.className = "game-result win";
+        gameSub.textContent = "Now scroll to see your marks row in the scoreboard.";
+      } else {
+        gameResult.textContent = "You LOST this round ❌";
+        gameResult.className = "game-result lose";
+        gameSub.textContent = "Refresh the page to try again. (Your marks scoreboard is still visible below.)";
+      }
+    }
+
+    function startTimer() {
+      timerId = setInterval(() => {
+        timeLeft--;
+        if (timeLeft < 0) timeLeft = 0;
+        timeLeftEl.textContent = timeLeft;
+        if (timeLeft <= 0 && !finished) {
+          endGame(false);
+        }
+      }, 1000);
+    }
+
+    tapBtn.addEventListener("click", () => {
+      if (!currentStudent || finished) return;
+      if (!timerId) startTimer();
+      tapCount++;
+      tapCountEl.textContent = tapCount;
+      if (tapCount >= 5 && !finished) {
+        endGame(true);
+      }
+    });
+
+    // Scoreboard
+    const rows = students.map((s) => {
+      const m = marksData[s.usn];
+      const total = (m.cie1 || 0) + (m.cie2 || 0) + (m.quiz || 0);
+      return {
+        usn: s.usn,
+        roll: s.roll,
+        name: s.name,
+        attendance: m.attendance,
+        cie1: m.cie1,
+        cie2: m.cie2,
+        quiz: m.quiz,
+        total
+      };
+    });
+
+    rows.sort((a,b) => b.total - a.total);
+
+    rows.forEach((r, idx) => {
+      const tr = document.createElement("tr");
+      if (currentStudent && r.usn === currentStudent.usn) {
+        tr.classList.add("highlight-row");
+      }
+      tr.innerHTML = `
+        <td>${idx + 1}</td>
+        <td>${r.roll}</td>
+        <td class="score-name">${r.name}</td>
+        <td>${r.attendance}</td>
+        <td>${r.cie1}</td>
+        <td>${r.cie2}</td>
+        <td>${r.quiz}</td>
+        <td>${r.total}</td>
+      `;
+      scoreBody.appendChild(tr);
+    });
+  </script>
+</body>
+</html>
