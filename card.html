@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Game 1 – Card Match | ET</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --bg:#020617;
+      --card:#0b1120;
+      --accent:#38bdf8;
+      --muted:#9ca3af;
+      --text:#f9fafb;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:"Poppins",system-ui;
+      background:radial-gradient(circle at top,#0b1120,#020617);
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      padding:1.4rem;
+      color:var(--text);
+    }
+    .shell{
+      width:100%;
+      max-width:900px;
+      background:rgba(15,23,42,0.98);
+      border-radius:1.5rem;
+      padding:1.4rem 1.5rem 1.7rem;
+      border:1px solid rgba(148,163,184,0.6);
+      box-shadow:0 20px 40px rgba(0,0,0,0.8);
+    }
+    header{
+      display:flex;
+      justify-content:space-between;
+      gap:1rem;
+      flex-wrap:wrap;
+      margin-bottom:1rem;
+    }
+    header h1{font-size:1.1rem;font-weight:600}
+    header p{font-size:0.85rem;color:var(--muted);margin-top:0.2rem}
+    .tag{
+      font-size:0.78rem;
+      padding:0.25rem 0.6rem;
+      border-radius:999px;
+      border:1px solid rgba(75,85,99,0.9);
+      color:var(--muted);
+      background:rgba(15,23,42,0.95);
+    }
+    .player-bar{
+      background:var(--card);
+      border-radius:1rem;
+      padding:0.6rem 0.8rem;
+      border:1px solid rgba(55,65,81,0.9);
+      display:flex;
+      justify-content:space-between;
+      gap:0.6rem;
+      font-size:0.8rem;
+      margin-bottom:0.8rem;
+    }
+    .player-bar strong{font-weight:500}
+    .game-info{
+      font-size:0.82rem;
+      color:var(--muted);
+      margin-bottom:0.6rem;
+    }
+    .status-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      font-size:0.83rem;
+      margin-bottom:0.6rem;
+    }
+    .status-row .timer span{color:var(--accent);font-weight:600}
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(60px,1fr));
+      gap:0.6rem;
+    }
+    @media(max-width:600px){
+      .grid{grid-template-columns:repeat(3,minmax(60px,1fr));}
+    }
+    .card-tile{
+      position:relative;
+      height:80px;
+      border-radius:0.8rem;
+      cursor:pointer;
+      perspective:800px;
+    }
+    .card-inner{
+      position:absolute;inset:0;
+      border-radius:0.8rem;
+      transform-style:preserve-3d;
+      transition:transform 0.3s;
+      border:1px solid rgba(55,65,81,0.9);
+      background:#020617;
+    }
+    .card-inner.flipped{
+      transform:rotateY(180deg);
+      border-color:var(--accent);
+      box-shadow:0 10px 20px rgba(56,189,248,0.4);
+    }
+    .face{
+      position:absolute;inset:0;
+      backface-visibility:hidden;
+      display:flex;align-items:center;justify-content:center;
+      border-radius:0.8rem;
+    }
+    .front{
+      background:linear-gradient(135deg,#1f2937,#020617);
+      font-size:1.3rem;
+    }
+    .back{
+      transform:rotateY(180deg);
+      background:radial-gradient(circle at top,#0ea5e9,#020617);
+      font-size:1.4rem;
+      font-weight:600;
+    }
+    .btn{
+      margin-top:0.7rem;
+      border:none;
+      border-radius:999px;
+      padding:0.55rem 1.2rem;
+      font-size:0.85rem;
+      background:linear-gradient(135deg,#38bdf8,#2563eb);
+      color:white;
+      cursor:pointer;
+      box-shadow:0 12px 22px rgba(37,99,235,0.7);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:0.3rem;
+    }
+    .btn:disabled{opacity:0.4;cursor:not-allowed;box-shadow:none}
+    .msg{
+      margin-top:0.6rem;
+      font-size:0.83rem;
+    }
+    .msg.good{color:#4ade80;font-weight:500}
+    .msg.bad{color:#f97373;font-weight:500}
+    a.back-link{
+      display:inline-block;
+      margin-top:0.6rem;
+      font-size:0.8rem;
+      color:var(--muted);
+      text-decoration:none;
+    }
+    a.back-link:hover{text-decoration:underline;}
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <div>
+        <h1>Game 1 – Card Match</h1>
+        <p>Flip cards and find all matching pairs. Time will be recorded.</p>
+      </div>
+      <div><span class="tag">Step 1 of 3</span></div>
+    </header>
+
+    <div id="noPlayer" style="font-size:0.85rem;color:#f97373;display:none;">
+      No player data found. Go back to <a href="index.html" style="color:#38bdf8;">index</a> and register again.
+    </div>
+
+    <div id="gameArea" style="display:none;">
+      <div class="player-bar">
+        <div>
+          <strong id="playerName"></strong><br />
+          <span id="playerUsn" style="color:var(--muted);font-size:0.78rem;"></span>
+        </div>
+        <div style="text-align:right;">
+          Roll<br /><strong id="playerRoll"></strong>
+        </div>
+      </div>
+
+      <p class="game-info">
+        You must clear all pairs. Timer starts on your first flip. When you finish, click
+        <strong>Continue to MD's questions</strong>.
+      </p>
+
+      <div class="status-row">
+        <div>Matched pairs: <span id="pairsCount">0</span> / 6</div>
+        <div class="timer">Time: <span id="timeLabel">0.0</span>s</div>
+      </div>
+
+      <div class="grid" id="cardsGrid"></div>
+
+      <p id="statusMsg" class="msg"></p>
+      <button id="nextBtn" class="btn" disabled>
+        Continue to MD's questions ↗
+      </button>
+
+      <a class="back-link" href="index.html">← Back to registration</a>
+    </div>
+  </div>
+
+  <script>
+    // read player from URL
+    const params = new URLSearchParams(window.location.search);
+    const usn = (params.get("usn") || "").toUpperCase();
+    const name = params.get("name") || "";
+    const roll = params.get("roll") || "";
+
+    const noPlayer = document.getElementById("noPlayer");
+    const gameArea = document.getElementById("gameArea");
+    const playerName = document.getElementById("playerName");
+    const playerUsn = document.getElementById("playerUsn");
+    const playerRoll = document.getElementById("playerRoll");
+    const grid = document.getElementById("cardsGrid");
+    const pairsCountEl = document.getElementById("pairsCount");
+    const timeLabel = document.getElementById("timeLabel");
+    const statusMsg = document.getElementById("statusMsg");
+    const nextBtn = document.getElementById("nextBtn");
+
+    if (!usn || !name || !roll) {
+      noPlayer.style.display = "block";
+    } else {
+      gameArea.style.display = "block";
+      playerName.textContent = name;
+      playerUsn.textContent = usn + " • ET";
+      playerRoll.textContent = roll;
+    }
+
+    // card game setup
+    const symbols = ["★","◆","❤","☘","⚡","♛"]; // 6 pairs
+    let deck = [...symbols, ...symbols];
+    deck.sort(()=>Math.random()-0.5);
+
+    let firstCard = null;
+    let lockBoard = false;
+    let matchedPairs = 0;
+
+    let started = false;
+    let startTime = 0;
+    let endTime = 0;
+    let timerInterval = null;
+
+    function updateTimeLabel(){
+      if(!started) return;
+      const now = performance.now();
+      const sec = (now - startTime)/1000;
+      timeLabel.textContent = sec.toFixed(1);
+    }
+
+    function startTimerIfNeeded(){
+      if(started) return;
+      started = true;
+      startTime = performance.now();
+      timerInterval = setInterval(updateTimeLabel,100);
+    }
+
+    function stopTimer(){
+      if(timerInterval) clearInterval(timerInterval);
+      endTime = performance.now();
+      updateTimeLabel();
+    }
+
+    function createCard(symbol, index){
+      const tile = document.createElement("div");
+      tile.className = "card-tile";
+      tile.dataset.index = index;
+      tile.dataset.symbol = symbol;
+
+      const inner = document.createElement("div");
+      inner.className = "card-inner";
+
+      const front = document.createElement("div");
+      front.className = "face front";
+      front.textContent = "ET";
+
+      const back = document.createElement("div");
+      back.className = "face back";
+      back.textContent = symbol;
+
+      inner.appendChild(front);
+      inner.appendChild(back);
+      tile.appendChild(inner);
+
+      tile.addEventListener("click", () => handleFlip(tile));
+
+      return tile;
+    }
+
+    function handleFlip(tile){
+      if(lockBoard) return;
+      const inner = tile.firstElementChild;
+      if(inner.classList.contains("flipped")) return;
+
+      startTimerIfNeeded();
+      inner.classList.add("flipped");
+
+      if(!firstCard){
+        firstCard = tile;
+        return;
+      }
+
+      // second card
+      const firstSymbol = firstCard.dataset.symbol;
+      const secondSymbol = tile.dataset.symbol;
+
+      if(firstSymbol === secondSymbol){
+        // match
+        matchedPairs++;
+        pairsCountEl.textContent = matchedPairs;
+        firstCard = null;
+        if(matchedPairs === symbols.length){
+          stopTimer();
+          statusMsg.textContent = "Nice! You cleared all pairs.";
+          statusMsg.className = "msg good";
+          nextBtn.disabled = false;
+        }
+      } else {
+        lockBoard = true;
+        setTimeout(()=>{
+          firstCard.firstElementChild.classList.remove("flipped");
+          inner.classList.remove("flipped");
+          firstCard = null;
+          lockBoard = false;
+        },700);
+      }
+    }
+
+    // build grid
+    deck.forEach((sym, idx)=>{
+      grid.appendChild(createCard(sym, idx));
+    });
+
+    nextBtn.addEventListener("click", ()=>{
+      const totalMs = endTime && started ? (endTime - startTime) : 0;
+      const totalSec = (totalMs/1000).toFixed(1);
+
+      const q = new URLSearchParams({
+        usn,
+        name,
+        roll,
+        gameTime: totalSec
+      });
+      window.location.href = "md-quiz.html?" + q.toString();
+    });
+  </script>
+</body>
+</html>
