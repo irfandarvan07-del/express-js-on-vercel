@@ -269,21 +269,39 @@
 
     <div class="layout">
       <!-- student list -->
-      <section class="card">
-        <h2><span class="icon">👥</span>Student list – click to play</h2>
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>Roll</th>
-                <th>Name</th>
-                <th>Play</th>
-              </tr>
-            </thead>
-            <tbody id="studentBody"></tbody>
-          </table>
-        </div>
-      </section>
+     <section class="card">
+  <h2><span class="icon">📊</span>Class scoreboard</h2>
+  <p class="side-note">
+    This ranking is shared for everyone using this game. It combines:
+  </p>
+  <ul class="side-bullets">
+    <li><span>Memory game time</span> – faster is better.</li>
+    <li><span>Quiz score</span> – out of 5.</li>
+    <li><span>Moves</span> – fewer card flips is better.</li>
+  </ul>
+  <div class="badge">Top runs – ET Section E</div>
+  <div id="scoreWrapper" class="score-table-wrapper" style="display:none;">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Correct</th>
+          <th>Time (s)</th>
+          <th>Moves</th>
+        </tr>
+      </thead>
+      <tbody id="scoreBody"></tbody>
+    </table>
+  </div>
+  <div id="scoreEmpty" class="empty-text">
+    No runs recorded yet. Play once to create the first entry.
+  </div>
+  <p class="note">
+    For full class ranking & prize button, complete both levels and reach the final results page.
+  </p>
+</section>
+
 
       <!-- scoreboard + info -->
       <section class="card">
@@ -583,5 +601,6 @@
   
 </body>
 </html>
+
 
 
