@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>MD's Questions – Game 2 | ET</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --bg:#020617;
+      --card:#0b1120;
+      --accent:#38bdf8;
+      --muted:#9ca3af;
+      --text:#f9fafb;
+      --enemy-bg:rgba(248,113,113,0.16);
+      --enemy-border:rgba(248,113,113,0.85);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:"Poppins",system-ui;
+      background:radial-gradient(circle at top,#0b1120,#020617);
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      padding:1.4rem;
+      color:var(--text);
+    }
+    .shell{
+      width:100%;
+      max-width:900px;
+      background:rgba(15,23,42,0.98);
+      border-radius:1.5rem;
+      padding:1.4rem 1.5rem 1.8rem;
+      border:1px solid rgba(148,163,184,0.6);
+      box-shadow:0 20px 40px rgba(0,0,0,0.85);
+    }
+    header{
+      display:flex;
+      justify-content:space-between;
+      gap:1rem;
+      flex-wrap:wrap;
+      margin-bottom:1rem;
+    }
+    header h1{font-size:1.15rem;font-weight:600}
+    header p{font-size:0.85rem;color:var(--muted);margin-top:0.2rem}
+    .tag{
+      font-size:0.78rem;
+      padding:0.25rem 0.6rem;
+      border-radius:999px;
+      border:1px solid rgba(75,85,99,0.9);
+      background:rgba(15,23,42,0.95);
+      color:var(--muted);
+    }
+    .player-bar{
+      background:var(--card);
+      border-radius:1rem;
+      padding:0.6rem 0.8rem;
+      border:1px solid rgba(55,65,81,0.9);
+      display:flex;
+      justify-content:space-between;
+      gap:0.6rem;
+      font-size:0.8rem;
+      margin-bottom:0.7rem;
+    }
+    .player-bar strong{font-weight:500}
+    .enemy-banner{
+      display:none;
+      margin-bottom:0.7rem;
+      padding:0.5rem 0.8rem;
+      border-radius:0.9rem;
+      background:var(--enemy-bg);
+      border:1px solid var(--enemy-border);
+      font-size:0.84rem;
+      position:relative;
+      overflow:hidden;
+    }
+    .enemy-title{
+      font-size:0.8rem;
+      text-transform:uppercase;
+      letter-spacing:0.05em;
+      color:#fecaca;
+      margin-bottom:0.15rem;
+      display:flex;
+      align-items:center;
+      gap:0.3rem;
+    }
+    .enemy-text{color:#fee2e2;}
+    .enemy-glitch{
+      position:absolute;inset:0;
+      pointer-events:none;
+      mix-blend-mode:screen;
+      opacity:0;
+      background:repeating-linear-gradient(
+        0deg,
+        rgba(248,250,252,0.18) 0px,
+        rgba(248,250,252,0.18) 1px,
+        transparent 1px,
+        transparent 3px
+      );
+      animation:glitch 1.4s infinite;
+    }
+    .enemy-banner.flash{
+      animation:flash 0.35s linear 0s 8;
+    }
+    @keyframes flash{
+      0%,100%{transform:translateX(0);}
+      25%{transform:translateX(-1px);}
+      50%{transform:translateX(1px);}
+      75%{transform:translateX(-0.5px);}
+    }
+    @keyframes glitch{
+      0%{opacity:0;}
+      20%{opacity:0.45;}
+      40%{opacity:0.2;}
+      60%{opacity:0.5;}
+      80%{opacity:0.25;}
+      100%{opacity:0;}
+    }
+    .info{
+      font-size:0.82rem;
+      color:var(--muted);
+      margin-bottom:0.6rem;
+    }
+    .status{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      font-size:0.83rem;
+      margin-bottom:0.6rem;
+    }
+    .status span.time{color:var(--accent);font-weight:600}
+    .card{
+      background:var(--card);
+      border-radius:1rem;
+      padding:0.9rem 1rem 1rem;
+      border:1px solid rgba(55,65,81,0.9);
+      margin-bottom:0.6rem;
+    }
+    .q-text{font-size:0.85rem;margin-bottom:0.4rem;}
+    .options{font-size:0.8rem;display:flex;flex-direction:column;gap:0.25rem;}
+    .options label{cursor:pointer;}
+    .btn{
+      border:none;
+      border-radius:999px;
+      padding:0.55rem 1.2rem;
+      font-size:0.85rem;
+      background:linear-gradient(135deg,#38bdf8,#2563eb);
+      color:white;
+      cursor:pointer;
+      box-shadow:0 12px 22px rgba(37,99,235,0.7);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:0.3rem;
+      margin-top:0.7rem;
+    }
+    .msg{
+      margin-top:0.6rem;
+      font-size:0.82rem;
+    }
+    .msg.ok{color:#4ade80;font-weight:500}
+    .msg.bad{color:#f97373;font-weight:500}
+    .footer-link{
+      margin-top:0.6rem;
+      font-size:0.8rem;
+    }
+    .footer-link a{color:#38bdf8;text-decoration:none;}
+    .footer-link a:hover{text-decoration:underline;}
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <div>
+        <h1>Game 2 – MD's Questions</h1>
+        <p>Answer quickly and correctly. We’ll combine this with your card game time.</p>
+      </div>
+      <div><span class="tag">Step 2 of 3</span></div>
+    </header>
+
+    <div id="noPlayer" style="font-size:0.85rem;color:#f97373;display:none;">
+      No player data found. Go back to <a href="index.html" style="color:#38bdf8;">index</a> and restart.
+    </div>
+
+    <div id="quizArea" style="display:none;">
+      <div class="player-bar">
+        <div>
+          <strong id="playerName"></strong><br/>
+          <span id="playerUsn" style="color:var(--muted);"></span>
+        </div>
+        <div style="text-align:right;">
+          Roll<br/><strong id="playerRoll"></strong><br/>
+          <span style="font-size:0.75rem;color:var(--muted);">Cards time: <span id="cardsTime"></span>s</span>
+        </div>
+      </div>
+
+      <div id="enemyBanner" class="enemy-banner">
+        <div class="enemy-glitch"></div>
+        <div class="enemy-title">
+          <span>⚠️</span> <span>Message from Irfan</span>
+        </div>
+        <div class="enemy-text">
+          Irfan says… you're now my enemy 😈
+        </div>
+      </div>
+
+      <p class="info">
+        Timer starts now. Answer all the questions and hit <strong>Submit</strong>.
+      </p>
+      <div class="status">
+        <div>Questions: <strong>3</strong></div>
+        <div>Quiz time: <span class="time" id="quizTimeLabel">0.0</span>s</div>
+      </div>
+
+      <form id="quizForm">
+        <div class="card">
+          <div class="q-text">
+            1) In this mini-project, what is MD acting as?
+          </div>
+          <div class="options">
+            <label><input type="radio" name="q1" value="friend" /> Just a friend sending links</label>
+            <label><input type="radio" name="q1" value="cr" /> Official CR of ET</label>
+            <label><input type="radio" name="q1" value="architect" /> The chaotic game architect (correct)</label>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="q-text">
+            2) Which tech is used to store the shared scoreboard for everyone?
+          </div>
+          <div class="options">
+            <label><input type="radio" name="q2" value="excel" /> MS Excel on someone's laptop</label>
+            <label><input type="radio" name="q2" value="firebase" /> Firebase Firestore (correct)</label>
+            <label><input type="radio" name="q2" value="whatsapp" /> WhatsApp group description</label>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="q-text">
+            3) If your score is low, what should you actually do?
+          </div>
+          <div class="options">
+            <label><input type="radio" name="q3" value="cry" /> Cry in the washroom</label>
+            <label><input type="radio" name="q3" value="blame" /> Blame the Wi-Fi and faculty</label>
+            <label><input type="radio" name="q3" value="learn" /> Laugh, learn, and move on (correct)</label>
+          </div>
+        </div>
+
+        <button type="submit" class="btn">Submit and see result ↗</button>
+        <div id="msg" class="msg"></div>
+      </form>
+
+      <div class="footer-link">
+        Stuck? You can go back to <a href="index.html">registration</a>, but your old partial score may remain in Firestore.
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase v8 -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+  <script>
+    // TODO: same firebaseConfig as index.html
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    const params = new URLSearchParams(window.location.search);
+    const usn = (params.get("usn") || "").toUpperCase();
+    const name = params.get("name") || "";
+    const roll = params.get("roll") || "";
+    const gameTimeStr = params.get("gameTime") || "0";
+
+    const noPlayer = document.getElementById("noPlayer");
+    const quizArea = document.getElementById("quizArea");
+    const playerName = document.getElementById("playerName");
+    const playerUsn = document.getElementById("playerUsn");
+    const playerRoll = document.getElementById("playerRoll");
+    const cardsTime = document.getElementById("cardsTime");
+    const enemyBanner = document.getElementById("enemyBanner");
+    const quizTimeLabel = document.getElementById("quizTimeLabel");
+    const quizForm = document.getElementById("quizForm");
+    const msgEl = document.getElementById("msg");
+
+    if(!usn || !name || !roll){
+      noPlayer.style.display = "block";
+    } else {
+      quizArea.style.display = "block";
+      playerName.textContent = name;
+      playerUsn.textContent = usn + " • ET";
+      playerRoll.textContent = roll;
+      cardsTime.textContent = gameTimeStr;
+
+      // Ishita scare (only her)
+      if(usn === "RVCE25BTE009"){
+        enemyBanner.style.display = "block";
+        enemyBanner.classList.add("flash");
+        setTimeout(()=>enemyBanner.classList.remove("flash"),4000);
+      }
+    }
+
+    // quiz timer
+    let quizStart = performance.now();
+    let quizTimerId = null;
+
+    function updateQuizTime(){
+      const now = performance.now();
+      const sec = (now - quizStart)/1000;
+      quizTimeLabel.textContent = sec.toFixed(1);
+    }
+    quizTimerId = setInterval(updateQuizTime,100);
+
+    quizForm.addEventListener("submit", async (e)=>{
+      e.preventDefault();
+      if(!usn || !name) return;
+
+      clearInterval(quizTimerId);
+      const now = performance.now();
+      const quizTimeSec = (now - quizStart)/1000;
+
+      const q1 = document.querySelector('input[name="q1"]:checked');
+      const q2 = document.querySelector('input[name="q2"]:checked');
+      const q3 = document.querySelector('input[name="q3"]:checked');
+
+      if(!q1 || !q2 || !q3){
+        msgEl.textContent = "Answer all three questions.";
+        msgEl.className = "msg bad";
+        return;
+      }
+
+      let correct = 0;
+      if(q1.value === "architect") correct++;
+      if(q2.value === "firebase") correct++;
+      if(q3.value === "learn") correct++;
+
+      const totalQuestions = 3;
+      const accuracy = correct / totalQuestions;
+
+      const gameTime = parseFloat(gameTimeStr) || 0;
+      const roundedQuiz = Number(quizTimeSec.toFixed(1));
+
+      // scoring: accuracy is main, time is penalty
+      const totalTime = gameTime + quizTimeSec;
+      // timeScore decreases after 40s
+      const timeScore = Math.max(0, 30 - Math.max(0, totalTime - 10));
+      const accuracyScore = accuracy * 70;
+      const totalScore = Math.round(accuracyScore + timeScore);
+
+      msgEl.textContent = `Saving your score… (Accuracy: ${(accuracy*100).toFixed(0)}%, Total score: ${totalScore})`;
+      msgEl.className = "msg ok";
+
+      try{
+        await db.collection("scores").doc(usn).set({
+          usn,
+          name,
+          roll: Number(roll),
+          gameTime: Number(gameTime.toFixed ? gameTime.toFixed(1) : gameTime),
+          quizTime: roundedQuiz,
+          accuracy,
+          totalScore,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge:true });
+
+        const q = new URLSearchParams({ usn });
+        window.location.href = "result.html?" + q.toString();
+      } catch(err){
+        console.error(err);
+        msgEl.textContent = "Failed to save score to Firebase. Check console / config.";
+        msgEl.className = "msg bad";
+      }
+    });
+  </script>
+</body>
+</html>
