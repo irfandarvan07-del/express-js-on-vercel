@@ -325,212 +325,229 @@
       </section>
     </div>
   </div>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import {
+    getFirestore,
+    collection,
+    getDocs,
+    query,
+    orderBy,
+    limit
+  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-  <script>
-    const resultsKey = "et_game_results_v1";
+  // 🔥 1) PASTE YOUR CONFIG HERE FROM FIREBASE
+  const firebaseConfig = {
+  apiKey: "AIzaSyAcRrQIHYDctuKdc8QJTx8i5Gi_1b2QbNc",
+  authDomain: "et-attendance-game.firebaseapp.com",
+  projectId: "et-attendance-game",
+  storageBucket: "et-attendance-game.firebasestorage.app",
+  messagingSenderId: "398432369224",
+  appId: "1:398432369224:web:2d4a76360b0ea3d99e367d",
+  measurementId: "G-Z2793VJ1Z9"
+};
 
-    const params = new URLSearchParams(window.location.search);
-    const usn = (params.get("usn") || "").toUpperCase();
-    const roll = params.get("roll");
-    const name = params.get("name") || "";
-    const time = parseFloat(params.get("time") || "0");
-    const moves = parseInt(params.get("moves") || "0", 10);
-    const correct = parseInt(params.get("correct") || "0", 10);
 
-    const heroIcon = document.getElementById("heroIcon");
-    const heroTitle = document.getElementById("heroTitle");
-    const heroSub = document.getElementById("heroSub");
-    const heroMe = document.getElementById("heroMe");
-    const eggText = document.getElementById("eggText");
-    const rankBadge = document.getElementById("rankBadge");
-    const scoreLine = document.getElementById("scoreLine");
-    const tableWrapper = document.getElementById("tableWrapper");
-    const tableBody = document.getElementById("tableBody");
-    const emptyText = document.getElementById("emptyText");
+  // 🔥 2) Initialize Firebase + Firestore
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-    // Friendly easter eggs for every student (by USN)
-    const easterEggs = {
-      "RVCE25BTE059": "Future problem solver – just don’t debug your friends like code.",
-      "RVCE25BTE051": "Always ready with an answer… even when the question just changed.",
-      "RVCE25BTE058": "Your notes are probably cleaner than half the textbooks.",
-      "RVCE25BTE006": "Silently understanding everything, loudly judging everyone’s doubts.",
-      "RVCE25BTE001": "Roll 1 energy: teacher’s radar is always on you.",
-      "RVCE25BTE045": "Low-key genius, high-key pretending to be confused.",
-      "RVCE25BTE055": "The type who says ‘I didn’t study’ and then tops the test.",
-      "RVCE25BTE015": "Your brain has more tabs open than your browser.",
-      "RVCE25BTE016": "Can explain memes and maths with equal confidence.",
-      "RVCE25BTE043": "If attendance was a subject, you’d probably get full marks.",
-      "RVCE25BTE061": "Main character vibes in every lab group.",
-      "RVCE25BTE041": "Your handwriting can either save or destroy the lab record.",
-      "RVCE25BTE028": "Can crack jokes and circuits at the same time.",
-      "RVCE25BTE011": "Teachers trust you. Your friends trust your screenshots.",
-      "RVCE25BTE029": "Quiet in class, loud on WhatsApp status.",
-      "RVCE25BTE044": "Knows the answer, waits to see if anyone else does first.",
-      "RVCE25BTE019": "Always early to class, never early to submit assignments.",
-      "RVCE25BTE032": "Knows how to find shortcuts… in questions and corridors.",
-      "RVCE25BTE038": "If overthinking was a subject, you’d be the gold medalist.",
-      "RVCE25BTE020": "Balances labs, lectures and late-night reels like a pro.",
-      "RVCE25BTE014": "First to say ‘I’m dead’ after seeing the question paper.",
-      "RVCE25BTE018": "Makes group projects actually look like a team effort.",
-      "RVCE25BTE025": "Has at least 3 backup plans for every viva.",
-      "RVCE25BTE005": "Topper energy but still pretending to be chill.",
-      "RVCE25BTE034": "Most likely to fix the network when Wi-Fi dies in class.",
-      "RVCE25BTE035": "Knows everyone’s tea but never spills it in class.",
-      "RVCE25BTE030": "May forget homework but never forgets punchlines.",
-      "RVCE25BTE009": "You’re still Irfan’s official enemy… but also secretly the main villain of this site.",
-      "RVCE25BTE057": "Your laugh is probably louder than the fan in the classroom.",
-      "RVCE25BTE053": "Will absolutely turn any lab experiment into a story.",
-      "RVCE25BTE031": "You give strong ‘explain this once more’ energy.",
-      "RVCE25BTE021": "Probably the one reminding others about deadlines.",
-      "RVCE25BTE033": "Lives life 50% in college, 50% in daydreams.",
-      "RVCE25BTE048": "Your mood swings faster than the semester schedule.",
-      "RVCE25BTE013": "CR mode: roasting, managing, and still submitting at 11:59 PM.",
-      "RVCE25BTE060": "Your calm face hides 47 open tasks and 2 pending labs.",
-      "RVCE25BTE004": "Makes everything look aesthetic, even circuit diagrams.",
-      "RVCE25BTE026": "Attendance low, confidence high – perfect balance.",
-      "RVCE25BTE008": "Always ‘just reached’ even when class started 15 mins ago.",
-      "RVCE25BTE037": "Can speedrun assignments like a gaming level.",
-      "RVCE25BTE012": "Your ‘okay sir’ has 5 different meanings.",
-      "RVCE25BTE022": "Knows the entire classroom gossip but still acts innocent.",
-      "RVCE25BTE047": "If talking was a sport, you’d be in nationals.",
-      "RVCE25BTE023": "Probably the tech support of at least three friend groups.",
-      "RVCE25BTE063": "Low battery, high chaos. But still somehow passes.",
-      "RVCE25BTE017": "Seems quiet until the group chat becomes unhinged.",
-      "RVCE25BTE049": "You treat every exam like a surprise quiz.",
-      "RVCE25BTE024": "Your snack stash is the real reason friends visit your bench.",
-      "RVCE25BTE003": "Backbench vibes with frontbench grades.",
-      "RVCE25BTE010": "Can sleep in class and still answer when name is called.",
-      "RVCE25BTE050": "Laptop always on, life always buffering.",
-      "RVCE25BTE052": "The ‘I’ll send notes’ hero of the section.",
-      "RVCE25BTE056": "Talks like exam is a joke, writes like rank 1 material.",
-      "RVCE25BTE039": "Lab partner who actually knows where the probes connect.",
-      "RVCE25BTE046": "CR’s secret backup when things get too chaotic.",
-      "RVCE25BTE042": "May forget roll number, never forgets canteen timings.",
-      "RVCE25BTE027": "Small in size, large in opinions.",
-      "RVCE25BTE002": "Enters 5 mins late but still says ‘arey just started only’.",
-      "RVCE25BTE062": "Probably colour-codes notes and chaos both.",
-      "RVCE25BTE036": "Gives strong ‘I’ll figure it out somehow’ energy.",
-      "RVCE25BTE007": "Silently collecting knowledge and screenshots.",
-      "RVCE25BTE054": "Always ready to help, especially when proxy is needed.",
-      "RVCE25BTE040": "You bring main character energy to every bench you sit on."
-    };
+  // 🔥 3) Existing students array (same as before)
+  const students = [
+    { roll: 1,  name: "ABHAY BALIGA B",                 usn: "RVCE25BTE059" },
+    { roll: 2,  name: "ABHINAV H KRISHNA",              usn: "RVCE25BTE051" },
+    { roll: 3,  name: "ANANYA H S",                     usn: "RVCE25BTE058" },
+    { roll: 4,  name: "ANANYA KARTHIK",                 usn: "RVCE25BTE006" },
+    { roll: 5,  name: "ANAY DURG",                      usn: "RVCE25BTE001" },
+    { roll: 6,  name: "ANIRUDH S J",                    usn: "RVCE25BTE045" },
+    { roll: 7,  name: "ARAVIND R",                      usn: "RVCE25BTE055" },
+    { roll: 8,  name: "ARNAV GANGOOR",                  usn: "RVCE25BTE015" },
+    { roll: 9,  name: "ARNAV GAUTAM",                   usn: "RVCE25BTE016" },
+    { roll: 10, name: "ARYA RITESH KHODAKE",            usn: "RVCE25BTE043" },
+    { roll: 11, name: "ATHARVA TYAGI",                  usn: "RVCE25BTE061" },
+    { roll: 12, name: "ATHARVA VARSHNEY",               usn: "RVCE25BTE041" },
+    { roll: 13, name: "BHARGAV BEKKAM",                 usn: "RVCE25BTE028" },
+    { roll: 14, name: "BHARGAVI S B",                   usn: "RVCE25BTE011" },
+    { roll: 15, name: "CHANDRAKANTHA",                  usn: "RVCE25BTE029" },
+    { roll: 16, name: "CHIRAG CHANDRA",                 usn: "RVCE25BTE044" },
+    { roll: 17, name: "D R SHREESUJA",                  usn: "RVCE25BTE019" },
+    { roll: 18, name: "DAIVIK MANKAME",                 usn: "RVCE25BTE032" },
+    { roll: 19, name: "DAKSH JAIN",                     usn: "RVCE25BTE038" },
+    { roll: 20, name: "DEBDEEP GHOSH",                  usn: "RVCE25BTE020" },
+    { roll: 21, name: "DHRUV TANDEKAR",                 usn: "RVCE25BTE014" },
+    { roll: 22, name: "DIVYA YANAMASHETTI",             usn: "RVCE25BTE018" },
+    { roll: 23, name: "DONDAPATI SINDHUJA",             usn: "RVCE25BTE025" },
+    { roll: 24, name: "GARGI TOMAR",                    usn: "RVCE25BTE005" },
+    { roll: 25, name: "GAUTHAM REDDY CHIRAPU REDDY",    usn: "RVCE25BTE034" },
+    { roll: 26, name: "HARDIK VATS",                    usn: "RVCE25BTE035" },
+    { roll: 27, name: "HRITHIK",                        usn: "RVCE25BTE030" },
+    { roll: 28, name: "ISHITA SINGH",                   usn: "RVCE25BTE009" },
+    { roll: 29, name: "JAHNAVI A H",                    usn: "RVCE25BTE057" },
+    { roll: 30, name: "JASVANTH V A",                   usn: "RVCE25BTE053" },
+    { roll: 31, name: "KARTHIK R",                      usn: "RVCE25BTE031" },
+    { roll: 32, name: "KSHITI CHAUDHARY",               usn: "RVCE25BTE021" },
+    { roll: 33, name: "MANIK KANYAL",                   usn: "RVCE25BTE033" },
+    { roll: 34, name: "MANYA S",                        usn: "RVCE25BTE048" },
+    { roll: 35, name: "MD IRFAN DARVAN",                usn: "RVCE25BTE013" },
+    { roll: 36, name: "MEGHNA ROY",                     usn: "RVCE25BTE060" },
+    { roll: 37, name: "MIA MICHAEL",                    usn: "RVCE25BTE004" },
+    { roll: 38, name: "MOHIT RAJ JALGAR",               usn: "RVCE25BTE026" },
+    { roll: 39, name: "NIKHIL JAGADEESH KORI",          usn: "RVCE25BTE008" },
+    { roll: 40, name: "NIMIT JAIN",                     usn: "RVCE25BTE037" },
+    { roll: 41, name: "PALLAVI K",                      usn: "RVCE25BTE012" },
+    { roll: 42, name: "PRANYA",                         usn: "RVCE25BTE022" },
+    { roll: 43, name: "RISHAB KASHYAP A",               usn: "RVCE25BTE047" },
+    { roll: 44, name: "SAI PRAKASH J",                  usn: "RVCE25BTE023" },
+    { roll: 45, name: "SAMANVAY SHOBHIT",               usn: "RVCE25BTE063" },
+    { roll: 46, name: "SANATH KUMAR N",                 usn: "RVCE25BTE017" },
+    { roll: 47, name: "SANDYA PRITHIKA BALAJI",         usn: "RVCE25BTE049" },
+    { roll: 48, name: "SATYADEEP SREENIVAS",            usn: "RVCE25BTE024" },
+    { roll: 49, name: "SKANDHA VISAKHA",                usn: "RVCE25BTE003" },
+    { roll: 50, name: "SOHAN A GADAVI",                 usn: "RVCE25BTE010" },
+    { roll: 51, name: "SRIJAN SANJEEV INGALAGI",        usn: "RVCE25BTE050" },
+    { roll: 52, name: "STUTHI SANTOSH MATHAPATI",       usn: "RVCE25BTE052" },
+    { roll: 53, name: "SUHAS CHAWAN",                   usn: "RVCE25BTE056" },
+    { roll: 54, name: "SUHAS V J",                      usn: "RVCE25BTE039" },
+    { roll: 55, name: "SUJAN KUMAR S K",                usn: "RVCE25BTE046" },
+    { roll: 56, name: "SWAPNIL SAHU",                   usn: "RVCE25BTE042" },
+    { roll: 57, name: "THARICKA MURARI",                usn: "RVCE25BTE027" },
+    { roll: 58, name: "THARUN S",                       usn: "RVCE25BTE002" },
+    { roll: 59, name: "VAISHNAVI KARPUR",               usn: "RVCE25BTE062" },
+    { roll: 60, name: "VANI GUSAIN",                    usn: "RVCE25BTE036" },
+    { roll: 61, name: "VEDAANT RAJ",                    usn: "RVCE25BTE007" },
+    { roll: 62, name: "VINAYAK S HALLI",                usn: "RVCE25BTE054" },
+    { roll: 63, name: "YASHASVI ARVIND JAIN",           usn: "RVCE25BTE040" }
+  ];
 
-    function getRank(correct, time) {
-      if (correct === 5 && time < 25) return "Legend";
-      if (correct === 5) return "Topper";
-      if (correct >= 3) return "Backbencher";
-      return "Noob";
+  const studentBody = document.getElementById("studentBody");
+  const scoreBody = document.getElementById("scoreBody");
+  const scoreWrapper = document.getElementById("scoreWrapper");
+  const scoreEmpty = document.getElementById("scoreEmpty");
+  const modalBackdrop = document.getElementById("modalBackdrop");
+  const modalTitle = document.getElementById("modalTitle");
+  const modalSub = document.getElementById("modalSub");
+  const usnInput = document.getElementById("usnInput");
+  const modalError = document.getElementById("modalError");
+  const cancelBtn = document.getElementById("cancelBtn");
+  const continueBtn = document.getElementById("continueBtn");
+
+  let selectedStudent = null;
+
+  function renderStudents() {
+    studentBody.innerHTML = "";
+    students.forEach(s => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${s.roll}</td>
+        <td>${s.name}</td>
+        <td><button class="play-btn" data-usn="${s.usn}">Play</button></td>
+      `;
+      studentBody.appendChild(tr);
+    });
+
+    studentBody.addEventListener("click", (e)=>{
+      const btn = e.target.closest(".play-btn");
+      if (!btn) return;
+      const usn = btn.getAttribute("data-usn");
+      const stu = students.find(s=>s.usn===usn);
+      if (!stu) return;
+      selectedStudent = stu;
+      openModal(stu);
+    });
+  }
+
+  function openModal(stu) {
+    modalTitle.textContent = "Login as " + stu.name;
+    modalSub.textContent = `Roll ${stu.roll} • Telecom • 1st Sem`;
+    usnInput.value = "";
+    modalError.textContent = "";
+    modalBackdrop.style.display = "flex";
+    usnInput.focus();
+  }
+
+  function closeModal() {
+    modalBackdrop.style.display = "none";
+    selectedStudent = null;
+  }
+
+  cancelBtn.addEventListener("click", closeModal);
+  modalBackdrop.addEventListener("click",(e)=>{
+    if (e.target===modalBackdrop) closeModal();
+  });
+
+  continueBtn.addEventListener("click", ()=>{
+    if (!selectedStudent) return;
+    const entered = (usnInput.value || "").trim().toUpperCase();
+    if (!entered) {
+      modalError.textContent = "Enter your USN.";
+      return;
     }
-
-    function saveResult() {
-      if (!usn || !name || !roll || isNaN(time) || isNaN(correct)) return;
-      let arr;
-      try {
-        arr = JSON.parse(localStorage.getItem(resultsKey) || "[]");
-      } catch {
-        arr = [];
-      }
-      const newEntry = {
-        usn,
-        name,
-        roll: Number(roll),
-        correct,
-        time: Number(time.toFixed(2)),
-        moves: isNaN(moves) ? 0 : moves,
-        ts: Date.now()
-      };
-      const idx = arr.findIndex(e => e.usn === newEntry.usn);
-      if (idx >= 0) {
-        const old = arr[idx];
-        const better =
-          newEntry.correct > old.correct ||
-          (newEntry.correct === old.correct && newEntry.time < old.time) ||
-          (newEntry.correct === old.correct && newEntry.time === old.time && newEntry.moves < (old.moves ?? Infinity));
-        if (better) arr[idx] = newEntry;
-      } else {
-        arr.push(newEntry);
-      }
-      localStorage.setItem(resultsKey, JSON.stringify(arr));
+    if (entered !== selectedStudent.usn) {
+      modalError.textContent = "USN does not match this name.";
+      return;
     }
+    const params = new URLSearchParams({
+      usn: selectedStudent.usn,
+      roll: String(selectedStudent.roll),
+      name: selectedStudent.name
+    });
+    window.location.href = "game.html?" + params.toString();
+  });
 
-    function renderHero() {
-      const rank = getRank(correct, time);
-      heroMe.textContent = name
-        ? `Logged in as ${name} (Roll ${roll || "?"}).`
-        : "";
-      scoreLine.innerHTML =
-        `You scored <strong>${correct}/5</strong> in the quiz, with a memory game time of <strong>${isNaN(time)? "0.00" : time.toFixed(2)}s</strong> and <strong>${isNaN(moves)? 0 : moves} moves</strong>.`;
-
-      rankBadge.style.display = "inline-flex";
-      rankBadge.textContent = rank;
-      rankBadge.classList.remove("rank-legend","rank-topper","rank-backbencher","rank-noob");
-      if (rank==="Legend") {
-        rankBadge.classList.add("rank-legend");
-        heroIcon.textContent = "👑";
-        heroTitle.textContent = "Legend of ET!";
-        heroSub.textContent = "Perfect performance and fast reflexes. MD officially salutes you.";
-      } else if (rank==="Topper") {
-        rankBadge.classList.add("rank-topper");
-        heroIcon.textContent = "🏆";
-        heroTitle.textContent = "Topper mode activated!";
-        heroSub.textContent = "5/5 correct – you definitely read more than just WhatsApp chats.";
-      } else if (rank==="Backbencher") {
-        rankBadge.classList.add("rank-backbencher");
-        heroIcon.textContent = "🎖️";
-        heroTitle.textContent = "Certified Backbencher!";
-        heroSub.textContent = "You may sit behind but your brain still shows up for exams.";
-      } else {
-        rankBadge.classList.add("rank-noob");
-        heroIcon.textContent = "🥉";
-        heroTitle.textContent = "Respect for trying!";
-        heroSub.textContent = "Noob rank today, legend potential tomorrow. Or at least pass in externals.";
-      }
-
-      const egg = easterEggs[usn] || "You unlocked a secret level: survive this semester with your sanity intact.";
-      eggText.textContent = "Secret note: " + egg;
+  usnInput.addEventListener("keydown",(e)=>{
+    if (e.key==="Enter") {
+      e.preventDefault();
+      continueBtn.click();
     }
+  });
 
-    function renderScoreboard() {
-      let arr;
-      try {
-        arr = JSON.parse(localStorage.getItem(resultsKey) || "[]");
-      } catch {
-        arr = [];
-      }
-      if (!arr.length) {
-        tableWrapper.style.display = "none";
-        emptyText.style.display = "block";
+  // 🔥 4) GLOBAL SCOREBOARD FROM FIRESTORE
+  async function renderScoreboard() {
+    try {
+      const qRef = query(
+        collection(db, "scores"),
+        orderBy("correct", "desc"),
+        orderBy("time", "asc"),
+        orderBy("moves", "asc"),
+        limit(100)
+      );
+      const snap = await getDocs(qRef);
+
+      if (snap.empty) {
+        scoreWrapper.style.display = "none";
+        scoreEmpty.style.display = "block";
         return;
       }
-      arr.sort((a,b)=>{
-        if (b.correct !== a.correct) return b.correct - a.correct;
-        if (a.time !== b.time) return a.time - b.time;
-        const ma = a.moves ?? 0;
-        const mb = b.moves ?? 0;
-        if (ma !== mb) return ma - mb;
-        return (a.ts || 0) - (b.ts || 0);
-      });
-      tableBody.innerHTML = "";
-      arr.forEach((entry, index)=>{
-        const r = getRank(entry.correct, entry.time);
+
+      scoreBody.innerHTML = "";
+      let rank = 1;
+      snap.forEach(docSnap => {
+        const d = docSnap.data();
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td>${index+1}</td>
-          <td>${entry.name}</td>
-          <td>${r}</td>
-          <td>${entry.correct}/5</td>
-          <td>${entry.time.toFixed ? entry.time.toFixed(2) : entry.time}</td>
-          <td>${entry.moves ?? 0}</td>
+          <td>${rank++}</td>
+          <td>${d.name}</td>
+          <td>${d.correct}/5</td>
+          <td>${d.time.toFixed ? d.time.toFixed(2) : d.time}</td>
+          <td>${d.moves ?? 0}</td>
         `;
-        tableBody.appendChild(tr);
+        scoreBody.appendChild(tr);
       });
-      tableWrapper.style.display = "block";
-      emptyText.style.display = "none";
-    }
 
-    saveResult();
-    renderHero();
-    renderScoreboard();
-  </script>
+      scoreWrapper.style.display = "block";
+      scoreEmpty.style.display = "none";
+    } catch (err) {
+      console.error("Error loading scoreboard:", err);
+      scoreWrapper.style.display = "none";
+      scoreEmpty.style.display = "block";
+      scoreEmpty.textContent = "Could not load scoreboard right now.";
+    }
+  }
+
+  renderStudents();
+  renderScoreboard();
+</script>
+
+ 
 </body>
 </html>
