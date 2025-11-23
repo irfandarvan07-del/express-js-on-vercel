@@ -2,64 +2,50 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>ET Memory Game – RVCE</title>
+  <title>ET Memory Game – Level 1</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
       --bg: #f3f4f6;
-      --card: #ffffff;
+      --card-bg: #ffffff;
       --accent: #2563eb;
-      --accent-soft: rgba(37, 99, 235, 0.09);
+      --accent-soft: rgba(37, 99, 235, 0.08);
       --text-main: #111827;
       --text-muted: #6b7280;
-      --danger: #dc2626;
       --border: #e5e7eb;
+      --danger: #dc2626;
     }
-
-    * { box-sizing:border-box; margin:0; padding:0; }
-
-    body {
-      font-family: "Poppins", system-ui, -apple-system;
-      background: radial-gradient(circle at top, #e5f0ff, #f3f4f6);
-      color: var(--text-main);
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{
+      font-family:"Poppins",system-ui,-apple-system;
+      background:radial-gradient(circle at top,#e5f0ff,#f3f4f6);
+      color:var(--text-main);
       min-height:100vh;
       display:flex;
       align-items:center;
       justify-content:center;
       padding:1.2rem;
     }
-
-    .shell {
+    .shell{
       width:100%;
-      max-width:1100px;
-      background:var(--card);
+      max-width:1050px;
+      background:var(--card-bg);
       border-radius:1.5rem;
       padding:1.5rem 1.6rem 1.7rem;
       border:1px solid var(--border);
       box-shadow:0 16px 40px rgba(15,23,42,0.15);
     }
-
-    header {
+    header{
       display:flex;
       justify-content:space-between;
       gap:1rem;
       flex-wrap:wrap;
       margin-bottom:1.1rem;
     }
-
-    .title h1 {
-      font-size:1.35rem;
-      font-weight:600;
-    }
-
-    .title p {
-      font-size:0.86rem;
-      color:var(--text-muted);
-      margin-top:0.2rem;
-    }
-
-    .tag {
+    .title h1{font-size:1.35rem;font-weight:600;}
+    .title p{font-size:0.86rem;color:var(--text-muted);margin-top:0.2rem;}
+    .tag{
       font-size:0.75rem;
       padding:0.25rem 0.6rem;
       border-radius:999px;
@@ -70,39 +56,31 @@
       align-items:center;
       gap:0.3rem;
     }
-
-    .tag-dot {
+    .tag-dot{
       width:7px;height:7px;border-radius:999px;
       background:#22c55e;
       box-shadow:0 0 0 5px rgba(34,197,94,0.25);
     }
-
-    .layout {
+    .layout{
       display:grid;
-      grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);
+      grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);
       gap:1.1rem;
     }
-
-    @media (max-width:900px) {
-      .layout { grid-template-columns:minmax(0,1fr); }
-    }
-
-    .card {
+    @media (max-width:900px){.layout{grid-template-columns:minmax(0,1fr);}}
+    .card{
       background:#ffffff;
       border-radius:1.1rem;
       padding:1rem 1.05rem 1.2rem;
       border:1px solid #e5e7eb;
     }
-
-    .card h2 {
+    .card h2{
       font-size:0.98rem;
       margin-bottom:0.55rem;
       display:flex;
       align-items:center;
       gap:0.4rem;
     }
-
-    .card h2 span.icon {
+    .card h2 span.icon{
       width:24px;height:24px;border-radius:999px;
       background:var(--accent-soft);
       display:inline-flex;
@@ -111,8 +89,7 @@
       font-size:0.9rem;
       color:var(--accent);
     }
-
-    .student-banner {
+    .student-banner{
       display:flex;
       justify-content:space-between;
       gap:0.6rem;
@@ -122,39 +99,79 @@
       border:1px solid #d4d8ff;
       margin-bottom:0.7rem;
     }
+    .student-main{font-size:0.85rem;}
+    .student-main .name{font-weight:500;}
+    .student-main .usn{font-size:0.78rem;color:var(--text-muted);}
+    .student-roll{font-size:0.78rem;color:var(--text-muted);text-align:right;}
+    .student-roll span{color:var(--accent);font-weight:600;}
+    .error-text{font-size:0.84rem;color:var(--danger);margin-bottom:0.6rem;}
 
-    .student-main { font-size:0.85rem; }
-    .student-main .name { font-weight:500; }
-    .student-main .usn { font-size:0.78rem; color:var(--text-muted); }
-
-    .student-roll {
-      font-size:0.78rem;
-      color:var(--text-muted);
-      text-align:right;
-    }
-    .student-roll span { font-weight:600; color:var(--accent); }
-
-    #noStudentMsg {
-      font-size:0.84rem;
-      color:#b91c1c;
-      margin-bottom:0.6rem;
-    }
-
-    .game-info {
+    /* Ishita enemy banner */
+    .enemy-banner{
+      margin-bottom:0.7rem;
+      padding:0.5rem 0.75rem;
+      border-radius:0.9rem;
+      background:#fee2e2;
+      border:1px solid #fca5a5;
       font-size:0.83rem;
-      color:var(--text-muted);
-      margin-bottom:0.6rem;
+      display:none;
+      position:relative;
+      overflow:hidden;
+    }
+    .enemy-banner-title{
+      font-size:0.8rem;
+      font-weight:600;
+      text-transform:uppercase;
+      margin-bottom:0.15rem;
+      color:#b91c1c;
+      display:flex;
+      align-items:center;
+      gap:0.3rem;
+    }
+    .enemy-banner-text{font-size:0.85rem;color:#7f1d1d;}
+    .enemy-glitch{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      opacity:0;
+      mix-blend-mode:multiply;
+      background:repeating-linear-gradient(
+        0deg,
+        rgba(248,113,113,0.18) 0px,
+        rgba(248,113,113,0.18) 1px,
+        transparent 1px,
+        transparent 3px
+      );
+      animation:enemyGlitch 1.2s infinite;
+    }
+    .enemy-banner.flash{
+      animation:enemyFlash 0.35s linear 0s 10;
+    }
+    @keyframes enemyFlash{
+      0%,100%{transform:translateX(0);}
+      20%{transform:translateX(-1px);}
+      40%{transform:translateX(1px);}
+      60%{transform:translateX(-1px);}
+      80%{transform:translateX(1px);}
+    }
+    @keyframes enemyGlitch{
+      0%{opacity:0;}
+      20%{opacity:0.6;}
+      40%{opacity:0.3;}
+      60%{opacity:0.7;}
+      80%{opacity:0.4;}
+      100%{opacity:0;}
     }
 
-    .game-status {
+    .game-info{font-size:0.84rem;color:var(--text-muted);margin-bottom:0.6rem;}
+    .game-status{
       display:flex;
       justify-content:space-between;
       align-items:center;
       margin-bottom:0.7rem;
       font-size:0.84rem;
     }
-
-    .badge {
+    .badge{
       display:inline-flex;
       align-items:center;
       justify-content:center;
@@ -165,146 +182,64 @@
       color:var(--accent);
       font-weight:500;
     }
+    .timer{font-size:0.85rem;color:var(--text-muted);}
+    .timer span{color:var(--accent);font-weight:600;}
 
-    .timer {
-      font-size:0.85rem;
-      color:var(--text-muted);
-    }
-    .timer span { color:var(--accent); font-weight:600; }
-
-    .arena {
-      width:100%;
-      max-width:420px;
-      margin:0 auto;
-      background:#f9fafb;
-      border-radius:1rem;
-      border:1px dashed #d1d5db;
-      padding:0.8rem;
-    }
-
-    .grid {
+    .grid{
       display:grid;
-      grid-template-columns:repeat(4, minmax(0,1fr));
+      grid-template-columns:repeat(4,minmax(0,1fr));
       gap:0.5rem;
+      max-width:360px;
+      margin:0 auto;
     }
-
-    .card-tile {
+    .card-tile{
       position:relative;
-      aspect-ratio:3/4;
-      border-radius:0.75rem;
+      padding-top:100%;
+      border-radius:0.9rem;
+      background:#e5e7eb;
       cursor:pointer;
-      perspective:800px;
+      overflow:hidden;
+      box-shadow:0 6px 12px rgba(15,23,42,0.08);
+      transition:transform 0.12s ease-out, box-shadow 0.12s ease-out, background 0.12s;
     }
-
-    .card-inner {
+    .card-tile-inner{
       position:absolute;
       inset:0;
-      border-radius:inherit;
-      transform-style:preserve-3d;
-      transition:transform 0.28s ease-out;
-    }
-
-    .card-tile.flipped .card-inner {
-      transform:rotateY(180deg);
-    }
-
-    .card-face {
-      position:absolute;
-      inset:0;
-      backface-visibility:hidden;
-      border-radius:inherit;
       display:flex;
       align-items:center;
       justify-content:center;
       font-size:1.6rem;
       font-weight:600;
+      color:#111827;
     }
-
-    .card-front {
-      background:linear-gradient(135deg,#2563eb,#3b82f6);
-      color:#ffffff;
-    }
-
-    .card-back {
+    .card-tile.flipped{
       background:#ffffff;
-      border:1px solid #d1d5db;
-      transform:rotateY(180deg);
-      font-size:1.8rem;
+      box-shadow:0 10px 18px rgba(15,23,42,0.16);
+      transform:translateY(-2px);
     }
-
-    .card-tile.matched .card-inner {
-      transform:rotateY(180deg);
+    .card-tile.matched{
+      background:#dcfce7;
+      box-shadow:0 10px 18px rgba(22,163,74,0.35);
       cursor:default;
-      opacity:0.9;
     }
-
-    .start-btn {
-      margin-top:0.8rem;
-      display:inline-flex;
-      align-items:center;
-      gap:0.35rem;
-      padding:0.6rem 1.4rem;
-      border-radius:999px;
-      border:none;
-      background:linear-gradient(135deg,#2563eb,#3b82f6);
-      color:#ffffff;
-      font-size:0.9rem;
-      font-weight:500;
-      cursor:pointer;
-      box-shadow:0 14px 30px rgba(37,99,235,0.65);
-      transition:transform 0.15s ease-out, box-shadow 0.15s ease-out;
-    }
-    .start-btn:hover {
-      transform:translateY(-1px);
-      box-shadow:0 18px 36px rgba(37,99,235,0.9);
-    }
-    .start-btn:disabled {
-      opacity:0.5;
-      cursor:not-allowed;
-      box-shadow:none;
-      transform:none;
-    }
-
-    .game-result {
-      margin-top:0.6rem;
-      font-size:0.85rem;
-    }
-    .game-result span.label { font-weight:600; }
-
-    .next-btn {
+    .start-note{
       margin-top:0.55rem;
-      display:none;
-      align-items:center;
-      gap:0.35rem;
-      padding:0.58rem 1.35rem;
-      border-radius:999px;
-      border:none;
-      background:#16a34a;
-      color:#ffffff;
-      font-size:0.88rem;
-      font-weight:500;
-      cursor:pointer;
-      box-shadow:0 10px 24px rgba(22,163,74,0.6);
-      transition:transform 0.15s ease-out, box-shadow 0.15s ease-out;
+      font-size:0.8rem;
+      color:var(--text-muted);
+      text-align:center;
     }
-    .next-btn:hover {
-      transform:translateY(-1px);
-      box-shadow:0 14px 30px rgba(22,163,74,0.9);
-    }
-
-    .back-link {
+    .back-link{
       margin-top:0.7rem;
       font-size:0.8rem;
     }
-    .back-link a { color:#2563eb; text-decoration:none; }
-    .back-link a:hover { text-decoration:underline; }
-
-    .side-note {
-      font-size:0.82rem;
-      color:var(--text-muted);
-      margin-bottom:0.7rem;
+    .back-link a{
+      color:#2563eb;
+      text-decoration:none;
     }
-    .side-bullets {
+    .back-link a:hover{text-decoration:underline;}
+
+    .side-note{font-size:0.82rem;color:var(--text-muted);margin-bottom:0.7rem;}
+    .side-bullets{
       font-size:0.8rem;
       list-style:none;
       padding-left:0;
@@ -313,34 +248,44 @@
       gap:0.3rem;
       color:var(--text-muted);
     }
-    .side-bullets li span { color:#111827; font-weight:500; }
-
-    .note {
+    .side-bullets li span{color:#111827;font-weight:500;}
+    .note{
       margin-top:0.5rem;
       font-size:0.78rem;
       color:var(--text-muted);
     }
-
   </style>
 </head>
 <body>
   <div class="shell">
     <header>
       <div class="title">
-        <h1>ET Memory Game (Part 1)</h1>
-        <p>Match all the cards as fast as you can. Then you’ll be redirected to the MD quiz page (Part 2).</p>
+        <h1>ET Memory Game – Level 1</h1>
+        <p>Match all icon pairs. Your time & moves go to the final scoreboard.</p>
       </div>
       <div>
         <div class="tag">
           <span class="tag-dot"></span>
-          <span>Telecom • 1st Sem • Fun only</span>
+          <span>Telecom • Game 1</span>
         </div>
       </div>
     </header>
 
     <div class="layout">
       <section class="card">
-        <h2><span class="icon">🧠</span>Memory Match</h2>
+        <h2><span class="icon">🧠</span>Memory match</h2>
+
+        <!-- Ishita enemy popup -->
+        <div id="enemyBanner" class="enemy-banner">
+          <div class="enemy-glitch"></div>
+          <div class="enemy-banner-title">
+            <span class="icon">⚠️</span>
+            <span>Message from Irfan</span>
+          </div>
+          <div class="enemy-banner-text">
+            Irfan says… you're now my enemy 😈
+          </div>
+        </div>
 
         <div id="studentBanner" class="student-banner" style="display:none;">
           <div class="student-main">
@@ -351,41 +296,24 @@
             Roll<br><span id="stuRoll"></span>
           </div>
         </div>
-
-        <p id="noStudentMsg" style="display:none;">
-          Login data missing. Go back and select your name again.
+        <p id="noStudentMsg" class="error-text" style="display:none;">
+          No student info found. Go back and login again from the main page.
         </p>
 
-        <div id="gameBlock" style="display:none;">
-          <p class="game-info">
-            There are <strong>6 pairs</strong> of icons. Flip two cards at a time. Match all pairs with
-            minimum moves and time.
-          </p>
+        <p class="game-info">
+          Flip cards to find matching pairs. Timer starts when you flip the first card. Once all pairs are matched, you automatically move to the MD quiz (Level 2).
+        </p>
 
-          <div class="game-status">
-            <div class="badge">
-              Moves: <span id="moveCount">0</span>
-            </div>
-            <div class="timer">
-              Time: <span id="timeElapsed">0.00</span>s
-            </div>
-          </div>
-
-          <div class="arena">
-            <div class="grid" id="grid">
-              <!-- cards via JS -->
-            </div>
-          </div>
-
-          <button id="restartBtn" class="start-btn">
-            🔁 Restart game
-          </button>
-
-          <div id="gameResult" class="game-result"></div>
-          <button id="nextBtn" class="next-btn">
-            ➜ Go to MD Quiz
-          </button>
+        <div class="game-status">
+          <div class="badge">Moves: <span id="moveCount">0</span></div>
+          <div class="timer">Time: <span id="timeElapsed">0.00</span>s</div>
         </div>
+
+        <div class="grid" id="cardGrid"></div>
+
+        <p class="start-note">
+          Tip: Don’t spam-click. Fewer moves = more brain cells.
+        </p>
 
         <div class="back-link">
           ← <a href="index.html">Back to student list</a>
@@ -393,24 +321,24 @@
       </section>
 
       <section class="card">
-        <h2><span class="icon">ℹ️</span>How this is used</h2>
+        <h2><span class="icon">📋</span>How this level works</h2>
         <p class="side-note">
-          Only your total time from this game is passed to the MD quiz page. Final scoreboard = quiz score + this time.
+          Level 1 tests if your memory is better than your attendance.
         </p>
         <ul class="side-bullets">
-          <li><span>Game 1:</span> Memory match with 6 pairs.</li>
-          <li><span>Game 2:</span> MD roast quiz on the next page.</li>
-          <li><span>Scoreboard:</span> stored on this device and visible on the quiz page & main dashboard.</li>
+          <li><span>Cards:</span> 6 icon pairs (12 cards total).</li>
+          <li><span>Timer:</span> Starts on first flip, stops at last match.</li>
+          <li><span>Moves:</span> Every 2 flips = 1 move.</li>
+          <li><span>Next:</span> Auto redirect to <strong>MD quiz</strong> with your time & moves.</li>
         </ul>
         <p class="note">
-          Don’t overthink the strategy. Just flip fast and pray the icons match.
+          If you refresh here, your progress is lost and this run won’t be saved.
         </p>
       </section>
     </div>
   </div>
 
   <script>
-    // ---- student setup (same list as index) ----
     const students = [
       { roll: 1,  name: "ABHAY BALIGA B",                 usn: "RVCE25BTE059" },
       { roll: 2,  name: "ABHINAV H KRISHNA",              usn: "RVCE25BTE051" },
@@ -474,7 +402,8 @@
       { roll: 60, name: "VANI GUSAIN",                    usn: "RVCE25BTE036" },
       { roll: 61, name: "VEDAANT RAJ",                    usn: "RVCE25BTE007" },
       { roll: 62, name: "VINAYAK S HALLI",                usn: "RVCE25BTE054" },
-      { roll: 63, name: "YASHASVI ARVIND JAIN",           usn: "RVCE25BTE040" }
+      { roll: 63, name: "YASHASVI ARVIND JAIN",           usn: "RVCE25BTE040" },
+      { roll: 63, name: "abdul rahman",                   usn: "RVCE25Bcv039" },
     ];
 
     const params = new URLSearchParams(window.location.search);
@@ -482,12 +411,16 @@
     const roll = params.get("roll");
     const name = params.get("name") || "";
 
+    const enemyBanner = document.getElementById("enemyBanner");
     const studentBanner = document.getElementById("studentBanner");
     const noStudentMsg = document.getElementById("noStudentMsg");
-    const gameBlock = document.getElementById("gameBlock");
     const stuName = document.getElementById("stuName");
     const stuUsn = document.getElementById("stuUsn");
     const stuRoll = document.getElementById("stuRoll");
+
+    const cardGrid = document.getElementById("cardGrid");
+    const moveCountEl = document.getElementById("moveCount");
+    const timeElapsedEl = document.getElementById("timeElapsed");
 
     let currentStudent = null;
     if (usn && roll && name) {
@@ -499,161 +432,137 @@
       noStudentMsg.style.display = "block";
     } else {
       studentBanner.style.display = "flex";
-      gameBlock.style.display = "block";
       stuName.textContent = currentStudent.name;
       stuUsn.textContent = currentStudent.usn + " • ET";
       stuRoll.textContent = currentStudent.roll;
-    }
-
-    const icons = ["📡","📶","📱","💻","🛰️","⚡"]; // 6 pairs
-    const gridEl = document.getElementById("grid");
-    const moveCountEl = document.getElementById("moveCount");
-    const timeElapsedEl = document.getElementById("timeElapsed");
-    const gameResultEl = document.getElementById("gameResult");
-    const restartBtn = document.getElementById("restartBtn");
-    const nextBtn = document.getElementById("nextBtn");
-
-    let cards = [];
-    let firstCard = null;
-    let secondCard = null;
-    let lockBoard = false;
-    let moves = 0;
-    let matchedPairs = 0;
-    let startTime = null;
-    let timerInterval = null;
-    let finalTime = 0;
-
-    function shuffleArray(arr) {
-      for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
+      // Ishita horror glitch sound + banner
+      if (currentStudent.usn === "RVCE25BTE009") {
+        enemyBanner.style.display = "block";
+        enemyBanner.classList.add("flash");
+        playGlitchSound();
+        setTimeout(()=> enemyBanner.classList.remove("flash"), 5000);
       }
-      return arr;
     }
 
-    function setupBoard() {
-      clearInterval(timerInterval);
-      timerInterval = null;
-      startTime = null;
-      finalTime = 0;
-      moves = 0;
-      matchedPairs = 0;
-      moveCountEl.textContent = "0";
-      timeElapsedEl.textContent = "0.00";
-      gameResultEl.textContent = "";
-      nextBtn.style.display = "none";
+    // horror-style glitch sound (no external file)
+    function playGlitchSound() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        for (let i = 0; i < 5; i++) {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = "square";
+          osc.frequency.setValueAtTime(200 + Math.random()*800, ctx.currentTime);
+          gain.gain.setValueAtTime(0.2, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.18);
+          osc.connect(gain).connect(ctx.destination);
+          const start = ctx.currentTime + i*0.04;
+          osc.start(start);
+          osc.stop(start + 0.2);
+        }
+      } catch(e) {
+        // ignore if audio context fails
+      }
+    }
 
-      gridEl.innerHTML = "";
-      firstCard = null;
-      secondCard = null;
-      lockBoard = false;
+    const icons = ["★","◆","▲","■","●","☕"];
+    const pairs = icons.concat(icons);
 
-      const pairIcons = [...icons, ...icons];
-      shuffleArray(pairIcons);
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
 
-      cards = pairIcons.map((icon, index) => {
-        const card = document.createElement("div");
-        card.className = "card-tile";
-        card.dataset.icon = icon;
-        card.dataset.index = index;
+    let shuffled = shuffle(pairs.slice());
+    let flippedCards = [];
+    let matchedCount = 0;
+    let moves = 0;
+    let timerStarted = false;
+    let startTime = 0;
+    let timerInterval = null;
 
-        card.innerHTML = `
-          <div class="card-inner">
-            <div class="card-face card-front"></div>
-            <div class="card-face card-back">${icon}</div>
-          </div>
-        `;
+    function startTimer() {
+      if (timerStarted) return;
+      timerStarted = true;
+      startTime = performance.now();
+      timerInterval = setInterval(()=>{
+        const now = performance.now();
+        const elapsed = (now - startTime)/1000;
+        timeElapsedEl.textContent = elapsed.toFixed(2);
+      },80);
+    }
 
-        card.addEventListener("click", () => onCardClick(card));
-        gridEl.appendChild(card);
-        return card;
+    function stopTimer() {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+    }
+
+    function createBoard() {
+      cardGrid.innerHTML = "";
+      shuffled.forEach((icon, index)=>{
+        const cell = document.createElement("div");
+        cell.className = "card-tile";
+        cell.dataset.index = index;
+        cell.innerHTML = `<div class="card-tile-inner"></div>`;
+        cell.addEventListener("click", ()=> handleCardClick(cell, icon, index));
+        cardGrid.appendChild(cell);
       });
     }
 
-    function startTimerIfNeeded() {
-      if (startTime !== null) return;
-      startTime = performance.now();
-      timerInterval = setInterval(() => {
-        const now = performance.now();
-        const elapsed = (now - startTime) / 1000;
-        timeElapsedEl.textContent = elapsed.toFixed(2);
-      }, 100);
-    }
-
-    function onCardClick(card) {
-      if (lockBoard) return;
-      if (card.classList.contains("matched")) return;
-
-      startTimerIfNeeded();
-
-      if (card === firstCard) return;
-
-      card.classList.add("flipped");
-
-      if (!firstCard) {
-        firstCard = card;
-        return;
-      }
-
-      secondCard = card;
-      moves++;
-      moveCountEl.textContent = String(moves);
-      checkMatch();
-    }
-
-    function checkMatch() {
-      const isMatch = firstCard.dataset.icon === secondCard.dataset.icon;
-
-      if (isMatch) {
-        firstCard.classList.add("matched");
-        secondCard.classList.add("matched");
-        matchedPairs++;
-        resetTurn();
-
-        if (matchedPairs === icons.length) {
-          finishGame();
-        }
-      } else {
-        lockBoard = true;
-        setTimeout(() => {
-          firstCard.classList.remove("flipped");
-          secondCard.classList.remove("flipped");
-          resetTurn();
-        }, 700);
-      }
-    }
-
-    function resetTurn() {
-      [firstCard, secondCard] = [null, null];
-      lockBoard = false;
-    }
-
-    function finishGame() {
-      clearInterval(timerInterval);
-      timerInterval = null;
-      const now = performance.now();
-      finalTime = startTime ? (now - startTime) / 1000 : 0;
-      timeElapsedEl.textContent = finalTime.toFixed(2);
-      gameResultEl.innerHTML =
-        `<span class="label">Nice!</span> You finished in <strong>${moves}</strong> moves and <strong>${finalTime.toFixed(2)}s</strong>.`;
-      nextBtn.style.display = "inline-flex";
-    }
-
-    restartBtn.addEventListener("click", setupBoard);
-
-    nextBtn.addEventListener("click", () => {
+    function handleCardClick(cardEl, icon, index) {
       if (!currentStudent) return;
-      const params = new URLSearchParams({
+      if (cardEl.classList.contains("matched")) return;
+      if (flippedCards.some(c => c.index === index)) return;
+      if (flippedCards.length === 2) return;
+
+      startTimer();
+      cardEl.classList.add("flipped");
+      cardEl.querySelector(".card-tile-inner").textContent = icon;
+      flippedCards.push({ cardEl, icon, index });
+
+      if (flippedCards.length === 2) {
+        moves++;
+        moveCountEl.textContent = moves;
+        const [c1, c2] = flippedCards;
+        if (c1.icon === c2.icon) {
+          c1.cardEl.classList.add("matched");
+          c2.cardEl.classList.add("matched");
+          flippedCards = [];
+          matchedCount += 2;
+          if (matchedCount === shuffled.length) {
+            stopTimer();
+            const finalTime = parseFloat(timeElapsedEl.textContent) || 0;
+            goToQuiz(finalTime, moves);
+          }
+        } else {
+          setTimeout(()=>{
+            flippedCards.forEach(c=>{
+              c.cardEl.classList.remove("flipped");
+              c.cardEl.querySelector(".card-tile-inner").textContent = "";
+            });
+            flippedCards = [];
+          },600);
+        }
+      }
+    }
+
+    function goToQuiz(gameTime, movesCount) {
+      const p = new URLSearchParams({
         usn: currentStudent.usn,
         roll: String(currentStudent.roll),
         name: currentStudent.name,
-        gameTime: finalTime.toFixed(2)
+        time: gameTime.toFixed(2),
+        moves: String(movesCount)
       });
-      window.location.href = "quiz.html?" + params.toString();
-    });
+      window.location.href = "quiz.html?" + p.toString();
+    }
 
-    // Initial draw
-    if (currentStudent) setupBoard();
+    createBoard();
   </script>
 </body>
 </html>
