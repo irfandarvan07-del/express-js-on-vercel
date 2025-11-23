@@ -304,38 +304,7 @@
 
 
       <!-- scoreboard + info -->
-      <section class="card">
-        <h2><span class="icon">📊</span>Local scoreboard</h2>
-        <p class="side-note">
-          This ranking is saved in your browser only. It combines:
-        </p>
-        <ul class="side-bullets">
-          <li><span>Memory game time</span> – faster is better.</li>
-          <li><span>Quiz score</span> – out of 5.</li>
-          <li><span>Moves</span> – fewer card flips is better.</li>
-        </ul>
-        <div class="badge">Top runs on this device</div>
-        <div id="scoreWrapper" class="score-table-wrapper" style="display:none;">
-          <table>
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Correct</th>
-                <th>Time (s)</th>
-                <th>Moves</th>
-              </tr>
-            </thead>
-            <tbody id="scoreBody"></tbody>
-          </table>
-        </div>
-        <div id="scoreEmpty" class="empty-text">
-          No one has played yet on this browser. Be the first.
-        </div>
-        <p class="note">
-          For full class ranking & prize button, complete both levels and reach the final results page.
-        </p>
-      </section>
+      
     </div>
   </div>
 
@@ -370,7 +339,15 @@
   } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
   // 🔥 1) SAME CONFIG AS index.html
-  const firebaseConfig = {
+ // Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
   apiKey: "AIzaSyAcRrQIHYDctuKdc8QJTx8i5Gi_1b2QbNc",
   authDomain: "et-attendance-game.firebaseapp.com",
   projectId: "et-attendance-game",
@@ -379,6 +356,10 @@
   appId: "1:398432369224:web:2d4a76360b0ea3d99e367d",
   measurementId: "G-Z2793VJ1Z9"
 };
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 
 
   const app = initializeApp(firebaseConfig);
@@ -601,6 +582,7 @@
   
 </body>
 </html>
+
 
 
 
