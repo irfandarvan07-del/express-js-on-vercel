@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Final Results & Prize – ET Game</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --bg:#f3f4f6;
+      --card-bg:#ffffff;
+      --accent:#2563eb;
+      --accent-soft:rgba(37,99,235,0.08);
+      --text-main:#111827;
+      --text-muted:#6b7280;
+      --border:#e5e7eb;
+      --gold:#facc15;
+      --danger:#dc2626;
+      --success:#16a34a;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{
+      font-family:"Poppins",system-ui,-apple-system;
+      background:radial-gradient(circle at top,#e5f0ff,#f3f4f6);
+      color:var(--text-main);
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:1.2rem;
+    }
+    .shell{
+      width:100%;
+      max-width:1050px;
+      background:var(--card-bg);
+      border-radius:1.5rem;
+      padding:1.5rem 1.6rem 1.7rem;
+      border:1px solid var(--border);
+      box-shadow:0 16px 40px rgba(15,23,42,0.15);
+    }
+    header{
+      display:flex;
+      justify-content:space-between;
+      gap:1rem;
+      flex-wrap:wrap;
+      margin-bottom:1.1rem;
+    }
+    .title h1{font-size:1.35rem;font-weight:600;}
+    .title p{font-size:0.86rem;color:var(--text-muted);margin-top:0.2rem;}
+    .tag{
+      font-size:0.75rem;
+      padding:0.25rem 0.6rem;
+      border-radius:999px;
+      border:1px solid #d1d5db;
+      background:#f9fafb;
+      color:var(--text-muted);
+      display:inline-flex;
+      align-items:center;
+      gap:0.3rem;
+    }
+    .tag-dot{
+      width:7px;height:7px;border-radius:999px;
+      background:#22c55e;
+      box-shadow:0 0 0 5px rgba(34,197,94,0.25);
+    }
+    .layout{
+      display:grid;
+      grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);
+      gap:1.1rem;
+    }
+    @media (max-width:900px){
+      .layout{grid-template-columns:minmax(0,1fr);}
+    }
+    .card{
+      background:#ffffff;
+      border-radius:1.1rem;
+      padding:1rem 1.05rem 1.2rem;
+      border:1px solid #e5e7eb;
+    }
+    .card h2{
+      font-size:0.98rem;
+      margin-bottom:0.55rem;
+      display:flex;
+      align-items:center;
+      gap:0.4rem;
+    }
+    .card h2 span.icon{
+      width:24px;height:24px;border-radius:999px;
+      background:var(--accent-soft);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      font-size:0.9rem;
+      color:var(--accent);
+    }
+
+    .hero{text-align:center;margin-bottom:0.8rem;}
+    .hero-icon{
+      font-size:2.4rem;
+      margin-bottom:0.2rem;
+    }
+    .hero-title{
+      font-size:1.2rem;
+      font-weight:600;
+      margin-bottom:0.2rem;
+    }
+    .hero-sub{
+      font-size:0.86rem;
+      color:var(--text-muted);
+      margin-bottom:0.35rem;
+    }
+    .hero-me{
+      font-size:0.84rem;
+      margin-bottom:0.3rem;
+    }
+    .hero-me span{
+      font-weight:600;
+      color:var(--accent);
+    }
+    .rank-badge{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:999px;
+      padding:0.18rem 0.7rem;
+      font-size:0.8rem;
+      font-weight:600;
+      margin-bottom:0.35rem;
+      color:#111827;
+    }
+    .rank-legend{
+      background:#fef9c3;
+      border:1px solid #facc15;
+    }
+    .rank-topper{
+      background:#dbeafe;
+      border:1px solid #60a5fa;
+    }
+    .rank-backbencher{
+      background:#ffedd5;
+      border:1px solid #fdba74;
+    }
+    .rank-noob{
+      background:#fee2e2;
+      border:1px solid #fecaca;
+    }
+    .egg-text{
+      font-size:0.8rem;
+      color:var(--text-muted);
+      margin-top:0.2rem;
+      font-style:italic;
+    }
+
+    .score-line{
+      font-size:0.85rem;
+      text-align:center;
+      margin-bottom:0.4rem;
+    }
+    .score-line strong{color:var(--accent);}
+
+    .answers{
+      font-size:0.8rem;
+      text-align:center;
+      color:var(--text-muted);
+      margin-bottom:0.5rem;
+    }
+
+    .prize-btn{
+      display:inline-flex;
+      align-items:center;
+      gap:0.35rem;
+      padding:0.6rem 1.4rem;
+      border-radius:999px;
+      border:none;
+      background:#ea580c;
+      color:#ffffff;
+      font-size:0.9rem;
+      font-weight:500;
+      text-decoration:none;
+      box-shadow:0 12px 26px rgba(234,88,12,0.75);
+      transition:transform 0.15s ease-out, box-shadow 0.15s ease-out;
+      margin-top:0.2rem;
+    }
+    .prize-btn:hover{
+      transform:translateY(-1px);
+      box-shadow:0 16px 30px rgba(234,88,12,0.95);
+    }
+    .back-link{
+      margin-top:0.6rem;
+      font-size:0.8rem;
+      text-align:center;
+      color:var(--text-muted);
+    }
+    .back-link a{
+      color:#2563eb;
+      text-decoration:none;
+    }
+    .back-link a:hover{text-decoration:underline;}
+
+    .table-wrapper{
+      margin-top:0.4rem;
+      border-radius:0.9rem;
+      border:1px solid #e5e7eb;
+      overflow:auto;
+      max-height:260px;
+      background:#f9fafb;
+    }
+    table{
+      width:100%;
+      border-collapse:collapse;
+      font-size:0.78rem;
+    }
+    thead{
+      position:sticky;
+      top:0;
+      background:#e5e7eb;
+    }
+    th,td{
+      padding:0.4rem 0.45rem;
+      text-align:left;
+      border-bottom:1px solid #e5e7eb;
+      white-space:nowrap;
+    }
+    th{font-weight:500;color:var(--text-muted);}
+    tbody tr:nth-child(even){background:#f9fafb;}
+    .empty-text{
+      font-size:0.8rem;
+      color:var(--text-muted);
+      margin-top:0.4rem;
+      font-style:italic;
+    }
+    .side-note{font-size:0.82rem;color:var(--text-muted);margin-bottom:0.7rem;}
+    .side-bullets{
+      font-size:0.8rem;
+      list-style:none;
+      padding-left:0;
+      display:flex;
+      flex-direction:column;
+      gap:0.3rem;
+      color:var(--text-muted);
+    }
+    .side-bullets li span{color:#111827;font-weight:500;}
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <div class="title">
+        <h1>Final Results &amp; Prize</h1>
+        <p>Memory game + MD quiz score saved. Check your rank, see your easter egg, then claim your prize.</p>
+      </div>
+      <div>
+        <div class="tag">
+          <span class="tag-dot"></span>
+          <span>Telecom • Final page</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="layout">
+      <section class="card">
+        <h2><span class="icon">🏆</span>Your result</h2>
+        <div class="hero">
+          <div id="heroIcon" class="hero-icon">🏆</div>
+          <div id="heroTitle" class="hero-title">Well done for participation!</div>
+          <div id="rankBadge" class="rank-badge rank-noob" style="display:none;"></div>
+          <div id="heroSub" class="hero-sub">
+            You survived both levels. That already puts you above average attention span.
+          </div>
+          <div id="heroMe" class="hero-me"></div>
+          <div id="eggText" class="egg-text"></div>
+        </div>
+
+        <div id="scoreLine" class="score-line"></div>
+        <div class="answers">
+          Correct answers: Q1 – D, Q2 – D, Q3 – D, Q4 – D, Q5 – D.
+        </div>
+
+        <!-- Prize button (after scoreboard visually, but logically here) -->
+        <div style="text-align:center;margin-top:0.3rem;">
+          <a
+            class="prize-btn"
+            href="https://youtu.be/HiJ2ym9auqI?si=BwDL0wZDsaW3Rcot"
+            target="_blank"
+            rel="noopener"
+          >
+            🎁 Here is your prize
+          </a>
+        </div>
+
+        <div class="back-link">
+          or <a href="index.html">go back to the main dashboard</a>.
+        </div>
+      </section>
+
+      <section class="card">
+        <h2><span class="icon">📊</span>Class scoreboard (this browser)</h2>
+        <p class="side-note">
+          Ranking rules:
+        </p>
+        <ul class="side-bullets">
+          <li><span>Legend:</span> 5/5 correct &amp; time &lt; 25s</li>
+          <li><span>Topper:</span> 5/5 correct</li>
+          <li><span>Backbencher:</span> 3–4 correct</li>
+          <li><span>Noob:</span> 0–2 correct</li>
+        </ul>
+        <div id="tableWrapper" class="table-wrapper" style="display:none;">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Rank</th>
+                <th>Correct</th>
+                <th>Time (s)</th>
+                <th>Moves</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+        </div>
+        <div id="emptyText" class="empty-text">
+          No results saved yet on this device. Play from the start to add entries here.
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const resultsKey = "et_game_results_v1";
+
+    const params = new URLSearchParams(window.location.search);
+    const usn = (params.get("usn") || "").toUpperCase();
+    const roll = params.get("roll");
+    const name = params.get("name") || "";
+    const time = parseFloat(params.get("time") || "0");
+    const moves = parseInt(params.get("moves") || "0", 10);
+    const correct = parseInt(params.get("correct") || "0", 10);
+
+    const heroIcon = document.getElementById("heroIcon");
+    const heroTitle = document.getElementById("heroTitle");
+    const heroSub = document.getElementById("heroSub");
+    const heroMe = document.getElementById("heroMe");
+    const eggText = document.getElementById("eggText");
+    const rankBadge = document.getElementById("rankBadge");
+    const scoreLine = document.getElementById("scoreLine");
+    const tableWrapper = document.getElementById("tableWrapper");
+    const tableBody = document.getElementById("tableBody");
+    const emptyText = document.getElementById("emptyText");
+
+    // Friendly easter eggs for every student (by USN)
+    const easterEggs = {
+      "RVCE25BTE059": "Future problem solver – just don’t debug your friends like code.",
+      "RVCE25BTE051": "Always ready with an answer… even when the question just changed.",
+      "RVCE25BTE058": "Your notes are probably cleaner than half the textbooks.",
+      "RVCE25BTE006": "Silently understanding everything, loudly judging everyone’s doubts.",
+      "RVCE25BTE001": "Roll 1 energy: teacher’s radar is always on you.",
+      "RVCE25BTE045": "Low-key genius, high-key pretending to be confused.",
+      "RVCE25BTE055": "The type who says ‘I didn’t study’ and then tops the test.",
+      "RVCE25BTE015": "Your brain has more tabs open than your browser.",
+      "RVCE25BTE016": "Can explain memes and maths with equal confidence.",
+      "RVCE25BTE043": "If attendance was a subject, you’d probably get full marks.",
+      "RVCE25BTE061": "Main character vibes in every lab group.",
+      "RVCE25BTE041": "Your handwriting can either save or destroy the lab record.",
+      "RVCE25BTE028": "Can crack jokes and circuits at the same time.",
+      "RVCE25BTE011": "Teachers trust you. Your friends trust your screenshots.",
+      "RVCE25BTE029": "Quiet in class, loud on WhatsApp status.",
+      "RVCE25BTE044": "Knows the answer, waits to see if anyone else does first.",
+      "RVCE25BTE019": "Always early to class, never early to submit assignments.",
+      "RVCE25BTE032": "Knows how to find shortcuts… in questions and corridors.",
+      "RVCE25BTE038": "If overthinking was a subject, you’d be the gold medalist.",
+      "RVCE25BTE020": "Balances labs, lectures and late-night reels like a pro.",
+      "RVCE25BTE014": "First to say ‘I’m dead’ after seeing the question paper.",
+      "RVCE25BTE018": "Makes group projects actually look like a team effort.",
+      "RVCE25BTE025": "Has at least 3 backup plans for every viva.",
+      "RVCE25BTE005": "Topper energy but still pretending to be chill.",
+      "RVCE25BTE034": "Most likely to fix the network when Wi-Fi dies in class.",
+      "RVCE25BTE035": "Knows everyone’s tea but never spills it in class.",
+      "RVCE25BTE030": "May forget homework but never forgets punchlines.",
+      "RVCE25BTE009": "You’re still Irfan’s official enemy… but also secretly the main villain of this site.",
+      "RVCE25BTE057": "Your laugh is probably louder than the fan in the classroom.",
+      "RVCE25BTE053": "Will absolutely turn any lab experiment into a story.",
+      "RVCE25BTE031": "You give strong ‘explain this once more’ energy.",
+      "RVCE25BTE021": "Probably the one reminding others about deadlines.",
+      "RVCE25BTE033": "Lives life 50% in college, 50% in daydreams.",
+      "RVCE25BTE048": "Your mood swings faster than the semester schedule.",
+      "RVCE25BTE013": "CR mode: roasting, managing, and still submitting at 11:59 PM.",
+      "RVCE25BTE060": "Your calm face hides 47 open tasks and 2 pending labs.",
+      "RVCE25BTE004": "Makes everything look aesthetic, even circuit diagrams.",
+      "RVCE25BTE026": "Attendance low, confidence high – perfect balance.",
+      "RVCE25BTE008": "Always ‘just reached’ even when class started 15 mins ago.",
+      "RVCE25BTE037": "Can speedrun assignments like a gaming level.",
+      "RVCE25BTE012": "Your ‘okay sir’ has 5 different meanings.",
+      "RVCE25BTE022": "Knows the entire classroom gossip but still acts innocent.",
+      "RVCE25BTE047": "If talking was a sport, you’d be in nationals.",
+      "RVCE25BTE023": "Probably the tech support of at least three friend groups.",
+      "RVCE25BTE063": "Low battery, high chaos. But still somehow passes.",
+      "RVCE25BTE017": "Seems quiet until the group chat becomes unhinged.",
+      "RVCE25BTE049": "You treat every exam like a surprise quiz.",
+      "RVCE25BTE024": "Your snack stash is the real reason friends visit your bench.",
+      "RVCE25BTE003": "Backbench vibes with frontbench grades.",
+      "RVCE25BTE010": "Can sleep in class and still answer when name is called.",
+      "RVCE25BTE050": "Laptop always on, life always buffering.",
+      "RVCE25BTE052": "The ‘I’ll send notes’ hero of the section.",
+      "RVCE25BTE056": "Talks like exam is a joke, writes like rank 1 material.",
+      "RVCE25BTE039": "Lab partner who actually knows where the probes connect.",
+      "RVCE25BTE046": "CR’s secret backup when things get too chaotic.",
+      "RVCE25BTE042": "May forget roll number, never forgets canteen timings.",
+      "RVCE25BTE027": "Small in size, large in opinions.",
+      "RVCE25BTE002": "Enters 5 mins late but still says ‘arey just started only’.",
+      "RVCE25BTE062": "Probably colour-codes notes and chaos both.",
+      "RVCE25BTE036": "Gives strong ‘I’ll figure it out somehow’ energy.",
+      "RVCE25BTE007": "Silently collecting knowledge and screenshots.",
+      "RVCE25BTE054": "Always ready to help, especially when proxy is needed.",
+      "RVCE25BTE040": "You bring main character energy to every bench you sit on."
+    };
+
+    function getRank(correct, time) {
+      if (correct === 5 && time < 25) return "Legend";
+      if (correct === 5) return "Topper";
+      if (correct >= 3) return "Backbencher";
+      return "Noob";
+    }
+
+    function saveResult() {
+      if (!usn || !name || !roll || isNaN(time) || isNaN(correct)) return;
+      let arr;
+      try {
+        arr = JSON.parse(localStorage.getItem(resultsKey) || "[]");
+      } catch {
+        arr = [];
+      }
+      const newEntry = {
+        usn,
+        name,
+        roll: Number(roll),
+        correct,
+        time: Number(time.toFixed(2)),
+        moves: isNaN(moves) ? 0 : moves,
+        ts: Date.now()
+      };
+      const idx = arr.findIndex(e => e.usn === newEntry.usn);
+      if (idx >= 0) {
+        const old = arr[idx];
+        const better =
+          newEntry.correct > old.correct ||
+          (newEntry.correct === old.correct && newEntry.time < old.time) ||
+          (newEntry.correct === old.correct && newEntry.time === old.time && newEntry.moves < (old.moves ?? Infinity));
+        if (better) arr[idx] = newEntry;
+      } else {
+        arr.push(newEntry);
+      }
+      localStorage.setItem(resultsKey, JSON.stringify(arr));
+    }
+
+    function renderHero() {
+      const rank = getRank(correct, time);
+      heroMe.textContent = name
+        ? `Logged in as ${name} (Roll ${roll || "?"}).`
+        : "";
+      scoreLine.innerHTML =
+        `You scored <strong>${correct}/5</strong> in the quiz, with a memory game time of <strong>${isNaN(time)? "0.00" : time.toFixed(2)}s</strong> and <strong>${isNaN(moves)? 0 : moves} moves</strong>.`;
+
+      rankBadge.style.display = "inline-flex";
+      rankBadge.textContent = rank;
+      rankBadge.classList.remove("rank-legend","rank-topper","rank-backbencher","rank-noob");
+      if (rank==="Legend") {
+        rankBadge.classList.add("rank-legend");
+        heroIcon.textContent = "👑";
+        heroTitle.textContent = "Legend of ET!";
+        heroSub.textContent = "Perfect performance and fast reflexes. MD officially salutes you.";
+      } else if (rank==="Topper") {
+        rankBadge.classList.add("rank-topper");
+        heroIcon.textContent = "🏆";
+        heroTitle.textContent = "Topper mode activated!";
+        heroSub.textContent = "5/5 correct – you definitely read more than just WhatsApp chats.";
+      } else if (rank==="Backbencher") {
+        rankBadge.classList.add("rank-backbencher");
+        heroIcon.textContent = "🎖️";
+        heroTitle.textContent = "Certified Backbencher!";
+        heroSub.textContent = "You may sit behind but your brain still shows up for exams.";
+      } else {
+        rankBadge.classList.add("rank-noob");
+        heroIcon.textContent = "🥉";
+        heroTitle.textContent = "Respect for trying!";
+        heroSub.textContent = "Noob rank today, legend potential tomorrow. Or at least pass in externals.";
+      }
+
+      const egg = easterEggs[usn] || "You unlocked a secret level: survive this semester with your sanity intact.";
+      eggText.textContent = "Secret note: " + egg;
+    }
+
+    function renderScoreboard() {
+      let arr;
+      try {
+        arr = JSON.parse(localStorage.getItem(resultsKey) || "[]");
+      } catch {
+        arr = [];
+      }
+      if (!arr.length) {
+        tableWrapper.style.display = "none";
+        emptyText.style.display = "block";
+        return;
+      }
+      arr.sort((a,b)=>{
+        if (b.correct !== a.correct) return b.correct - a.correct;
+        if (a.time !== b.time) return a.time - b.time;
+        const ma = a.moves ?? 0;
+        const mb = b.moves ?? 0;
+        if (ma !== mb) return ma - mb;
+        return (a.ts || 0) - (b.ts || 0);
+      });
+      tableBody.innerHTML = "";
+      arr.forEach((entry, index)=>{
+        const r = getRank(entry.correct, entry.time);
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${index+1}</td>
+          <td>${entry.name}</td>
+          <td>${r}</td>
+          <td>${entry.correct}/5</td>
+          <td>${entry.time.toFixed ? entry.time.toFixed(2) : entry.time}</td>
+          <td>${entry.moves ?? 0}</td>
+        `;
+        tableBody.appendChild(tr);
+      });
+      tableWrapper.style.display = "block";
+      emptyText.style.display = "none";
+    }
+
+    saveResult();
+    renderHero();
+    renderScoreboard();
+  </script>
+</body>
+</html>
