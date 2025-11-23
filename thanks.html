@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Thanks & Reward | ET</title>
+  <title>Thanks & Reward | ET Game</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
@@ -10,6 +10,7 @@
       --bg:#020617;
       --card:#020617;
       --accent:#38bdf8;
+      --accent2:#2563eb;
       --muted:#9ca3af;
       --text:#f9fafb;
     }
@@ -26,22 +27,59 @@
     }
     .card{
       width:100%;
-      max-width:480px;
+      max-width:520px;
       background:rgba(15,23,42,0.98);
-      border-radius:1.5rem;
-      padding:1.5rem 1.5rem 1.8rem;
+      border-radius:1.6rem;
+      padding:1.6rem 1.7rem 1.9rem;
       border:1px solid rgba(148,163,184,0.6);
       box-shadow:0 22px 45px rgba(0,0,0,0.85);
       text-align:center;
     }
-    h1{font-size:1.3rem;margin-bottom:0.4rem;}
-    p{font-size:0.86rem;color:var(--muted);margin-bottom:0.8rem;}
+    h1{font-size:1.3rem;margin-bottom:0.35rem;}
+    h2{font-size:1.05rem;margin-top:0.6rem;margin-bottom:0.25rem;}
+    p{font-size:0.86rem;color:var(--muted);margin-bottom:0.5rem;}
+    .summary{
+      margin-top:0.4rem;
+      font-size:0.84rem;
+      background:rgba(15,23,42,0.96);
+      border-radius:1rem;
+      border:1px solid rgba(55,65,81,0.9);
+      padding:0.7rem 0.9rem;
+      text-align:left;
+    }
+    .summary-row{
+      display:flex;
+      justify-content:space-between;
+      gap:0.7rem;
+      margin-bottom:0.2rem;
+    }
+    .summary-label{color:var(--muted);font-size:0.8rem;}
+    .summary-value{font-weight:500;font-size:0.84rem;}
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:0.3rem;
+      padding:0.25rem 0.7rem;
+      border-radius:999px;
+      background:rgba(56,189,248,0.16);
+      border:1px solid rgba(56,189,248,0.6);
+      font-size:0.78rem;
+      margin-top:0.45rem;
+    }
+    .buttons{
+      margin-top:0.9rem;
+      display:flex;
+      flex-wrap:wrap;
+      gap:0.55rem;
+      justify-content:center;
+    }
     .btn{
       border:none;
       border-radius:999px;
-      padding:0.6rem 1.6rem;
-      font-size:0.9rem;
-      background:linear-gradient(135deg,#38bdf8,#2563eb);
+      padding:0.6rem 1.4rem;
+      font-size:0.88rem;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
       color:white;
       cursor:pointer;
       box-shadow:0 14px 26px rgba(37,99,235,0.8);
@@ -50,33 +88,313 @@
       justify-content:center;
       gap:0.35rem;
       text-decoration:none;
+      min-width:170px;
     }
-    .btn span{font-size:1rem;}
+    .btn.secondary{
+      background:rgba(15,23,42,1);
+      color:var(--muted);
+      box-shadow:none;
+      border:1px solid rgba(55,65,81,0.9);
+    }
+    .btn:disabled{
+      opacity:0.5;
+      cursor:not-allowed;
+      box-shadow:none;
+    }
     .small{
-      margin-top:0.7rem;
+      margin-top:0.8rem;
       font-size:0.8rem;
       color:var(--muted);
     }
-    .small a{color:#38bdf8;text-decoration:none;}
+    .small a{color:var(--accent);text-decoration:none;}
     .small a:hover{text-decoration:underline;}
+    .loading{font-size:0.82rem;color:var(--muted);margin-top:0.5rem;}
+    .error{font-size:0.82rem;color:#f97373;margin-top:0.5rem;}
   </style>
 </head>
 <body>
   <div class="card">
     <h1>Thanks for participating 🎉</h1>
-    <p>
-      Your score has been recorded in the shared scoreboard.  
-      Now take your reward (you earned it).
+    <p id="introText">
+      We’re fetching your final score and rank from the shared scoreboard…
     </p>
 
-    <!-- Replace href with your real YouTube link -->
-    <a class="btn" href="https://www.youtube.com/watch?v=HiJ2ym9auqI" target="_blank" rel="noopener">
-      Take your reward <span>↗</span>
-    </a>
+    <div id="summary" class="summary" style="display:none;">
+      <div class="summary-row">
+        <span class="summary-label">Name</span>
+        <span class="summary-value" id="sumName">–</span>
+      </div>
+      <div class="summary-row">
+        <span class="summary-label">USN</span>
+        <span class="summary-value" id="sumUsn">–</span>
+      </div>
+      <div class="summary-row">
+        <span class="summary-label">Roll</span>
+        <span class="summary-value" id="sumRoll">–</span>
+      </div>
+      <div class="summary-row">
+        <span class="summary-label">Total score</span>
+        <span class="summary-value" id="sumScore">–</span>
+      </div>
+      <div class="summary-row">
+        <span class="summary-label">Accuracy</span>
+        <span class="summary-value" id="sumAcc">–</span>
+      </div>
+      <div class="summary-row">
+        <span class="summary-label">Card game time</span>
+        <span class="summary-value" id="sumCard">–</span>
+      </div>
+      <div class="summary-row">
+        <span class="summary-label">Quiz time</span>
+        <span class="summary-value" id="sumQuiz">–</span>
+      </div>
+      <div class="summary-row">
+        <span class="summary-label">Rank</span>
+        <span class="summary-value" id="sumRank">–</span>
+      </div>
+    </div>
+
+    <div id="badge" class="badge" style="display:none;"></div>
+
+    <div id="loading" class="loading">Loading from Firebase…</div>
+    <div id="error" class="error" style="display:none;"></div>
+
+    <div class="buttons">
+      <!-- Certificate button is disabled until data loads -->
+      <button id="certBtn" class="btn" disabled>
+        Download Certificate ⬇
+      </button>
+
+      <!-- Reward link: replace href with your real YouTube link -->
+      <a id="rewardBtn" class="btn secondary"
+         href="https://www.youtube.com/watch?v=YOUR_YOUTUBE_LINK_HERE"
+         target="_blank" rel="noopener">
+        Take your reward ↗
+      </a>
+    </div>
 
     <div class="small">
-      You can close this tab or go back to the <a href="index.html">registration page</a>.
+      You can revisit your detailed scoreboard on the <a href="result.html">results page</a> or go back to the
+      <a href="index.html">registration page</a>.
     </div>
   </div>
+
+  <!-- Firebase v8 -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <!-- jsPDF for certificate generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <script>
+    // TODO: paste the SAME firebaseConfig you used in md-quiz.html/result.html
+   // Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyAcRrQIHYDctuKdc8QJTx8i5Gi_1b2QbNc",
+  authDomain: "et-attendance-game.firebaseapp.com",
+  projectId: "et-attendance-game",
+  storageBucket: "et-attendance-game.firebasestorage.app",
+  messagingSenderId: "398432369224",
+  appId: "1:398432369224:web:2d4a76360b0ea3d99e367d",
+  measurementId: "G-Z2793VJ1Z9"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    const params = new URLSearchParams(window.location.search);
+    const currentUsn = (params.get("usn") || "").toUpperCase();
+
+    const introText = document.getElementById("introText");
+    const summaryBox = document.getElementById("summary");
+    const badgeEl = document.getElementById("badge");
+    const loadingEl = document.getElementById("loading");
+    const errorEl = document.getElementById("error");
+    const certBtn = document.getElementById("certBtn");
+
+    const sumName = document.getElementById("sumName");
+    const sumUsn = document.getElementById("sumUsn");
+    const sumRoll = document.getElementById("sumRoll");
+    const sumScore = document.getElementById("sumScore");
+    const sumAcc = document.getElementById("sumAcc");
+    const sumCard = document.getElementById("sumCard");
+    const sumQuiz = document.getElementById("sumQuiz");
+    const sumRank = document.getElementById("sumRank");
+
+    let playerData = null;   // will hold full data + rank
+
+    if (!currentUsn) {
+      loadingEl.style.display = "none";
+      errorEl.textContent = "No USN found in URL. Open this page from the results page.";
+      errorEl.style.display = "block";
+    } else {
+      loadPlayerAndRank();
+    }
+
+    async function loadPlayerAndRank() {
+      try {
+        // Get all scores with totalScore > 0
+        const snap = await db.collection("scores").where("totalScore", ">", 0).get();
+        loadingEl.style.display = "none";
+
+        if (snap.empty) {
+          errorEl.textContent = "No scores found yet. Maybe no one has finished the game.";
+          errorEl.style.display = "block";
+          return;
+        }
+
+        const rows = [];
+        snap.forEach(doc => {
+          const d = doc.data();
+          rows.push({
+            usn: (d.usn || "").toUpperCase(),
+            name: d.name || "Unknown",
+            roll: d.roll ?? 0,
+            totalScore: d.totalScore ?? 0,
+            accuracy: d.accuracy ?? 0,
+            gameTime: d.gameTime ?? null,
+            quizTime: d.quizTime ?? null
+          });
+        });
+
+        // sort by score desc, then roll asc
+        rows.sort((a,b)=>{
+          if (b.totalScore !== a.totalScore) return b.totalScore - a.totalScore;
+          return a.roll - b.roll;
+        });
+
+        const totalPlayers = rows.length;
+        const meIndex = rows.findIndex(r => r.usn === currentUsn);
+
+        if (meIndex === -1) {
+          errorEl.textContent = "Your score was not found in the scoreboard. Maybe refresh and try again.";
+          errorEl.style.display = "block";
+          return;
+        }
+
+        const me = rows[meIndex];
+        const rank = meIndex + 1;
+
+        playerData = {
+          ...me,
+          rank,
+          totalPlayers
+        };
+
+        fillSummary(playerData);
+        setupBadge(playerData);
+        certBtn.disabled = false;
+      } catch (err) {
+        console.error(err);
+        loadingEl.style.display = "none";
+        errorEl.textContent = "Failed to load data from Firebase on the thanks page.";
+        errorEl.style.display = "block";
+      }
+    }
+
+    function fillSummary(d) {
+      introText.textContent = "Your performance is recorded. Here is your final summary:";
+      summaryBox.style.display = "block";
+
+      sumName.textContent = d.name;
+      sumUsn.textContent = d.usn;
+      sumRoll.textContent = d.roll || "—";
+      sumScore.textContent = d.totalScore;
+      sumAcc.textContent = (d.accuracy * 100).toFixed(0) + "%";
+      sumCard.textContent = (d.gameTime != null ? d.gameTime : "—") + " s";
+      sumQuiz.textContent = (d.quizTime != null ? d.quizTime : "—") + " s";
+      sumRank.textContent = `${d.rank} / ${d.totalPlayers} players`;
+    }
+
+    function setupBadge(d) {
+      let text = "";
+      if (d.rank === 1) {
+        text = "🏆 Top Scorer – Rank 1";
+      } else if (d.rank <= 3) {
+        text = `🥇 Top 3 – Rank ${d.rank}`;
+      } else if (d.accuracy >= 0.95) {
+        text = "🎯 Accuracy Master (95%+)";
+      } else if (d.totalScore >= 70) {
+        text = "⚡ Solid Performer (70+)";
+      } else {
+        text = "💡 You showed up and finished. That’s what matters.";
+      }
+      badgeEl.textContent = text;
+      badgeEl.style.display = "inline-flex";
+    }
+
+    // Certificate generation with jsPDF
+    certBtn.addEventListener("click", () => {
+      if (!playerData) return;
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF("landscape", "mm", "a4");
+
+      // Background
+      doc.setFillColor(6, 12, 31); // dark blue
+      doc.rect(0, 0, 297, 210, "F");
+
+      // Border
+      doc.setDrawColor(56, 189, 248);
+      doc.setLineWidth(1.2);
+      doc.rect(10, 10, 277, 190);
+
+      // Title
+      doc.setTextColor(248, 250, 252);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(26);
+      doc.text("Certificate of Participation", 148.5, 40, { align: "center" });
+
+      // Subtitle
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(199, 210, 254);
+      doc.text("Electronics & Telecommunication – ET Game Event", 148.5, 52, { align: "center" });
+
+      // Name
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(22);
+      doc.setTextColor(248, 250, 252);
+      doc.text(playerData.name, 148.5, 80, { align: "center" });
+
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(12);
+      doc.setTextColor(209, 213, 219);
+      doc.text(`USN: ${playerData.usn}    Roll: ${playerData.roll || "-"}`, 148.5, 88, { align: "center" });
+
+      // Body text
+      doc.setFontSize(12);
+      const body = `has actively participated in the ET mini-project game, completed all stages, and achieved a total score of ${playerData.totalScore} with ${(playerData.accuracy*100).toFixed(0)}% accuracy. Final rank: ${playerData.rank} out of ${playerData.totalPlayers} players.`;
+      const bodyLines = doc.splitTextToSize(body, 220);
+      doc.text(bodyLines, 148.5, 104, { align: "center" });
+
+      // Stats
+      doc.setFontSize(11);
+      doc.text(`Card game time: ${playerData.gameTime ?? "-"} s`, 148.5, 132, { align: "center" });
+      doc.text(`Quiz time: ${playerData.quizTime ?? "-"} s`, 148.5, 140, { align: "center" });
+
+      // Footer
+      const today = new Date();
+      const dateStr = today.toLocaleDateString();
+      doc.setFontSize(10);
+      doc.setTextColor(156, 163, 175);
+      doc.text(`Generated on: ${dateStr}`, 20, 190);
+
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(248, 250, 252);
+      doc.text("MD – Event Architect", 277, 188, { align: "right" });
+
+      doc.save(`ET-Certificate-${playerData.usn}.pdf`);
+    });
+  </script>
 </body>
 </html>
