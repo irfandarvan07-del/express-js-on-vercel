@@ -415,44 +415,33 @@
   closeModalBtn.addEventListener("click", closeModal);
   modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
 
-  loginForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    if (!currentStudent) return;
+  loginForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  if (!currentStudent) return;
 
-    const entered = usnInput.value.trim().toUpperCase();
-    const expected = currentStudent.usn.toUpperCase();
-    if (!entered) {
-      loginError.textContent = "Enter your USN.";
-      return;
-    }
-    if (entered !== expected) {
-      loginError.textContent = "Wrong USN for this name.";
-      return;
-    }
-    loginError.textContent = "";
+  const entered = usnInput.value.trim().toUpperCase();
+  const expected = currentStudent.usn.toUpperCase();
 
-    try {
-      await db.collection("scores").doc(entered).set({
-        usn: entered,
-        name: currentStudent.name,
-        roll: currentStudent.roll,
-        totalScore: 0,
-        gameTime: null,
-        quizTime: null,
-        accuracy: null,
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-      }, { merge: true });
-    } catch (err) {
-      console.error("Firestore write error:", err);
-    }
+  if (!entered) {
+    loginError.textContent = "Enter your USN.";
+    return;
+  }
+  if (entered !== expected) {
+    loginError.textContent = "Wrong USN for this name.";
+    return;
+  }
 
-    const params = new URLSearchParams({
-      usn: entered,
-      name: currentStudent.name,
-      roll: currentStudent.roll
-    });
-    window.location.href = "cards.html?" + params.toString();
+  loginError.textContent = "";
+
+  // Just redirect to Game 1 – no database here
+  const params = new URLSearchParams({
+    usn: entered,
+    name: currentStudent.name,
+    roll: currentStudent.roll
   });
+  window.location.href = "cards.html?" + params.toString();
+});
+
 
   // initial render
   renderStudents();
@@ -462,4 +451,5 @@
   
 </body>
 </html>
+
 
