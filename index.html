@@ -2,38 +2,37 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>ET Attendance Fun Portal – RVCE</title>
+  <title>ET Game – Register</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <style>
+    /* Simplified styling, still clean */
     :root {
-      --bg: #f3f4f6;
-      --card-bg: #ffffff;
-      --accent: #2563eb;
-      --accent-soft: rgba(37, 99, 235, 0.08);
-      --text-main: #111827;
-      --text-muted: #6b7280;
-      --border: #e5e7eb;
+      --accent:#38bdf8;
+      --bg:#020617;
+      --card:#0b1120;
+      --text:#f9fafb;
+      --muted:#9ca3af;
+      --danger:#f97373;
     }
-    * { box-sizing:border-box; margin:0; padding:0; }
+    *{box-sizing:border-box;margin:0;padding:0}
     body {
-      font-family:"Poppins",system-ui,-apple-system;
-      background:radial-gradient(circle at top,#e5f0ff,#f3f4f6);
-      color:var(--text-main);
+      font-family:"Poppins",system-ui;
+      background:radial-gradient(circle at top,#0b1120,#020617);
+      color:var(--text);
       min-height:100vh;
       display:flex;
-      align-items:center;
       justify-content:center;
-      padding:1.2rem;
+      padding:1.4rem;
     }
     .shell{
       width:100%;
-      max-width:1050px;
-      background:var(--card-bg);
+      max-width:1100px;
+      background:rgba(15,23,42,0.98);
       border-radius:1.5rem;
-      padding:1.5rem 1.6rem 1.7rem;
-      border:1px solid var(--border);
-      box-shadow:0 16px 40px rgba(15,23,42,0.15);
+      padding:1.6rem 1.7rem 2rem;
+      border:1px solid rgba(148,163,184,0.5);
+      box-shadow:0 20px 45px rgba(0,0,0,0.7);
     }
     header{
       display:flex;
@@ -42,304 +41,247 @@
       flex-wrap:wrap;
       margin-bottom:1.1rem;
     }
-    .title h1{font-size:1.4rem;font-weight:600;}
-    .title p{font-size:0.86rem;color:var(--text-muted);margin-top:0.2rem;}
-    .tag{
-      font-size:0.75rem;
-      padding:0.25rem 0.6rem;
+    .brand-title h1{font-size:1.3rem;font-weight:600}
+    .brand-title p{font-size:0.86rem;color:var(--muted);margin-top:0.2rem}
+    .pill{
+      font-size:0.78rem;
+      padding:0.3rem 0.7rem;
       border-radius:999px;
-      border:1px solid #d1d5db;
-      background:#f9fafb;
-      color:var(--text-muted);
+      border:1px solid rgba(75,85,99,0.9);
+      background:rgba(15,23,42,0.9);
+      color:var(--muted);
       display:inline-flex;
       align-items:center;
-      gap:0.3rem;
+      gap:0.35rem;
     }
-    .tag-dot{
+    .pill-dot{
       width:7px;height:7px;border-radius:999px;
       background:#22c55e;
-      box-shadow:0 0 0 5px rgba(34,197,94,0.25);
+      box-shadow:0 0 0 6px rgba(34,197,94,0.35);
     }
-
     .layout{
       display:grid;
-      grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);
-      gap:1.1rem;
+      grid-template-columns:minmax(0,1.7fr) minmax(0,1.1fr);
+      gap:1.2rem;
     }
-    @media (max-width:900px){
-      .layout{grid-template-columns:minmax(0,1fr);}
-    }
-
+    @media(max-width:900px){.layout{grid-template-columns:1fr}}
     .card{
-      background:#ffffff;
-      border-radius:1.1rem;
-      padding:1rem 1.05rem 1.2rem;
-      border:1px solid #e5e7eb;
+      background:var(--card);
+      border-radius:1rem;
+      padding:1rem 1.1rem 1.2rem;
+      border:1px solid rgba(55,65,81,0.9);
+      box-shadow:0 16px 30px rgba(15,23,42,0.9);
     }
     .card h2{
       font-size:0.98rem;
-      margin-bottom:0.55rem;
+      margin-bottom:0.4rem;
       display:flex;
       align-items:center;
       gap:0.4rem;
     }
     .card h2 span.icon{
       width:24px;height:24px;border-radius:999px;
-      background:var(--accent-soft);
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
+      display:inline-flex;align-items:center;justify-content:center;
       font-size:0.9rem;
-      color:var(--accent);
+      background:rgba(56,189,248,0.16);
     }
-
-    .table-wrapper{
-      border-radius:0.9rem;
-      border:1px solid #e5e7eb;
+    .card p.sub{font-size:0.8rem;color:var(--muted);margin-bottom:0.5rem}
+    .students{
+      max-height:420px;
       overflow:auto;
-      max-height:340px;
-      background:#f9fafb;
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(190px,1fr));
+      gap:0.5rem;
     }
-    table{
-      width:100%;
-      border-collapse:collapse;
-      font-size:0.78rem;
-    }
-    thead{
-      position:sticky;
-      top:0;
-      background:#e5e7eb;
-      z-index:1;
-    }
-    th,td{
-      padding:0.42rem 0.52rem;
-      border-bottom:1px solid #e5e7eb;
+    @media(max-width:600px){.students{grid-template-columns:1fr}}
+    .student-btn{
+      border:none;
+      background:rgba(15,23,42,0.95);
+      border-radius:0.8rem;
+      padding:0.5rem 0.7rem;
       text-align:left;
-      white-space:nowrap;
-    }
-    th{font-weight:500;color:var(--text-muted);}
-    tbody tr:nth-child(even){background:#f9fafb;}
-    .play-btn{
-      border:none;
-      border-radius:999px;
-      padding:0.32rem 0.75rem;
-      font-size:0.75rem;
-      cursor:pointer;
-      background:var(--accent);
-      color:#ffffff;
-      font-weight:500;
-    }
-    .play-btn:hover{opacity:0.92;}
-
-    .side-note{font-size:0.82rem;color:var(--text-muted);margin-bottom:0.7rem;}
-    .side-bullets{
       font-size:0.8rem;
-      list-style:none;
-      padding-left:0;
+      color:var(--text);
       display:flex;
-      flex-direction:column;
-      gap:0.3rem;
-      color:var(--text-muted);
-    }
-    .side-bullets li span{
-      color:#111827;
-      font-weight:500;
-    }
-    .note{
-      margin-top:0.5rem;
-      font-size:0.78rem;
-      color:var(--text-muted);
-    }
-
-    .score-table-wrapper{
-      margin-top:0.45rem;
-      border-radius:0.9rem;
-      border:1px solid #e5e7eb;
-      overflow:auto;
-      max-height:220px;
-      background:#f9fafb;
-    }
-    .badge{
-      display:inline-flex;
       align-items:center;
-      justify-content:center;
-      border-radius:999px;
-      padding:0.18rem 0.6rem;
-      background:var(--accent-soft);
-      font-size:0.76rem;
-      color:var(--accent);
-      font-weight:500;
-      margin-bottom:0.3rem;
+      gap:0.45rem;
+      cursor:pointer;
+      border:1px solid rgba(55,65,81,0.9);
+      transition:0.15s;
     }
-    .empty-text{
-      font-size:0.8rem;
-      color:var(--text-muted);
-      margin-top:0.4rem;
+    .student-btn:hover{
+      border-color:var(--accent);
+      transform:translateY(-1px);
+      box-shadow:0 10px 20px rgba(8,47,73,0.9);
     }
-
+    .roll{
+      min-width:26px;height:26px;border-radius:999px;
+      display:inline-flex;align-items:center;justify-content:center;
+      font-size:0.78rem;font-weight:500;color:var(--accent);
+      background:rgba(31,41,55,0.95);
+    }
+    .student-name{
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+      font-size:0.83rem;font-weight:500;
+    }
+    .flow-steps{
+      font-size:0.82rem;color:var(--muted);
+      display:flex;flex-direction:column;gap:0.4rem;
+      margin-top:0.3rem;
+    }
+    .flow-steps strong{color:var(--text)}
+    .note{font-size:0.76rem;color:var(--muted);margin-top:0.7rem}
+    .note span{color:#fbbf24}
     /* modal */
-    .modal-backdrop{
-      position:fixed;
-      inset:0;
-      background:rgba(15,23,42,0.35);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      z-index:40;
+    .backdrop{
+      position:fixed;inset:0;
+      background:rgba(15,23,42,0.93);
+      display:none;align-items:center;justify-content:center;
+      z-index:30;padding:1rem;
     }
+    .backdrop.active{display:flex}
     .modal{
-      background:#ffffff;
-      border-radius:1rem;
-      padding:1rem 1.1rem 1rem;
-      width:100%;
-      max-width:360px;
-      box-shadow:0 16px 40px rgba(15,23,42,0.55);
-      border:1px solid #e5e7eb;
+      width:100%;max-width:420px;
+      background:radial-gradient(circle at top,rgba(56,189,248,0.16),transparent 60%),
+                 #020617;
+      border-radius:1.3rem;
+      padding:1.3rem 1.3rem 1.1rem;
+      border:1px solid rgba(148,163,184,0.6);
+      box-shadow:0 22px 45px rgba(0,0,0,0.9);
     }
-    .modal-title{
-      font-size:0.96rem;
-      font-weight:600;
-      margin-bottom:0.4rem;
+    .modal-header{
+      display:flex;justify-content:space-between;gap:0.8rem;margin-bottom:0.5rem;
     }
-    .modal-sub{
-      font-size:0.8rem;
-      color:var(--text-muted);
-      margin-bottom:0.4rem;
+    .modal-header h3{font-size:0.98rem}
+    .modal-header p{font-size:0.78rem;color:var(--muted);margin-top:0.1rem}
+    .x-btn{
+      border:none;background:rgba(15,23,42,0.9);
+      width:30px;height:30px;border-radius:999px;
+      display:inline-flex;align-items:center;justify-content:center;
+      color:var(--muted);cursor:pointer;font-size:0.9rem;
     }
-    .modal-field{
-      margin-bottom:0.6rem;
+    .summary{
+      display:flex;justify-content:space-between;gap:0.6rem;
+      background:rgba(15,23,42,0.98);
+      padding:0.5rem 0.7rem;border-radius:0.8rem;
+      border:1px solid rgba(55,65,81,0.95);
+      margin-bottom:0.6rem;font-size:0.8rem;
     }
-    .modal-label{
-      font-size:0.78rem;
-      color:var(--text-muted);
-      margin-bottom:0.18rem;
-      display:block;
+    .summary .name{font-weight:500}
+    .summary .usn{color:var(--muted);font-size:0.78rem}
+    .summary .roll-label{font-size:0.76rem;color:var(--muted);text-align:right}
+    .summary .roll-label span{color:var(--accent);font-weight:600}
+    .field label{font-size:0.76rem;color:#e5e7eb;margin-bottom:0.15rem;display:block}
+    .field input{
+      width:100%;padding:0.5rem 0.7rem;border-radius:0.8rem;
+      border:1px solid rgba(55,65,81,0.95);
+      background:#020617;color:var(--text);font-size:0.8rem;
+      outline:none;
     }
-    .modal-input{
-      width:100%;
-      padding:0.45rem 0.55rem;
-      border-radius:0.6rem;
-      border:1px solid #d1d5db;
-      font-size:0.82rem;
+    .field input:focus{
+      border-color:var(--accent);
+      box-shadow:0 0 0 1px rgba(56,189,248,0.7);
     }
-    .modal-actions{
-      display:flex;
-      justify-content:flex-end;
-      gap:0.4rem;
-      margin-top:0.4rem;
-    }
+    .error{font-size:0.75rem;color:var(--danger);min-height:1.1em;margin-top:0.2rem}
     .btn{
-      padding:0.4rem 0.85rem;
-      border-radius:999px;
-      border:none;
-      font-size:0.8rem;
-      cursor:pointer;
-    }
-    .btn-secondary{
-      background:#e5e7eb;
-      color:#111827;
-    }
-    .btn-primary{
-      background:var(--accent);
-      color:#ffffff;
-      font-weight:500;
-    }
-    .modal-error{
-      font-size:0.76rem;
-      color:#dc2626;
-      margin-top:0.2rem;
-      min-height:1em;
+      width:100%;margin-top:0.5rem;
+      border:none;border-radius:999px;
+      background:linear-gradient(135deg,#38bdf8,#2563eb);
+      color:white;font-size:0.86rem;font-weight:500;
+      padding:0.55rem 0.7rem;
+      display:flex;align-items:center;justify-content:center;
+      gap:0.3rem;cursor:pointer;
+      box-shadow:0 14px 25px rgba(37,99,235,0.6);
     }
   </style>
 </head>
 <body>
   <div class="shell">
     <header>
-      <div class="title">
-        <h1>ET Attendance Game Portal – 1st Sem</h1>
-        <p>Select your name, verify USN, play 2 levels, then earn your trophy & YouTube “prize”.</p>
+      <div class="brand-title">
+        <h1>ET Game Registration – 1st Sem</h1>
+        <p>Select your name, enter USN, then you’ll go to Game 1 (cards).</p>
       </div>
       <div>
-        <div class="tag">
-          <span class="tag-dot"></span>
-          <span>Telecom • Section E</span>
+        <div class="pill">
+          <span class="pill-dot"></span>
+          <span>Fun event • Shared scoreboard (Firebase)</span>
         </div>
       </div>
     </header>
 
     <div class="layout">
-      <!-- student list -->
-     <section class="card">
-  <h2><span class="icon">📊</span>Class scoreboard</h2>
-  <p class="side-note">
-    This ranking is shared for everyone using this game. It combines:
-  </p>
-  <ul class="side-bullets">
-    <li><span>Memory game time</span> – faster is better.</li>
-    <li><span>Quiz score</span> – out of 5.</li>
-    <li><span>Moves</span> – fewer card flips is better.</li>
-  </ul>
-  <div class="badge">Top runs – ET Section E</div>
-  <div id="scoreWrapper" class="score-table-wrapper" style="display:none;">
-    <table>
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Name</th>
-          <th>Correct</th>
-          <th>Time (s)</th>
-          <th>Moves</th>
-        </tr>
-      </thead>
-      <tbody id="scoreBody"></tbody>
-    </table>
-  </div>
-  <div id="scoreEmpty" class="empty-text">
-    No runs recorded yet. Play once to create the first entry.
-  </div>
-  <p class="note">
-    For full class ranking & prize button, complete both levels and reach the final results page.
-  </p>
-</section>
+      <section class="card">
+        <h2><span class="icon">👥</span> Students</h2>
+        <p class="sub">Click your name to register.</p>
+        <div style="margin-bottom:0.5rem;">
+          <input id="searchInput" placeholder="Search by name or roll…" style="width:100%;padding:0.5rem 0.7rem;border-radius:999px;border:1px solid rgba(55,65,81,0.9);background:#020617;color:#e5e7eb;font-size:0.8rem;outline:none;" />
+        </div>
+        <div id="studentList" class="students"></div>
+        <p style="font-size:0.78rem;color:var(--muted);margin-top:0.4rem;">
+          Showing <span id="visibleCount">0</span> students.
+        </p>
+      </section>
 
-
-      <!-- scoreboard + info -->
-      
+      <section class="card">
+        <h2><span class="icon">📜</span> Flow</h2>
+        <p class="sub">What will happen:</p>
+        <div class="flow-steps">
+          <div><strong>1.</strong> Register with name + USN here.</div>
+          <div><strong>2.</strong> Game 1: find matching cards (time recorded).</div>
+          <div><strong>3.</strong> Game 2: MD’s questions (MCQ + timer).</div>
+          <div><strong>4.</strong> We send your total score to <strong>Firebase</strong>.</div>
+          <div><strong>5.</strong> Result page shows <strong>shared scoreboard</strong> for everyone.</div>
+          <div><strong>6.</strong> Finally you go to a <strong>Thanks + Reward</strong> page.</div>
+        </div>
+        <p class="note">
+          All scores are stored in Firestore <span>scores</span> collection. Anyone opening the site sees the same
+          scoreboard. This is still just for fun (not official marks).
+        </p>
+      </section>
     </div>
   </div>
 
-  <!-- login modal -->
-  <div id="modalBackdrop" class="modal-backdrop">
+  <!-- Modal -->
+  <div id="loginModal" class="backdrop">
     <div class="modal">
-      <div class="modal-title" id="modalTitle">Login</div>
-      <div class="modal-sub" id="modalSub"></div>
-      <div class="modal-field">
-        <label class="modal-label" for="usnInput">Enter your RVCE USN exactly</label>
-        <input id="usnInput" class="modal-input" placeholder="RVCE25BTE0XX" />
-        <div id="modalError" class="modal-error"></div>
+      <div class="modal-header">
+        <div>
+          <h3>Confirm your USN</h3>
+          <p>We’ll use this to track your score across all games.</p>
+        </div>
+        <button class="x-btn" id="closeModalBtn">✕</button>
       </div>
-      <div class="modal-actions">
-        <button id="cancelBtn" class="btn btn-secondary">Cancel</button>
-        <button id="continueBtn" class="btn btn-primary">Start Game</button>
+      <div class="summary">
+        <div>
+          <div class="name" id="modalStudentName">Student Name</div>
+          <div class="usn" id="modalStudentUsn">USN • ET</div>
+        </div>
+        <div class="roll-label">
+          Roll<br><span id="modalStudentRoll">–</span>
+        </div>
       </div>
+      <form id="loginForm">
+        <div class="field">
+          <label for="usnInput">Enter your RVCE number (USN)</label>
+          <input id="usnInput" type="text" placeholder="Example: RVCE25BTE059" autocomplete="off" />
+        </div>
+        <div class="error" id="loginError"></div>
+        <button class="btn" type="submit">
+          Start Game 1 (cards) ↗
+        </button>
+      </form>
     </div>
   </div>
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import {
-    getFirestore,
-    collection,
-    getDocs,
-    query,
-    orderBy,
-    limit,
-    doc,
-    getDoc,
-    setDoc
-  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-  // 🔥 1) SAME CONFIG AS index.html
- // Import the functions you need from the SDKs you need
+  <!-- Firebase + App Script -->
+  <!-- Firebase v8 CDN (simpler API) -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+  <script>
+    // TODO: paste your real Firebase config here
+   // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -360,229 +302,174 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
 
+    const students = [
+      { roll: 1,  name: "ABHAY BALIGA B",                 usn: "RVCE25BTE059" },
+      { roll: 2,  name: "ABHINAV H KRISHNA",              usn: "RVCE25BTE051" },
+      { roll: 3,  name: "ANANYA H S",                     usn: "RVCE25BTE058" },
+      { roll: 4,  name: "ANANYA KARTHIK",                 usn: "RVCE25BTE006" },
+      { roll: 5,  name: "ANAY DURG",                      usn: "RVCE25BTE001" },
+      { roll: 6,  name: "ANIRUDH S J",                    usn: "RVCE25BTE045" },
+      { roll: 7,  name: "ARAVIND R",                      usn: "RVCE25BTE055" },
+      { roll: 8,  name: "ARNAV GANGOOR",                  usn: "RVCE25BTE015" },
+      { roll: 9,  name: "ARNAV GAUTAM",                   usn: "RVCE25BTE016" },
+      { roll: 10, name: "ARYA RITESH KHODAKE",            usn: "RVCE25BTE043" },
+      { roll: 11, name: "ATHARVA TYAGI",                  usn: "RVCE25BTE061" },
+      { roll: 12, name: "ATHARVA VARSHNEY",               usn: "RVCE25BTE041" },
+      { roll: 13, name: "BHARGAV BEKKAM",                 usn: "RVCE25BTE028" },
+      { roll: 14, name: "BHARGAVI S B",                   usn: "RVCE25BTE011" },
+      { roll: 15, name: "CHANDRAKANTHA",                  usn: "RVCE25BTE029" },
+      { roll: 16, name: "CHIRAG CHANDRA",                 usn: "RVCE25BTE044" },
+      { roll: 17, name: "D R SHREESUJA",                  usn: "RVCE25BTE019" },
+      { roll: 18, name: "DAIVIK MANKAME",                 usn: "RVCE25BTE032" },
+      { roll: 19, name: "DAKSH JAIN",                     usn: "RVCE25BTE038" },
+      { roll: 20, name: "DEBDEEP GHOSH",                  usn: "RVCE25BTE020" },
+      { roll: 21, name: "DHRUV TANDEKAR",                 usn: "RVCE25BTE014" },
+      { roll: 22, name: "DIVYA YANAMASHETTI",             usn: "RVCE25BTE018" },
+      { roll: 23, name: "DONDAPATI SINDHUJA",             usn: "RVCE25BTE025" },
+      { roll: 24, name: "GARGI TOMAR",                    usn: "RVCE25BTE005" },
+      { roll: 25, name: "GAUTHAM REDDY CHIRAPU REDDY",    usn: "RVCE25BTE034" },
+      { roll: 26, name: "HARDIK VATS",                    usn: "RVCE25BTE035" },
+      { roll: 27, name: "HRITHIK",                        usn: "RVCE25BTE030" },
+      { roll: 28, name: "ISHITA SINGH",                   usn: "RVCE25BTE009" },
+      { roll: 29, name: "JAHNAVI A H",                    usn: "RVCE25BTE057" },
+      { roll: 30, name: "JASVANTH V A",                   usn: "RVCE25BTE053" },
+      { roll: 31, name: "KARTHIK R",                      usn: "RVCE25BTE031" },
+      { roll: 32, name: "KSHITI CHAUDHARY",               usn: "RVCE25BTE021" },
+      { roll: 33, name: "MANIK KANYAL",                   usn: "RVCE25BTE033" },
+      { roll: 34, name: "MANYA S",                        usn: "RVCE25BTE048" },
+      { roll: 35, name: "MD IRFAN DARVAN",                usn: "RVCE25BTE013" },
+      { roll: 36, name: "MEGHNA ROY",                     usn: "RVCE25BTE060" },
+      { roll: 37, name: "MIA MICHAEL",                    usn: "RVCE25BTE004" },
+      { roll: 38, name: "MOHIT RAJ JALGAR",               usn: "RVCE25BTE026" },
+      { roll: 39, name: "NIKHIL JAGADEESH KORI",          usn: "RVCE25BTE008" },
+      { roll: 40, name: "NIMIT JAIN",                     usn: "RVCE25BTE037" },
+      { roll: 41, name: "PALLAVI K",                      usn: "RVCE25BTE012" },
+      { roll: 42, name: "PRANYA",                         usn: "RVCE25BTE022" },
+      { roll: 43, name: "RISHAB KASHYAP A",               usn: "RVCE25BTE047" },
+      { roll: 44, name: "SAI PRAKASH J",                  usn: "RVCE25BTE023" },
+      { roll: 45, name: "SAMANVAY SHOBHIT",               usn: "RVCE25BTE063" },
+      { roll: 46, name: "SANATH KUMAR N",                 usn: "RVCE25BTE017" },
+      { roll: 47, name: "SANDYA PRITHIKA BALAJI",         usn: "RVCE25BTE049" },
+      { roll: 48, name: "SATYADEEP SREENIVAS",            usn: "RVCE25BTE024" },
+      { roll: 49, name: "SKANDHA VISAKHA",                usn: "RVCE25BTE003" },
+      { roll: 50, name: "SOHAN A GADAVI",                 usn: "RVCE25BTE010" },
+      { roll: 51, name: "SRIJAN SANJEEV INGALAGI",        usn: "RVCE25BTE050" },
+      { roll: 52, name: "STUTHI SANTOSH MATHAPATI",       usn: "RVCE25BTE052" },
+      { roll: 53, name: "SUHAS CHAWAN",                   usn: "RVCE25BTE056" },
+      { roll: 54, name: "SUHAS V J",                      usn: "RVCE25BTE039" },
+      { roll: 55, name: "SUJAN KUMAR S K",                usn: "RVCE25BTE046" },
+      { roll: 56, name: "SWAPNIL SAHU",                   usn: "RVCE25BTE042" },
+      { roll: 57, name: "THARICKA MURARI",                usn: "RVCE25BTE027" },
+      { roll: 58, name: "THARUN S",                       usn: "RVCE25BTE002" },
+      { roll: 59, name: "VAISHNAVI KARPUR",               usn: "RVCE25BTE062" },
+      { roll: 60, name: "VANI GUSAIN",                    usn: "RVCE25BTE036" },
+      { roll: 61, name: "VEDAANT RAJ",                    usn: "RVCE25BTE007" },
+      { roll: 62, name: "VINAYAK S HALLI",                usn: "RVCE25BTE054" },
+      { roll: 63, name: "YASHASVI ARVIND JAIN",           usn: "RVCE25BTE040" }
+    ];
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+    const studentListEl = document.getElementById("studentList");
+    const searchInputEl = document.getElementById("searchInput");
+    const visibleCountEl = document.getElementById("visibleCount");
+    const modal = document.getElementById("loginModal");
+    const modalName = document.getElementById("modalStudentName");
+    const modalUsn = document.getElementById("modalStudentUsn");
+    const modalRoll = document.getElementById("modalStudentRoll");
+    const closeModalBtn = document.getElementById("closeModalBtn");
+    const loginForm = document.getElementById("loginForm");
+    const usnInput = document.getElementById("usnInput");
+    const loginError = document.getElementById("loginError");
 
-  const params = new URLSearchParams(window.location.search);
-  const usn = (params.get("usn") || "").toUpperCase();
-  const roll = params.get("roll");
-  const name = params.get("name") || "";
-  const time = parseFloat(params.get("time") || "0");
-  const moves = parseInt(params.get("moves") || "0", 10);
-  const correct = parseInt(params.get("correct") || "0", 10);
+    let currentStudent = null;
 
-  const heroIcon = document.getElementById("heroIcon");
-  const heroTitle = document.getElementById("heroTitle");
-  const heroSub = document.getElementById("heroSub");
-  const heroMe = document.getElementById("heroMe");
-  const eggText = document.getElementById("eggText");
-  const rankBadge = document.getElementById("rankBadge");
-  const scoreLine = document.getElementById("scoreLine");
-  const tableWrapper = document.getElementById("tableWrapper");
-  const tableBody = document.getElementById("tableBody");
-  const emptyText = document.getElementById("emptyText");
-
-  const easterEggs = {
-    "RVCE25BTE059": "Future problem solver – just don’t debug your friends like code.",
-    "RVCE25BTE051": "Always ready with an answer… even when the question just changed.",
-    "RVCE25BTE058": "Your notes are probably cleaner than half the textbooks.",
-    "RVCE25BTE006": "Silently understanding everything, loudly judging everyone’s doubts.",
-    "RVCE25BTE001": "Roll 1 energy: teacher’s radar is always on you.",
-    "RVCE25BTE045": "Low-key genius, high-key pretending to be confused.",
-    "RVCE25BTE055": "The type who says ‘I didn’t study’ and then tops the test.",
-    "RVCE25BTE015": "Your brain has more tabs open than your browser.",
-    "RVCE25BTE016": "Can explain memes and maths with equal confidence.",
-    "RVCE25BTE043": "If attendance was a subject, you’d probably get full marks.",
-    "RVCE25BTE061": "Main character vibes in every lab group.",
-    "RVCE25BTE041": "Your handwriting can either save or destroy the lab record.",
-    "RVCE25BTE028": "Can crack jokes and circuits at the same time.",
-    "RVCE25BTE011": "Teachers trust you. Your friends trust your screenshots.",
-    "RVCE25BTE029": "Quiet in class, loud on WhatsApp status.",
-    "RVCE25BTE044": "Knows the answer, waits to see if anyone else does first.",
-    "RVCE25BTE019": "Always early to class, never early to submit assignments.",
-    "RVCE25BTE032": "Knows how to find shortcuts… in questions and corridors.",
-    "RVCE25BTE038": "If overthinking was a subject, you’d be the gold medalist.",
-    "RVCE25BTE020": "Balances labs, lectures and late-night reels like a pro.",
-    "RVCE25BTE014": "First to say ‘I’m dead’ after seeing the question paper.",
-    "RVCE25BTE018": "Makes group projects actually look like a team effort.",
-    "RVCE25BTE025": "Has at least 3 backup plans for every viva.",
-    "RVCE25BTE005": "Topper energy but still pretending to be chill.",
-    "RVCE25BTE034": "Most likely to fix the network when Wi-Fi dies in class.",
-    "RVCE25BTE035": "Knows everyone’s tea but never spills it in class.",
-    "RVCE25BTE030": "May forget homework but never forgets punchlines.",
-    "RVCE25BTE009": "You’re still Irfan’s official enemy… but also secretly the main villain of this site.",
-    "RVCE25BTE057": "Your laugh is probably louder than the fan in the classroom.",
-    "RVCE25BTE053": "Will absolutely turn any lab experiment into a story.",
-    "RVCE25BTE031": "You give strong ‘explain this once more’ energy.",
-    "RVCE25BTE021": "Probably the one reminding others about deadlines.",
-    "RVCE25BTE033": "Lives life 50% in college, 50% in daydreams.",
-    "RVCE25BTE048": "Your mood swings faster than the semester schedule.",
-    "RVCE25BTE013": "CR mode: roasting, managing, and still submitting at 11:59 PM.",
-    "RVCE25BTE060": "Your calm face hides 47 open tasks and 2 pending labs.",
-    "RVCE25BTE004": "Makes everything look aesthetic, even circuit diagrams.",
-    "RVCE25BTE026": "Attendance low, confidence high – perfect balance.",
-    "RVCE25BTE008": "Always ‘just reached’ even when class started 15 mins ago.",
-    "RVCE25BTE037": "Can speedrun assignments like a gaming level.",
-    "RVCE25BTE012": "Your ‘okay sir’ has 5 different meanings.",
-    "RVCE25BTE022": "Knows the entire classroom gossip but still acts innocent.",
-    "RVCE25BTE047": "If talking was a sport, you’d be in nationals.",
-    "RVCE25BTE023": "Probably the tech support of at least three friend groups.",
-    "RVCE25BTE063": "Low battery, high chaos. But still somehow passes.",
-    "RVCE25BTE017": "Seems quiet until the group chat becomes unhinged.",
-    "RVCE25BTE049": "You treat every exam like a surprise quiz.",
-    "RVCE25BTE024": "Your snack stash is the real reason friends visit your bench.",
-    "RVCE25BTE003": "Backbench vibes with frontbench grades.",
-    "RVCE25BTE010": "Can sleep in class and still answer when name is called.",
-    "RVCE25BTE050": "Laptop always on, life always buffering.",
-    "RVCE25BTE052": "The ‘I’ll send notes’ hero of the section.",
-    "RVCE25BTE056": "Talks like exam is a joke, writes like rank 1 material.",
-    "RVCE25BTE039": "Lab partner who actually knows where the probes connect.",
-    "RVCE25BTE046": "CR’s secret backup when things get too chaotic.",
-    "RVCE25BTE042": "May forget roll number, never forgets canteen timings.",
-    "RVCE25BTE027": "Small in size, large in opinions.",
-    "RVCE25BTE002": "Enters 5 mins late but still says ‘arey just started only’.",
-    "RVCE25BTE062": "Probably colour-codes notes and chaos both.",
-    "RVCE25BTE036": "Gives strong ‘I’ll figure it out somehow’ energy.",
-    "RVCE25BTE007": "Silently collecting knowledge and screenshots.",
-    "RVCE25BTE054": "Always ready to help, especially when proxy is needed.",
-    "RVCE25BTE040": "You bring main character energy to every bench you sit on."
-  };
-
-  function getRank(correct, time) {
-    if (correct === 5 && time < 25) return "Legend";
-    if (correct === 5) return "Topper";
-    if (correct >= 3) return "Backbencher";
-    return "Noob";
-  }
-
-  async function saveResultToFirestore() {
-    if (!usn || !name || !roll || isNaN(time) || isNaN(correct)) return;
-
-    const ref = doc(db, "scores", usn);
-    const newEntry = {
-      usn,
-      name,
-      roll: Number(roll),
-      correct,
-      time: Number(time.toFixed(2)),
-      moves: isNaN(moves) ? 0 : moves,
-      ts: Date.now()
-    };
-
-    try {
-      const snap = await getDoc(ref);
-      if (!snap.exists()) {
-        await setDoc(ref, newEntry);
-      } else {
-        const old = snap.data();
-        const better =
-          newEntry.correct > old.correct ||
-          (newEntry.correct === old.correct && newEntry.time < old.time) ||
-          (newEntry.correct === old.correct && newEntry.time === old.time && newEntry.moves < (old.moves ?? Infinity));
-        if (better) {
-          await setDoc(ref, newEntry);
-        }
-      }
-    } catch (err) {
-      console.error("Error saving result:", err);
-    }
-  }
-
-  function renderHero() {
-    const rank = getRank(correct, time);
-    heroMe.textContent = name
-      ? `Logged in as ${name} (Roll ${roll || "?"}).`
-      : "";
-    scoreLine.innerHTML =
-      `You scored <strong>${correct}/5</strong> in the quiz, with a memory game time of <strong>${isNaN(time)? "0.00" : time.toFixed(2)}s</strong> and <strong>${isNaN(moves)? 0 : moves} moves</strong>.`;
-
-    rankBadge.style.display = "inline-flex";
-    rankBadge.textContent = rank;
-    rankBadge.className = "rank-badge"; // reset
-    if (rank==="Legend") {
-      rankBadge.classList.add("rank-legend");
-      heroIcon.textContent = "👑";
-      heroTitle.textContent = "Legend of ET!";
-      heroSub.textContent = "Perfect performance and fast reflexes. MD officially salutes you.";
-    } else if (rank==="Topper") {
-      rankBadge.classList.add("rank-topper");
-      heroIcon.textContent = "🏆";
-      heroTitle.textContent = "Topper mode activated!";
-      heroSub.textContent = "5/5 correct – you definitely read more than just WhatsApp chats.";
-    } else if (rank==="Backbencher") {
-      rankBadge.classList.add("rank-backbencher");
-      heroIcon.textContent = "🎖️";
-      heroTitle.textContent = "Certified Backbencher!";
-      heroSub.textContent = "You may sit behind but your brain still shows up for exams.";
-    } else {
-      rankBadge.classList.add("rank-noob");
-      heroIcon.textContent = "🥉";
-      heroTitle.textContent = "Respect for trying!";
-      heroSub.textContent = "Noob rank today, legend potential tomorrow. Or at least pass in externals.";
+    function renderStudents(filter=""){
+      const q = filter.trim().toLowerCase();
+      studentListEl.innerHTML = "";
+      let count = 0;
+      students.forEach(s=>{
+        const match =
+          !q ||
+          s.name.toLowerCase().includes(q) ||
+          String(s.roll).includes(q);
+        if(!match) return;
+        count++;
+        const btn = document.createElement("button");
+        btn.className = "student-btn";
+        btn.type = "button";
+        btn.innerHTML = `
+          <span class="roll">${s.roll}</span>
+          <span class="student-name">${s.name}</span>
+        `;
+        btn.addEventListener("click",()=>openModal(s));
+        studentListEl.appendChild(btn);
+      });
+      visibleCountEl.textContent = count;
     }
 
-    const egg = easterEggs[usn] || "You unlocked a secret level: survive this semester with your sanity intact.";
-    eggText.textContent = "Secret note: " + egg;
-  }
+    function openModal(s){
+      currentStudent = s;
+      modalName.textContent = s.name;
+      modalUsn.textContent = s.usn + " • ET";
+      modalRoll.textContent = s.roll;
+      loginError.textContent = "";
+      usnInput.value = "";
+      modal.classList.add("active");
+      usnInput.focus();
+    }
+    function closeModal(){
+      modal.classList.remove("active");
+      currentStudent = null;
+    }
 
-  async function renderScoreboard() {
-    try {
-      const qRef = query(
-        collection(db, "scores"),
-        orderBy("correct", "desc"),
-        orderBy("time", "asc"),
-        orderBy("moves", "asc"),
-        limit(100)
-      );
-      const snap = await getDocs(qRef);
+    searchInputEl.addEventListener("input", e=>renderStudents(e.target.value));
+    closeModalBtn.addEventListener("click", closeModal);
+    modal.addEventListener("click", e=>{ if(e.target===modal) closeModal(); });
 
-      if (snap.empty) {
-        tableWrapper.style.display = "none";
-        emptyText.style.display = "block";
+    loginForm.addEventListener("submit", async (e)=>{
+      e.preventDefault();
+      if(!currentStudent) return;
+      const entered = usnInput.value.trim().toUpperCase();
+      const expected = currentStudent.usn.toUpperCase();
+      if(!entered){
+        loginError.textContent = "Enter your USN.";
         return;
       }
+      if(entered !== expected){
+        loginError.textContent = "Wrong USN for this name.";
+        return;
+      }
+      loginError.textContent = "";
 
-      tableBody.innerHTML = "";
-      let rankNum = 1;
-      snap.forEach(docSnap => {
-        const d = docSnap.data();
-        const r = getRank(d.correct, d.time);
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${rankNum++}</td>
-          <td>${d.name}</td>
-          <td>${r}</td>
-          <td>${d.correct}/5</td>
-          <td>${d.time.toFixed ? d.time.toFixed(2) : d.time}</td>
-          <td>${d.moves ?? 0}</td>
-        `;
-        tableBody.appendChild(tr);
+      // Optionally create basic doc in Firestore (so everyone has an entry)
+      try {
+        await db.collection("scores").doc(entered).set({
+          usn: entered,
+          name: currentStudent.name,
+          roll: currentStudent.roll,
+          // placeholder scores until they actually play
+          totalScore: 0,
+          gameTime: null,
+          quizTime: null,
+          accuracy: null,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+      } catch (err) {
+        console.error("Error writing to Firestore:", err);
+      }
+
+      // Redirect to Game 1 (no localStorage, only URL params)
+      const params = new URLSearchParams({
+        usn: entered,
+        name: currentStudent.name,
+        roll: currentStudent.roll
       });
+      window.location.href = "cards.html?" + params.toString();
+    });
 
-      tableWrapper.style.display = "block";
-      emptyText.style.display = "none";
-    } catch (err) {
-      console.error("Error loading scoreboard:", err);
-      tableWrapper.style.display = "none";
-      emptyText.style.display = "block";
-      emptyText.textContent = "Could not load scoreboard right now.";
-    }
-  }
-
-  // 🔥 Run everything
-  (async () => {
-    await saveResultToFirestore();
-    renderHero();
-    await renderScoreboard();
-  })();
-</script>
-
-  
+    renderStudents();
+  </script>
 </body>
 </html>
-
-
-
-
