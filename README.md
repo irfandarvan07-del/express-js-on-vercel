@@ -23,6 +23,7 @@ Install the Vercel CLI:
 ```bash
 npm i -g vercel
 ```
+fuck this
 
 Then run the app at the root of the repository:
 
